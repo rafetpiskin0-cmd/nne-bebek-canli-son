@@ -534,15 +534,21 @@ function useAIDaily(cacheKey, buildPrompt, fallback) {
   const [loading, setLoading] = useState(true);
   const [isAI, setIsAI] = useState(false);
 
+  // NOT: Bu içerik kullanıcıya özel değildir (herkes için aynı "bu hafta ne
+  // olur" tarzı genel bilgidir), bu yüzden shared=true ile paylaşımlı
+  // depoda tutulur. Böylece her benzersiz cacheKey için Gemini'ye SADECE
+  // BİR KERE istek gider; sonraki tüm kullanıcılar/ziyaretler aynı
+  // önbellekten okur. Bu, ücretsiz Gemini kotasını (dakikada birkaç
+  // istek) aşmamak için kritik önemdedir.
   const load = async (force=false) => {
     setLoading(true);
     if (!force) {
-      const cached = await storageGet(cacheKey, false);
+      const cached = await storageGet(cacheKey, true);
       if (cached) { setData(cached); setIsAI(true); setLoading(false); return; }
     }
     const result = await generateAIJSON(buildPrompt());
     if (result) {
-      await storageSet(cacheKey, result, false);
+      await storageSet(cacheKey, result, true);
       setData(result); setIsAI(true);
     } else {
       setData(null); setIsAI(false);
