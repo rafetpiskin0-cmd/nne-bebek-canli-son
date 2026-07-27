@@ -1,0 +1,21 @@
+rules_version = '2';
+
+// Bu kurallar, storage.js'teki koleksiyon yapısıyla eşleşir:
+//   users/{uid}/data/{key}   -> yalnızca sahibi okuyup yazabilir
+//   shared/{key}             -> giriş yapmış (anonim dahil) herkes okuyup yazabilir
+//
+// NOT: shared/ koleksiyonu (forum, aile senkronizasyonu, admin CMS,
+// topluluk sohbeti) tasarım gereği paylaşımlıdır ve bu kurallarda
+// içerik moderasyonu YAPILMAZ. Üretimde kötüye kullanımı önlemek için
+// Cloud Functions ile bir moderasyon/rate-limit katmanı eklemeniz
+// önerilir.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/data/{key} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /shared/{key} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
