@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, createContext, useContext } from "react";
 import { callGemini } from "./services/geminiService.js";
 import { signInWithGoogle, signInWithApple, registerWithEmail, signInWithEmail, resetPassword, watchAuthState, signOutUser, handleRedirectResult } from "./services/auth.js";
 import {
@@ -9,12 +9,537 @@ import {
   Moon as MoonIcon, Droplets, Wind, CloudRain, Waves, TreePine, Flame,
   Train, Car, User, Users, Settings, Crown, Lock, ArrowRight, Home,
   Activity, CalendarDays, MessageCircle, Menu, Edit3, LogOut, Mail,
-  Apple as AppleIcon, MapPin, Clock, TrendingUp, AlertCircle, Info
+  Apple as AppleIcon, MapPin, Clock, TrendingUp, AlertCircle, Info, Globe
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Area, AreaChart, Legend
 } from "recharts";
+
+/* ============================================================
+   ÇOKLU DİL (i18n) — Arayüz metinleri için çeviri sistemi.
+   `t("anahtar")` çağrısı, seçili dile göre UI_TEXT sözlüğünden
+   karşılık gelen metni döndürür; karşılık yoksa Türkçe'ye, o da
+   yoksa anahtarın kendisine düşer.
+   ============================================================ */
+const LANG_LABELS = { tr: "Türkçe", en: "English", de: "Deutsch" };
+const LOCALE_CODES = { tr: "tr-TR", en: "en-US", de: "de-DE" };
+function localeOf(lang) { return LOCALE_CODES[lang] || "tr-TR"; }
+
+const UI_TEXT = {
+  tr: {
+    // Alt gezinme
+    nav_today: "Bugün", nav_track: "Takip", nav_activities: "Aktiviteler",
+    nav_nearby: "Yakınımda", nav_community: "Topluluk", nav_assistant: "Asistan", nav_profile: "Profil",
+    // Genel
+    save: "Kaydet", cancel: "İptal", close: "Kapat", add: "Ekle", delete: "Sil", edit: "Düzenle",
+    back: "Geri", loading: "Yükleniyor...", search: "Ara", done: "Tamam", confirm: "Onayla",
+    // Profil ekranı
+    profile_title: "Profil",
+    profile_children_title: "Çocuklarım",
+    profile_add: "Ekle",
+    profile_pregnancy_tracking: "Hamilelik takibi",
+    profile_postnatal_tracking: "Doğum sonrası takip",
+    profile_premium_title: "Premium",
+    profile_premium_upgrade: "Premium'a Geç",
+    profile_premium_desc: "Reklamsız kullanım · Sınırsız AI · Detaylı raporlar · Premium sesler ve aktiviteler",
+    profile_premium_btn: "Ödeme Yöntemi Ekle",
+    profile_calendar_title: "Takvim",
+    profile_calendar_card_title: "Randevu ve Etkinlik Takvimi",
+    profile_calendar_card_desc: "Doktor randevuları, aşılar ve önemli tarihler",
+    profile_market_title: "Anne Pazarı",
+    profile_market_desc: "2. el bebek ve çocuk eşyaları alışveriş pazarı",
+    profile_reminders_title: "Hatırlatıcılar",
+    profile_admin_title: "Yönetim",
+    profile_admin_card_title: "Yönetici Paneli (Demo)",
+    profile_admin_card_desc: "Makale, aktivite, ses ve ninni ekle",
+    profile_settings_title: "Ayarlar",
+    profile_theme_light: "Açık Tema",
+    profile_theme_dark: "Koyu Tema",
+    profile_language_title: "Dil",
+    profile_language_card_title: "Uygulama Dili",
+    profile_language_card_desc: "Arayüz dilini değiştir",
+    profile_about: "Hakkımızda",
+    profile_privacy: "Gizlilik Politikası (KVKK)",
+    profile_logout: "Çıkış Yap",
+    profile_logout_confirm: "Çıkış yapmak istediğinize emin misiniz?",
+    profile_mom_name_placeholder: "Adınız",
+    profile_mom_name_modal_title: "Adınızı Değiştirin",
+    profile_child_rename_placeholder: "Çocuğunuzun adı",
+    profile_child_remove_confirm: (name)=>`"${name}" profilini silmek istediğinize emin misiniz?`,
+    toast_name_updated: "Adınız güncellendi ✓",
+    toast_name_updated2: "İsim güncellendi ✓",
+    toast_profile_added: "Yeni profil eklendi ✓",
+    toast_profile_removed: "Profil silindi",
+    toast_logged_out: "Çıkış yapıldı",
+    toast_logout_failed: "Çıkış yapılamadı, tekrar deneyin",
+    toast_reminder_on: "Hatırlatıcı açıldı ✓",
+    toast_reminder_off: "Hatırlatıcı kapatıldı",
+    toast_language_changed: "Uygulama dili güncellendi ✓",
+    new_profile_default_name: "Yeni Profil",
+    // Bugün ekranı
+    today_greeting: "Merhaba,",
+    today_week_label: (w)=>`${w}. Hafta`,
+    today_day_fruit: (d,fruit)=>`${d}. gün · Bebeğiniz bugün ${fruit} büyüklüğünde 🤰`,
+    today_age_years: (y,m)=>`${y} yaş ${m} ay`,
+    today_age_months: (m)=>`${m} aylık`,
+    today_child_day: (d)=>`Bebeğiniz bugün ${d}. gününde 👶`,
+    today_market_title: "Anne Pazarı",
+    today_market_desc: "2. el bebek kıyafeti, oyuncak ve eşyaları keşfet ya da satışa çıkar",
+    today_cards_title: "Bugünün Kartları",
+    today_cards_refresh_note: "İçerikler her gün otomatik olarak yenilenir.",
+    empty_state_default: "Henüz bir çocuk profili eklenmedi.",
+    // Takip ekranı
+    track_title: "Takip",
+    track_sub_weight: "Kilo Takibi", track_sub_kick: "Bebek Tekmesi", track_sub_contraction: "Kasılma Takibi",
+    track_sub_appointments: "Randevu Takvimi", track_sub_sleep: "Uyku",
+    track_sub_breastfeeding: "Emzirme", track_sub_formula: "Mama", track_sub_foodlist: "Yemek Listesi",
+    track_sub_diaper: "Bez", track_sub_poop: "Kaka Takibi", track_sub_teething: "Diş Çıkarma",
+    track_sub_vaccine: "Aşı Takvimi", track_sub_weaning: "Ek Gıda",
+    tracker_weight_title: "Kilo Takibi", field_weight_kg: "Kilo (kg)",
+    tracker_breastfeeding_title: "Emzirme Takibi", field_right_breast: "Sağ Göğüs", field_left_breast: "Sol Göğüs",
+    tracker_formula_title: "Mama & Sıvı Takibi", field_formula_ml: "Mama (ml)", field_breastmilk_ml: "Anne Sütü (ml)", field_water_ml: "Su (ml)",
+    tracker_sleep_title: "Uyku Takibi", field_duration_min: "Süre (dk)", tracker_sleep_weekly_chart: "Haftalık Uyku Grafiği",
+    tracker_diaper_title: "Bez Takibi", diaper_pee: "Çiş", diaper_poop: "Kaka", diaper_both: "İkisi",
+    field_note_placeholder: "Not ekle (opsiyonel)",
+    history_title: "Geçmiş Kayıtlar",
+    history_empty: "Henüz kayıt yok. İlk kaydını ekle!",
+    history_empty_generic: "Henüz kayıt yok.",
+    toast_saved: "Kaydedildi ✓",
+    toast_item_saved: (item)=>`${item} kaydedildi ✓`,
+    weight_log_render: (time,kg)=>`${time} · ${kg} kg`,
+    breastfeeding_log_render: (time,r,l)=>`${time} · ${r} dk sağ / ${l} dk sol`,
+    formula_log_render: (time,f,b,w)=>`${time} · Mama ${f}ml, Anne Sütü ${b}ml, Su ${w}ml`,
+    sleep_log_render: (time,min)=>`${time} · ${min} dakika uyudu`,
+    diaper_log_render: (time,type)=>`${time} · ${type}`,
+    kick_counter_title: "Bebek Tekmesi Sayacı",
+    kick_counter_desc: "Genelde 2 saat içinde 10 hareket beklenir",
+    kick_counter_movement_count: (min)=>`${min} dk içinde sayılan hareket`,
+    reset: "Sıfırla",
+    toast_kick_saved: "Tekme sayımı kaydedildi ✓",
+    history_empty_kick: "Henüz kayıt yok. İlk sayımını kaydet!",
+    kick_log_render: (time,count,min)=>`${time} · ${count} hareket · ${min} dk içinde`,
+    contraction_title: "Kasılma Takibi",
+    contraction_running: "Kasılma sürüyor…",
+    contraction_idle: "Kasılma başladığında butona basın",
+    contraction_stop: "Kasılma Bitti",
+    contraction_start: "Kasılma Başladı",
+    toast_contraction_saved: "Kasılma kaydedildi ✓",
+    contraction_warning: "Kasılmalar 5 dakikadan sık, 1 dakikadan uzun sürüyorsa doğum kliniğinizi arayın.",
+    contraction_log_render: (time,sec,intervalMin)=>`${time} · ${sec} sn sürdü${intervalMin!=null?` · önceki kasılmadan ${intervalMin} dk sonra`:""}`,
+    cms_required_fields: "Zorunlu alanları doldurun",
+    cms_add_default: "Ekle",
+    cms_empty_default: "Henüz içerik eklenmedi.",
+    cms_adding: "Ekleniyor...",
+    cms_shared_content: (n)=>`Paylaşımlı İçerik (${n})`,
+    toast_content_added: "İçerik eklendi ✓",
+    toast_content_add_failed: "Eklenemedi, tekrar deneyin",
+    toast_content_removed: "İçerik silindi",
+    admin_tab_articles: "Makaleler", admin_tab_activities: "Aktiviteler", admin_tab_sounds: "Uyku Sesleri", admin_tab_lullabies: "Ninniler",
+    calendar_title: "Takvim",
+    calendar_add_btn: "Randevu / Etkinlik Ekle",
+    calendar_empty: "Henüz bir randevu veya etkinlik eklenmedi.",
+    calendar_upcoming: "Yaklaşanlar",
+    calendar_no_upcoming: "Yaklaşan bir kayıt yok.",
+    calendar_past: "Geçmiş",
+    calendar_new_event_modal_title: "Yeni Randevu / Etkinlik",
+    calendar_title_placeholder: "Başlık (örn. Kadın Doğum Kontrolü)",
+    calendar_note_placeholder: "Not (opsiyonel)",
+    calendar_saving: "Kaydediliyor...",
+    calendar_add_to_calendar: "Takvime Ekle",
+    toast_calendar_added: "Takvime eklendi ✓",
+    toast_add_failed: "Eklenemedi, tekrar deneyin",
+    calendar_type_doctor: "Doktor Randevusu",
+    calendar_type_vaccine: "Aşı",
+    calendar_type_vitamin: "Vitamin/İlaç",
+    calendar_type_other: "Diğer",
+    admin_title: "Yönetici Paneli",
+    admin_login_title: "Demo Yönetici Girişi",
+    admin_login_desc: "Bu bir demo geçiş koduyla korunur (0000), gerçek kimlik doğrulama içermez.",
+    admin_code_placeholder: "Geçiş kodu",
+    admin_login_btn: "Giriş Yap",
+    toast_admin_login_ok: "Giriş yapıldı ✓",
+    toast_admin_login_fail: "Kod hatalı",
+    admin_add_article: "Makale Ekle", admin_field_title: "Başlık", admin_field_body: "İçerik metni",
+    admin_add_activity: "Aktivite Ekle", admin_field_skill: "Geliştirdiği beceri", admin_field_duration: "Süre (örn. 15 dk)", admin_field_materials: "Malzeme",
+    admin_add_sound: "Uyku Sesi Ekle", admin_field_sound_name: "Ses adı",
+    admin_add_lullaby: "Ninni Ekle", admin_field_category: "Kategori",
+    vaccine_schedule_title: "Türkiye Aşı Takvimi",
+    vaccine_schedule_desc: (name, birthDate)=>`${name} doğum tarihine (${birthDate}) göre her aşının yapılması gereken tarih otomatik hesaplanır. Yapıldığında karta dokunup tarihini kaydedin — genel bir rehberdir, aile hekiminizin önerdiği program esastır.`,
+    default_child_possessive: "Çocuğunuzun",
+    vaccine_status_done: "Tamamlandı", vaccine_status_overdue: "Gecikti", vaccine_status_upcoming: "Yaklaşıyor", vaccine_status_planned: "Planlandı",
+    toast_vaccine_marked_done: "Tamamlandı olarak işaretlendi ✓",
+    toast_vaccine_unmarked: "Yaklaşıyor olarak işaretlendi",
+    vaccine_at_birth: "Doğumda",
+    vaccine_age_month: (m)=>`${m}. Ay`,
+    vaccine_planned_label: (date)=>`Planlanan: ${date}`,
+    vaccine_done_label: (date)=>`Yapıldı: ${date}`,
+    vaccine_undo: "Geri Al",
+    weaning_reaction_good: "Sorun Yok, Sevdi", weaning_reaction_dislike: "Beğenmedi",
+    weaning_reaction_mild: "Hafif Reaksiyon", weaning_reaction_avoid: "Kaçınılmalı / Alerji",
+    weaning_log_title: "Bugün Neler Verildi?",
+    weaning_food_placeholder: (def)=>`Örn. ${def}`,
+    weaning_default_food_example: "Havuç Püresi",
+    weaning_amount_placeholder: "Miktar (opsiyonel, ör. 2 tatlı kaşığı)",
+    weaning_reaction_label: "Tepkisi nasıldı?",
+    weaning_add_to_log: "Günlüğe Ekle",
+    toast_weaning_added: "Ek gıda günlüğüne eklendi ✓",
+    toast_save_failed: "Kaydedilemedi, tekrar deneyin",
+    toast_entry_removed: "Kayıt silindi",
+    weaning_watchlist_title: "Takip Edilmesi Gereken Besinler",
+    weaning_watchlist_text: (foods)=>`${foods} için hafif reaksiyon/kaçınma notu var. Bu besinleri tekrar vermeden önce doktorunuza danışın.`,
+    weaning_history_empty: "Henüz kayıt yok. Bugün verdiğin ilk besini ekle!",
+    weaning_amount_label: (amt)=>`Miktar: ${amt}`,
+  },
+  en: {
+    nav_today: "Today", nav_track: "Track", nav_activities: "Activities",
+    nav_nearby: "Nearby", nav_community: "Community", nav_assistant: "Assistant", nav_profile: "Profile",
+    save: "Save", cancel: "Cancel", close: "Close", add: "Add", delete: "Delete", edit: "Edit",
+    back: "Back", loading: "Loading...", search: "Search", done: "Done", confirm: "Confirm",
+    profile_title: "Profile",
+    profile_children_title: "My Children",
+    profile_add: "Add",
+    profile_pregnancy_tracking: "Pregnancy tracking",
+    profile_postnatal_tracking: "Postnatal tracking",
+    profile_premium_title: "Premium",
+    profile_premium_upgrade: "Upgrade to Premium",
+    profile_premium_desc: "Ad-free · Unlimited AI · Detailed reports · Premium sounds and activities",
+    profile_premium_btn: "Add Payment Method",
+    profile_calendar_title: "Calendar",
+    profile_calendar_card_title: "Appointment & Event Calendar",
+    profile_calendar_card_desc: "Doctor appointments, vaccines and important dates",
+    profile_market_title: "Mom Market",
+    profile_market_desc: "Marketplace for second-hand baby and kids' items",
+    profile_reminders_title: "Reminders",
+    profile_admin_title: "Management",
+    profile_admin_card_title: "Admin Panel (Demo)",
+    profile_admin_card_desc: "Add articles, activities, sounds and lullabies",
+    profile_settings_title: "Settings",
+    profile_theme_light: "Light Theme",
+    profile_theme_dark: "Dark Theme",
+    profile_language_title: "Language",
+    profile_language_card_title: "App Language",
+    profile_language_card_desc: "Change the interface language",
+    profile_about: "About Us",
+    profile_privacy: "Privacy Policy (GDPR)",
+    profile_logout: "Log Out",
+    profile_logout_confirm: "Are you sure you want to log out?",
+    profile_mom_name_placeholder: "Your name",
+    profile_mom_name_modal_title: "Change Your Name",
+    profile_child_rename_placeholder: "Your child's name",
+    profile_child_remove_confirm: (name)=>`Are you sure you want to delete the "${name}" profile?`,
+    toast_name_updated: "Your name has been updated ✓",
+    toast_name_updated2: "Name updated ✓",
+    toast_profile_added: "New profile added ✓",
+    toast_profile_removed: "Profile deleted",
+    toast_logged_out: "Logged out",
+    toast_logout_failed: "Couldn't log out, please try again",
+    toast_reminder_on: "Reminder turned on ✓",
+    toast_reminder_off: "Reminder turned off",
+    toast_language_changed: "App language updated ✓",
+    new_profile_default_name: "New Profile",
+    today_greeting: "Hello,",
+    today_week_label: (w)=>`Week ${w}`,
+    today_day_fruit: (d,fruit)=>`Day ${d} · Your baby is the size of a ${fruit} today 🤰`,
+    today_age_years: (y,m)=>`${y}y ${m}m`,
+    today_age_months: (m)=>`${m} months old`,
+    today_child_day: (d)=>`Your baby is on day ${d} today 👶`,
+    today_market_title: "Mom Market",
+    today_market_desc: "Discover or sell second-hand baby clothes, toys and gear",
+    today_cards_title: "Today's Cards",
+    today_cards_refresh_note: "Content refreshes automatically every day.",
+    empty_state_default: "No child profile added yet.",
+    track_title: "Track",
+    track_sub_weight: "Weight Tracking", track_sub_kick: "Kick Counter", track_sub_contraction: "Contraction Tracking",
+    track_sub_appointments: "Appointment Calendar", track_sub_sleep: "Sleep",
+    track_sub_breastfeeding: "Breastfeeding", track_sub_formula: "Formula", track_sub_foodlist: "Food List",
+    track_sub_diaper: "Diaper", track_sub_poop: "Poop Tracking", track_sub_teething: "Teething",
+    track_sub_vaccine: "Vaccine Schedule", track_sub_weaning: "Weaning",
+    tracker_weight_title: "Weight Tracking", field_weight_kg: "Weight (kg)",
+    tracker_breastfeeding_title: "Breastfeeding Tracking", field_right_breast: "Right Breast", field_left_breast: "Left Breast",
+    tracker_formula_title: "Formula & Fluid Tracking", field_formula_ml: "Formula (ml)", field_breastmilk_ml: "Breast Milk (ml)", field_water_ml: "Water (ml)",
+    tracker_sleep_title: "Sleep Tracking", field_duration_min: "Duration (min)", tracker_sleep_weekly_chart: "Weekly Sleep Chart",
+    tracker_diaper_title: "Diaper Tracking", diaper_pee: "Wet", diaper_poop: "Dirty", diaper_both: "Both",
+    field_note_placeholder: "Add a note (optional)",
+    history_title: "Past Entries",
+    history_empty: "No entries yet. Add your first one!",
+    history_empty_generic: "No entries yet.",
+    toast_saved: "Saved ✓",
+    toast_item_saved: (item)=>`${item} saved ✓`,
+    weight_log_render: (time,kg)=>`${time} · ${kg} kg`,
+    breastfeeding_log_render: (time,r,l)=>`${time} · ${r} min right / ${l} min left`,
+    formula_log_render: (time,f,b,w)=>`${time} · Formula ${f}ml, Breast Milk ${b}ml, Water ${w}ml`,
+    sleep_log_render: (time,min)=>`${time} · slept ${min} minutes`,
+    diaper_log_render: (time,type)=>`${time} · ${type}`,
+    kick_counter_title: "Baby Kick Counter",
+    kick_counter_desc: "Usually 10 movements are expected within 2 hours",
+    kick_counter_movement_count: (min)=>`Movements counted in ${min} min`,
+    reset: "Reset",
+    toast_kick_saved: "Kick count saved ✓",
+    history_empty_kick: "No entries yet. Save your first count!",
+    kick_log_render: (time,count,min)=>`${time} · ${count} movements · within ${min} min`,
+    contraction_title: "Contraction Tracking",
+    contraction_running: "Contraction in progress…",
+    contraction_idle: "Tap the button when a contraction starts",
+    contraction_stop: "Contraction Ended",
+    contraction_start: "Contraction Started",
+    toast_contraction_saved: "Contraction saved ✓",
+    contraction_warning: "Call your birth clinic if contractions are more frequent than every 5 minutes and last longer than 1 minute.",
+    contraction_log_render: (time,sec,intervalMin)=>`${time} · lasted ${sec}s${intervalMin!=null?` · ${intervalMin} min after the previous one`:""}`,
+    cms_required_fields: "Please fill in the required fields",
+    cms_add_default: "Add",
+    cms_empty_default: "No content added yet.",
+    cms_adding: "Adding...",
+    cms_shared_content: (n)=>`Shared Content (${n})`,
+    toast_content_added: "Content added ✓",
+    toast_content_add_failed: "Couldn't add, please try again",
+    toast_content_removed: "Content deleted",
+    admin_tab_articles: "Articles", admin_tab_activities: "Activities", admin_tab_sounds: "Sleep Sounds", admin_tab_lullabies: "Lullabies",
+    calendar_title: "Calendar",
+    calendar_add_btn: "Add Appointment / Event",
+    calendar_empty: "No appointment or event added yet.",
+    calendar_upcoming: "Upcoming",
+    calendar_no_upcoming: "No upcoming entries.",
+    calendar_past: "Past",
+    calendar_new_event_modal_title: "New Appointment / Event",
+    calendar_title_placeholder: "Title (e.g. OB/GYN Checkup)",
+    calendar_note_placeholder: "Note (optional)",
+    calendar_saving: "Saving...",
+    calendar_add_to_calendar: "Add to Calendar",
+    toast_calendar_added: "Added to calendar ✓",
+    toast_add_failed: "Couldn't add, please try again",
+    calendar_type_doctor: "Doctor's Appointment",
+    calendar_type_vaccine: "Vaccine",
+    calendar_type_vitamin: "Vitamin/Medicine",
+    calendar_type_other: "Other",
+    admin_title: "Admin Panel",
+    admin_login_title: "Demo Admin Login",
+    admin_login_desc: "This is protected by a demo passcode (0000), it has no real authentication.",
+    admin_code_placeholder: "Passcode",
+    admin_login_btn: "Log In",
+    toast_admin_login_ok: "Logged in ✓",
+    toast_admin_login_fail: "Incorrect code",
+    admin_add_article: "Add Article", admin_field_title: "Title", admin_field_body: "Body text",
+    admin_add_activity: "Add Activity", admin_field_skill: "Skill developed", admin_field_duration: "Duration (e.g. 15 min)", admin_field_materials: "Materials",
+    admin_add_sound: "Add Sleep Sound", admin_field_sound_name: "Sound name",
+    admin_add_lullaby: "Add Lullaby", admin_field_category: "Category",
+    vaccine_schedule_title: "Türkiye Vaccine Schedule",
+    vaccine_schedule_desc: (name, birthDate)=>`Based on ${name} birth date (${birthDate}), the due date for every vaccine is calculated automatically. Once given, tap the card to save the date — this is a general guide, your pediatrician's recommended schedule takes precedence.`,
+    default_child_possessive: "Your child's",
+    vaccine_status_done: "Done", vaccine_status_overdue: "Overdue", vaccine_status_upcoming: "Upcoming", vaccine_status_planned: "Planned",
+    toast_vaccine_marked_done: "Marked as done ✓",
+    toast_vaccine_unmarked: "Marked as upcoming",
+    vaccine_at_birth: "At birth",
+    vaccine_age_month: (m)=>`Month ${m}`,
+    vaccine_planned_label: (date)=>`Planned: ${date}`,
+    vaccine_done_label: (date)=>`Done: ${date}`,
+    vaccine_undo: "Undo",
+    weaning_reaction_good: "Loved It, No Issues", weaning_reaction_dislike: "Didn't Like It",
+    weaning_reaction_mild: "Mild Reaction", weaning_reaction_avoid: "Avoid / Allergy",
+    weaning_log_title: "What Did They Eat Today?",
+    weaning_food_placeholder: (def)=>`E.g. ${def}`,
+    weaning_default_food_example: "Carrot Puree",
+    weaning_amount_placeholder: "Amount (optional, e.g. 2 teaspoons)",
+    weaning_reaction_label: "How did they react?",
+    weaning_add_to_log: "Add to Log",
+    toast_weaning_added: "Added to the weaning log ✓",
+    toast_save_failed: "Couldn't save, please try again",
+    toast_entry_removed: "Entry deleted",
+    weaning_watchlist_title: "Foods to Watch",
+    weaning_watchlist_text: (foods)=>`There's a mild reaction/avoidance note for ${foods}. Check with your doctor before offering these foods again.`,
+    weaning_history_empty: "No entries yet. Add the first food you gave today!",
+    weaning_amount_label: (amt)=>`Amount: ${amt}`,
+  },
+  de: {
+    nav_today: "Heute", nav_track: "Verfolgen", nav_activities: "Aktivitäten",
+    nav_nearby: "In der Nähe", nav_community: "Community", nav_assistant: "Assistent", nav_profile: "Profil",
+    save: "Speichern", cancel: "Abbrechen", close: "Schließen", add: "Hinzufügen", delete: "Löschen", edit: "Bearbeiten",
+    back: "Zurück", loading: "Wird geladen...", search: "Suchen", done: "Fertig", confirm: "Bestätigen",
+    profile_title: "Profil",
+    profile_children_title: "Meine Kinder",
+    profile_add: "Hinzufügen",
+    profile_pregnancy_tracking: "Schwangerschaftsverfolgung",
+    profile_postnatal_tracking: "Nachgeburtliche Verfolgung",
+    profile_premium_title: "Premium",
+    profile_premium_upgrade: "Auf Premium upgraden",
+    profile_premium_desc: "Werbefrei · Unbegrenzte KI · Detaillierte Berichte · Premium-Klänge und -Aktivitäten",
+    profile_premium_btn: "Zahlungsmethode hinzufügen",
+    profile_calendar_title: "Kalender",
+    profile_calendar_card_title: "Termin- und Ereigniskalender",
+    profile_calendar_card_desc: "Arzttermine, Impfungen und wichtige Termine",
+    profile_market_title: "Mama-Markt",
+    profile_market_desc: "Marktplatz für gebrauchte Baby- und Kinderartikel",
+    profile_reminders_title: "Erinnerungen",
+    profile_admin_title: "Verwaltung",
+    profile_admin_card_title: "Admin-Panel (Demo)",
+    profile_admin_card_desc: "Artikel, Aktivitäten, Klänge und Schlaflieder hinzufügen",
+    profile_settings_title: "Einstellungen",
+    profile_theme_light: "Helles Design",
+    profile_theme_dark: "Dunkles Design",
+    profile_language_title: "Sprache",
+    profile_language_card_title: "App-Sprache",
+    profile_language_card_desc: "Oberflächensprache ändern",
+    profile_about: "Über uns",
+    profile_privacy: "Datenschutzrichtlinie (DSGVO)",
+    profile_logout: "Abmelden",
+    profile_logout_confirm: "Möchten Sie sich wirklich abmelden?",
+    profile_mom_name_placeholder: "Ihr Name",
+    profile_mom_name_modal_title: "Namen ändern",
+    profile_child_rename_placeholder: "Name Ihres Kindes",
+    profile_child_remove_confirm: (name)=>`Möchten Sie das Profil "${name}" wirklich löschen?`,
+    toast_name_updated: "Ihr Name wurde aktualisiert ✓",
+    toast_name_updated2: "Name aktualisiert ✓",
+    toast_profile_added: "Neues Profil hinzugefügt ✓",
+    toast_profile_removed: "Profil gelöscht",
+    toast_logged_out: "Abgemeldet",
+    toast_logout_failed: "Abmelden fehlgeschlagen, bitte erneut versuchen",
+    toast_reminder_on: "Erinnerung aktiviert ✓",
+    toast_reminder_off: "Erinnerung deaktiviert",
+    toast_language_changed: "App-Sprache aktualisiert ✓",
+    new_profile_default_name: "Neues Profil",
+    today_greeting: "Hallo,",
+    today_week_label: (w)=>`Woche ${w}`,
+    today_day_fruit: (d,fruit)=>`Tag ${d} · Ihr Baby ist heute so groß wie eine ${fruit} 🤰`,
+    today_age_years: (y,m)=>`${y} J. ${m} Mon.`,
+    today_age_months: (m)=>`${m} Monate alt`,
+    today_child_day: (d)=>`Ihr Baby ist heute am Tag ${d} 👶`,
+    today_market_title: "Mama-Markt",
+    today_market_desc: "Entdecken oder verkaufen Sie gebrauchte Babykleidung, Spielzeug und Ausstattung",
+    today_cards_title: "Karten für heute",
+    today_cards_refresh_note: "Die Inhalte werden jeden Tag automatisch aktualisiert.",
+    empty_state_default: "Noch kein Kinderprofil hinzugefügt.",
+    track_title: "Verfolgen",
+    track_sub_weight: "Gewichtsverfolgung", track_sub_kick: "Tritt-Zähler", track_sub_contraction: "Wehen-Tracking",
+    track_sub_appointments: "Terminkalender", track_sub_sleep: "Schlaf",
+    track_sub_breastfeeding: "Stillen", track_sub_formula: "Fläschchen", track_sub_foodlist: "Essensliste",
+    track_sub_diaper: "Windel", track_sub_poop: "Stuhlgang-Tracking", track_sub_teething: "Zahnen",
+    track_sub_vaccine: "Impfplan", track_sub_weaning: "Beikost",
+    tracker_weight_title: "Gewichtsverfolgung", field_weight_kg: "Gewicht (kg)",
+    tracker_breastfeeding_title: "Stillverfolgung", field_right_breast: "Rechte Brust", field_left_breast: "Linke Brust",
+    tracker_formula_title: "Fläschchen- & Flüssigkeitsverfolgung", field_formula_ml: "Fläschchen (ml)", field_breastmilk_ml: "Muttermilch (ml)", field_water_ml: "Wasser (ml)",
+    tracker_sleep_title: "Schlafverfolgung", field_duration_min: "Dauer (Min.)", tracker_sleep_weekly_chart: "Wöchentliches Schlafdiagramm",
+    tracker_diaper_title: "Windelverfolgung", diaper_pee: "Nass", diaper_poop: "Voll", diaper_both: "Beides",
+    field_note_placeholder: "Notiz hinzufügen (optional)",
+    history_title: "Frühere Einträge",
+    history_empty: "Noch keine Einträge. Fügen Sie den ersten hinzu!",
+    history_empty_generic: "Noch keine Einträge.",
+    toast_saved: "Gespeichert ✓",
+    toast_item_saved: (item)=>`${item} gespeichert ✓`,
+    weight_log_render: (time,kg)=>`${time} · ${kg} kg`,
+    breastfeeding_log_render: (time,r,l)=>`${time} · ${r} Min. rechts / ${l} Min. links`,
+    formula_log_render: (time,f,b,w)=>`${time} · Fläschchen ${f}ml, Muttermilch ${b}ml, Wasser ${w}ml`,
+    sleep_log_render: (time,min)=>`${time} · ${min} Minuten geschlafen`,
+    diaper_log_render: (time,type)=>`${time} · ${type}`,
+    kick_counter_title: "Kindsbewegungszähler",
+    kick_counter_desc: "In der Regel werden 10 Bewegungen innerhalb von 2 Stunden erwartet",
+    kick_counter_movement_count: (min)=>`Bewegungen gezählt in ${min} Min.`,
+    reset: "Zurücksetzen",
+    toast_kick_saved: "Tritt-Zählung gespeichert ✓",
+    history_empty_kick: "Noch keine Einträge. Speichern Sie Ihre erste Zählung!",
+    kick_log_render: (time,count,min)=>`${time} · ${count} Bewegungen · innerhalb von ${min} Min.`,
+    contraction_title: "Wehen-Tracking",
+    contraction_running: "Wehe läuft…",
+    contraction_idle: "Drücken Sie den Knopf, wenn eine Wehe beginnt",
+    contraction_stop: "Wehe beendet",
+    contraction_start: "Wehe begonnen",
+    toast_contraction_saved: "Wehe gespeichert ✓",
+    contraction_warning: "Rufen Sie Ihre Geburtsklinik an, wenn die Wehen häufiger als alle 5 Minuten auftreten und länger als 1 Minute dauern.",
+    contraction_log_render: (time,sec,intervalMin)=>`${time} · dauerte ${sec}s${intervalMin!=null?` · ${intervalMin} Min. nach der vorherigen`:""}`,
+    cms_required_fields: "Bitte füllen Sie die Pflichtfelder aus",
+    cms_add_default: "Hinzufügen",
+    cms_empty_default: "Noch keine Inhalte hinzugefügt.",
+    cms_adding: "Wird hinzugefügt...",
+    cms_shared_content: (n)=>`Geteilte Inhalte (${n})`,
+    toast_content_added: "Inhalt hinzugefügt ✓",
+    toast_content_add_failed: "Konnte nicht hinzugefügt werden, bitte erneut versuchen",
+    toast_content_removed: "Inhalt gelöscht",
+    admin_tab_articles: "Artikel", admin_tab_activities: "Aktivitäten", admin_tab_sounds: "Schlafgeräusche", admin_tab_lullabies: "Schlaflieder",
+    calendar_title: "Kalender",
+    calendar_add_btn: "Termin / Ereignis hinzufügen",
+    calendar_empty: "Noch kein Termin oder Ereignis hinzugefügt.",
+    calendar_upcoming: "Bevorstehend",
+    calendar_no_upcoming: "Keine bevorstehenden Einträge.",
+    calendar_past: "Vergangen",
+    calendar_new_event_modal_title: "Neuer Termin / Neues Ereignis",
+    calendar_title_placeholder: "Titel (z. B. Gynäkologe-Kontrolle)",
+    calendar_note_placeholder: "Notiz (optional)",
+    calendar_saving: "Wird gespeichert...",
+    calendar_add_to_calendar: "Zum Kalender hinzufügen",
+    toast_calendar_added: "Zum Kalender hinzugefügt ✓",
+    toast_add_failed: "Konnte nicht hinzugefügt werden, bitte erneut versuchen",
+    calendar_type_doctor: "Arzttermin",
+    calendar_type_vaccine: "Impfung",
+    calendar_type_vitamin: "Vitamin/Medikament",
+    calendar_type_other: "Sonstiges",
+    admin_title: "Admin-Panel",
+    admin_login_title: "Demo-Admin-Login",
+    admin_login_desc: "Dies ist durch einen Demo-Zugangscode (0000) geschützt und bietet keine echte Authentifizierung.",
+    admin_code_placeholder: "Zugangscode",
+    admin_login_btn: "Anmelden",
+    toast_admin_login_ok: "Angemeldet ✓",
+    toast_admin_login_fail: "Falscher Code",
+    admin_add_article: "Artikel hinzufügen", admin_field_title: "Titel", admin_field_body: "Inhaltstext",
+    admin_add_activity: "Aktivität hinzufügen", admin_field_skill: "Geförderte Fähigkeit", admin_field_duration: "Dauer (z. B. 15 Min.)", admin_field_materials: "Material",
+    admin_add_sound: "Schlafgeräusch hinzufügen", admin_field_sound_name: "Name des Geräuschs",
+    admin_add_lullaby: "Schlaflied hinzufügen", admin_field_category: "Kategorie",
+    vaccine_schedule_title: "Türkischer Impfplan",
+    vaccine_schedule_desc: (name, birthDate)=>`Basierend auf dem Geburtsdatum von ${name} (${birthDate}) wird der Fälligkeitstermin für jede Impfung automatisch berechnet. Nach der Impfung tippen Sie auf die Karte, um das Datum zu speichern — dies ist ein allgemeiner Leitfaden, der von Ihrem Kinderarzt empfohlene Plan hat Vorrang.`,
+    default_child_possessive: "Ihres Kindes",
+    vaccine_status_done: "Erledigt", vaccine_status_overdue: "Überfällig", vaccine_status_upcoming: "Bevorstehend", vaccine_status_planned: "Geplant",
+    toast_vaccine_marked_done: "Als erledigt markiert ✓",
+    toast_vaccine_unmarked: "Als bevorstehend markiert",
+    vaccine_at_birth: "Bei Geburt",
+    vaccine_age_month: (m)=>`${m}. Monat`,
+    vaccine_planned_label: (date)=>`Geplant: ${date}`,
+    vaccine_done_label: (date)=>`Erledigt: ${date}`,
+    vaccine_undo: "Rückgängig",
+    weaning_reaction_good: "Kein Problem, Hat's Geliebt", weaning_reaction_dislike: "Mochte Es Nicht",
+    weaning_reaction_mild: "Leichte Reaktion", weaning_reaction_avoid: "Vermeiden / Allergie",
+    weaning_log_title: "Was gab es heute zu essen?",
+    weaning_food_placeholder: (def)=>`Z. B. ${def}`,
+    weaning_default_food_example: "Karottenpüree",
+    weaning_amount_placeholder: "Menge (optional, z. B. 2 Teelöffel)",
+    weaning_reaction_label: "Wie war die Reaktion?",
+    weaning_add_to_log: "Zum Tagebuch hinzufügen",
+    toast_weaning_added: "Zum Beikost-Tagebuch hinzugefügt ✓",
+    toast_save_failed: "Konnte nicht gespeichert werden, bitte erneut versuchen",
+    toast_entry_removed: "Eintrag gelöscht",
+    weaning_watchlist_title: "Zu beobachtende Lebensmittel",
+    weaning_watchlist_text: (foods)=>`Es gibt einen Hinweis auf eine leichte Reaktion/Vermeidung bei ${foods}. Sprechen Sie mit Ihrem Arzt, bevor Sie diese Lebensmittel erneut anbieten.`,
+    weaning_history_empty: "Noch keine Einträge. Fügen Sie das erste Lebensmittel von heute hinzu!",
+    weaning_amount_label: (amt)=>`Menge: ${amt}`,
+  }
+};
+
+const LanguageContext = createContext({ lang: "tr", setLang: ()=>{}, t: (k)=>k });
+function useLang() { return useContext(LanguageContext); }
+
+function LanguageProvider({ children }) {
+  const [lang, setLangState] = useState("tr");
+
+  useEffect(()=>{ (async ()=>{
+    const saved = await storageGet("app:lang", false);
+    if (saved && UI_TEXT[saved]) setLangState(saved);
+  })(); }, []);
+
+  const setLang = (l) => {
+    if (!UI_TEXT[l]) return;
+    setLangState(l);
+    storageSet("app:lang", l, false);
+  };
+
+  const t = (key, ...args) => {
+    const entry = (UI_TEXT[lang] && UI_TEXT[lang][key] !== undefined) ? UI_TEXT[lang][key] : UI_TEXT.tr[key];
+    if (entry === undefined) return key;
+    return typeof entry === "function" ? entry(...args) : entry;
+  };
+
+  return (
+    <LanguageContext.Provider value={{lang, setLang, t}}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
 
 /* ============================================================
    DESIGN TOKENS
@@ -321,28 +846,40 @@ function growthAtDay(days) {
   };
 }
 
-const VACCINE_SCHEDULE = [
-  {ageMonths:0, name:"Hepatit B (1. doz)"},
-  {ageMonths:2, name:"BCG (Verem Aşısı)"},
-  {ageMonths:2, name:"6'lı Karma — DaBT-İPA-Hib-Hepatit B (1. doz)"},
-  {ageMonths:2, name:"KPA — Konjuge Pnömokok Aşısı (1. doz)"},
-  {ageMonths:4, name:"6'lı Karma (2. doz)"},
-  {ageMonths:4, name:"KPA (2. doz)"},
-  {ageMonths:6, name:"6'lı Karma (3. doz)"},
-  {ageMonths:6, name:"OPA — Ağızdan Çocuk Felci Aşısı (1. doz)"},
-  {ageMonths:12, name:"KPA Rapel (3. doz)"},
-  {ageMonths:12, name:"KKK — Kızamık-Kızamıkçık-Kabakulak (1. doz)"},
-  {ageMonths:12, name:"Suçiçeği (1. doz)"},
-  {ageMonths:18, name:"DaBT-İPA-Hib Rapel"},
-  {ageMonths:18, name:"OPA (2. doz)"},
-  {ageMonths:18, name:"KKK (2. doz)"},
-  {ageMonths:18, name:"Hepatit A (1. doz)"},
-  {ageMonths:24, name:"Hepatit A (2. doz)"},
-  {ageMonths:48, name:"DaBT-İPA Rapel (4-6 yaş)"},
-  {ageMonths:78, name:"Td — Tetanoz-Difteri (İlkokul 1. Sınıf, yaklaşık 6-7 yaş)"}
+const VACCINE_NAMES_TR = [
+  "Hepatit B (1. doz)", "BCG (Verem Aşısı)", "6'lı Karma — DaBT-İPA-Hib-Hepatit B (1. doz)",
+  "KPA — Konjuge Pnömokok Aşısı (1. doz)", "6'lı Karma (2. doz)", "KPA (2. doz)",
+  "6'lı Karma (3. doz)", "OPA — Ağızdan Çocuk Felci Aşısı (1. doz)", "KPA Rapel (3. doz)",
+  "KKK — Kızamık-Kızamıkçık-Kabakulak (1. doz)", "Suçiçeği (1. doz)", "DaBT-İPA-Hib Rapel",
+  "OPA (2. doz)", "KKK (2. doz)", "Hepatit A (1. doz)", "Hepatit A (2. doz)",
+  "DaBT-İPA Rapel (4-6 yaş)", "Td — Tetanoz-Difteri (İlkokul 1. Sınıf, yaklaşık 6-7 yaş)"
 ];
+const VACCINE_NAMES_EN = [
+  "Hepatitis B (dose 1)", "BCG (Tuberculosis vaccine)", "6-in-1 — DTaP-IPV-Hib-HepB (dose 1)",
+  "PCV — Pneumococcal Conjugate Vaccine (dose 1)", "6-in-1 (dose 2)", "PCV (dose 2)",
+  "6-in-1 (dose 3)", "OPV — Oral Polio Vaccine (dose 1)", "PCV Booster (dose 3)",
+  "MMR — Measles-Mumps-Rubella (dose 1)", "Varicella (dose 1)", "DTaP-IPV-Hib Booster",
+  "OPV (dose 2)", "MMR (dose 2)", "Hepatitis A (dose 1)", "Hepatitis A (dose 2)",
+  "DTaP-IPV Booster (age 4-6)", "Td — Tetanus-Diphtheria (1st grade, around age 6-7)"
+];
+const VACCINE_NAMES_DE = [
+  "Hepatitis B (1. Dosis)", "BCG (Tuberkulose-Impfung)", "6-fach-Impfung — DTaP-IPV-Hib-HepB (1. Dosis)",
+  "PCV — Pneumokokken-Konjugatimpfstoff (1. Dosis)", "6-fach-Impfung (2. Dosis)", "PCV (2. Dosis)",
+  "6-fach-Impfung (3. Dosis)", "OPV — Orale Kinderlähmungsimpfung (1. Dosis)", "PCV-Auffrischung (3. Dosis)",
+  "MMR — Masern-Mumps-Röteln (1. Dosis)", "Windpocken (1. Dosis)", "DTaP-IPV-Hib-Auffrischung",
+  "OPV (2. Dosis)", "MMR (2. Dosis)", "Hepatitis A (1. Dosis)", "Hepatitis A (2. Dosis)",
+  "DTaP-IPV-Auffrischung (4-6 Jahre)", "Td — Tetanus-Diphtherie (1. Klasse, ca. 6-7 Jahre)"
+];
+const VACCINE_AGE_MONTHS = [0,2,2,2,4,4,6,6,12,12,12,18,18,18,18,24,48,78];
+const VACCINE_NAMES_BY_LANG = { tr: VACCINE_NAMES_TR, en: VACCINE_NAMES_EN, de: VACCINE_NAMES_DE };
+function getVaccineSchedule(lang) {
+  const names = VACCINE_NAMES_BY_LANG[lang] || VACCINE_NAMES_TR;
+  return VACCINE_AGE_MONTHS.map((ageMonths,i)=>({ageMonths, name: names[i]}));
+}
+const VACCINE_SCHEDULE = getVaccineSchedule("tr");
 // Geriye dönük uyumluluk için eski isim
 const VACCINES = VACCINE_SCHEDULE.map(v=>({age: v.ageMonths===0?"Doğumda":`${v.ageMonths}. Ay`, name:v.name}));
+
 
 const WEANING_FOODS = [
   {name:"Elma Püresi", gram:"1-2 tatlı kaşığı", prep:"Elmayı soyup buharda pişirin, iyice ezin.", alt:"Armut püresi", allergy:"Nadir, gaz yapabilir."},
@@ -1480,29 +2017,30 @@ function SetupWizard({onDone}) {
    BOTTOM NAV
    ============================================================ */
 const TABS = [
-  {key:"today", label:"Bugün", icon: Home},
-  {key:"track", label:"Takip", icon: Activity},
-  {key:"activities", label:"Etkinlik", icon: Sparkles},
-  {key:"nearby", label:"Yakın", icon: MapPin},
-  {key:"community", label:"Sohbet", icon: Users},
-  {key:"assistant", label:"Asistan", icon: MessageCircle},
-  {key:"profile", label:"Profil", icon: User}
+  {key:"today", labelKey:"nav_today", icon: Home},
+  {key:"track", labelKey:"nav_track", icon: Activity},
+  {key:"activities", labelKey:"nav_activities", icon: Sparkles},
+  {key:"nearby", labelKey:"nav_nearby", icon: MapPin},
+  {key:"community", labelKey:"nav_community", icon: Users},
+  {key:"assistant", labelKey:"nav_assistant", icon: MessageCircle},
+  {key:"profile", labelKey:"nav_profile", icon: User}
 ];
 function BottomNav({active, onChange}) {
+  const { t } = useLang();
   return (
     <div style={{
       position:"absolute", bottom:0, left:0, right:0, display:"flex",
       background:"var(--card)", borderTop:"1px solid rgba(150,130,180,0.12)",
       padding:"10px 6px 18px", boxShadow:"0 -8px 24px -16px rgba(90,70,130,0.25)"
     }}>
-      {TABS.map(t=>{
-        const Icon = t.icon; const isActive = active===t.key;
+      {TABS.map(tab=>{
+        const Icon = tab.icon; const isActive = active===tab.key;
         return (
-          <div key={t.key} onClick={()=>onChange(t.key)} className="abp-tap" style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"4px 0"}}>
+          <div key={tab.key} onClick={()=>onChange(tab.key)} className="abp-tap" style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:4,padding:"4px 0"}}>
             <div style={{width:34,height:34,borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center",background: isActive? "var(--pink)":"transparent"}}>
               <Icon size={18} color={isActive?"var(--ink)":"var(--ink-faint)"} strokeWidth={isActive?2.2:1.8}/>
             </div>
-            <div style={{fontSize:10.5,fontWeight:700,color: isActive?"var(--ink)":"var(--ink-faint)"}}>{t.label}</div>
+            <div style={{fontSize:10.5,fontWeight:700,color: isActive?"var(--ink)":"var(--ink-faint)"}}>{t(tab.labelKey)}</div>
           </div>
         );
       })}
@@ -1541,6 +2079,7 @@ function DayRing({percent, big, small, color}) {
 }
 
 function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
+  const { t } = useLang();
   const [cardsLoading, setCardsLoading] = useState(true);
   const [cards, setCards] = useState([]);
   const [openCard, setOpenCard] = useState(null);
@@ -1564,7 +2103,7 @@ function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
         <div>
-          <div style={{fontSize:12.5,color:"var(--ink-soft)",fontWeight:600}}>Merhaba,</div>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",fontWeight:600}}>{t("today_greeting")}</div>
           <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"2px 0 0"}}>{child.name}</h2>
         </div>
         <div style={{width:40,height:40,borderRadius:20,background:"var(--purple)",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -1574,9 +2113,9 @@ function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
 
       <div className="abp-fade-up" style={{marginTop:18}} onClick={()=> isPregnant ? onOpenPregnancy() : onOpenChild()}>
         {isPregnant ? (
-          <DayRing percent={(info.week/40)*100} big={`${info.week}. Hafta`} small={`${info.dayInWeek}. gün · Bebeğiniz bugün ${info.data.fruit.toLowerCase()} büyüklüğünde 🤰`}/>
+          <DayRing percent={(info.week/40)*100} big={t("today_week_label", info.week)} small={t("today_day_fruit", info.dayInWeek, info.data.fruit.toLowerCase())}/>
         ) : (
-          <DayRing percent={clamp((info.months/72)*100,4,100)} big={`${info.years>0?`${info.years} yaş ${info.remMonths} ay`:`${info.months} aylık`}`} small={`Bebeğiniz bugün ${info.days}. gününde 👶`}/>
+          <DayRing percent={clamp((info.months/72)*100,4,100)} big={info.years>0?t("today_age_years", info.years, info.remMonths):t("today_age_months", info.months)} small={t("today_child_day", info.days)}/>
         )}
       </div>
 
@@ -1589,13 +2128,13 @@ function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
           <ShoppingBag size={22} color="#5A3B50"/>
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <div className="abp-display" style={{fontWeight:800,fontSize:15,color:"#3A2A3B"}}>Anne Pazarı</div>
-          <div style={{fontSize:12,color:"#5A3B50",marginTop:2,fontWeight:600}}>2. el bebek kıyafeti, oyuncak ve eşyaları keşfet ya da satışa çıkar</div>
+          <div className="abp-display" style={{fontWeight:800,fontSize:15,color:"#3A2A3B"}}>{t("today_market_title")}</div>
+          <div style={{fontSize:12,color:"#5A3B50",marginTop:2,fontWeight:600}}>{t("today_market_desc")}</div>
         </div>
         <ChevronRight size={20} color="#5A3B50" style={{flexShrink:0}}/>
       </div>
 
-      <SectionTitle>Bugünün Kartları</SectionTitle>
+      <SectionTitle>{t("today_cards_title")}</SectionTitle>
       {cardsLoading ? (
         <SkeletonGrid count={6}/>
       ) : (
@@ -1617,19 +2156,22 @@ function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
         <Modal title={openCard.title} onClose={()=>setOpenCard(null)}>
           <IconBadge icon={openCard.icon} color={openCard.color} size={48}/>
           <p style={{fontSize:14.5,lineHeight:1.7,color:"var(--ink)",marginTop:14}}>{openCard.body}</p>
-          <p style={{fontSize:12.5,color:"var(--ink-faint)"}}>İçerikler her gün otomatik olarak yenilenir.</p>
+          <p style={{fontSize:12.5,color:"var(--ink-faint)"}}>{t("today_cards_refresh_note")}</p>
         </Modal>
       )}
     </div>
   );
 }
 
-const EmptyState = ({text="Henüz bir çocuk profili eklenmedi."}) => (
-  <div style={{height:"100%",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:10,background:"var(--bg)",padding:30,textAlign:"center"}}>
-    <IconBadge icon={Baby} color="pink" size={60}/>
-    <div style={{fontWeight:700}}>{text}</div>
-  </div>
-);
+const EmptyState = ({text}) => {
+  const { t } = useLang();
+  return (
+    <div style={{height:"100%",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:10,background:"var(--bg)",padding:30,textAlign:"center"}}>
+      <IconBadge icon={Baby} color="pink" size={60}/>
+      <div style={{fontWeight:700}}>{text || t("empty_state_default")}</div>
+    </div>
+  );
+};
 
 /* ============================================================
    PREGNANCY DETAIL
@@ -2273,6 +2815,7 @@ function ChildDetail({child, onBack}) {
    TRACK TAB
    ============================================================ */
 function TrackTab({child}) {
+  const { t, lang } = useLang();
   const isPregnant = child?.status === "pregnant";
   const [sub, setSub] = useState(isPregnant ? "kilo" : "emzirme");
   const [logs, setLogs] = useState({emzirme:[], mama:[], uyku:[], bez:[], kilo:[], tekme:[], kasilma:[]});
@@ -2280,37 +2823,37 @@ function TrackTab({child}) {
   const addLog = (type, entry) => setLogs(prev => ({...prev, [type]: [entry, ...prev[type]]}));
 
   const subTabs = isPregnant ? [
-    {key:"kilo", label:"Kilo Takibi"},
-    {key:"tekme", label:"Bebek Tekmesi"},
-    {key:"kasilma", label:"Kasılma Takibi"},
-    {key:"randevu", label:"Randevu Takvimi"},
-    {key:"uyku", label:"Uyku"}
+    {key:"kilo", label:t("track_sub_weight")},
+    {key:"tekme", label:t("track_sub_kick")},
+    {key:"kasilma", label:t("track_sub_contraction")},
+    {key:"randevu", label:t("track_sub_appointments")},
+    {key:"uyku", label:t("track_sub_sleep")}
   ] : [
-    {key:"emzirme", label:"Emzirme"},
-    {key:"mama", label:"Mama"},
-    {key:"beslenme", label:"Yemek Listesi"},
-    {key:"uyku", label:"Uyku"},
-    {key:"bez", label:"Bez"},
-    {key:"kaka", label:"Kaka Takibi"},
-    {key:"dis", label:"Diş Çıkarma"},
-    {key:"asi", label:"Aşı Takvimi"},
-    {key:"ekgida", label:"Ek Gıda"}
+    {key:"emzirme", label:t("track_sub_breastfeeding")},
+    {key:"mama", label:t("track_sub_formula")},
+    {key:"beslenme", label:t("track_sub_foodlist")},
+    {key:"uyku", label:t("track_sub_sleep")},
+    {key:"bez", label:t("track_sub_diaper")},
+    {key:"kaka", label:t("track_sub_poop")},
+    {key:"dis", label:t("track_sub_teething")},
+    {key:"asi", label:t("track_sub_vaccine")},
+    {key:"ekgida", label:t("track_sub_weaning")}
   ];
 
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
-      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>Takip</h2>
+      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>{t("track_title")}</h2>
       <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4}} className="abp-scrollbar">
-        {subTabs.map(t => <Pill_ key={t.key} active={sub===t.key} onClick={()=>setSub(t.key)}>{t.label}</Pill_>)}
+        {subTabs.map(tb => <Pill_ key={tb.key} active={sub===tb.key} onClick={()=>setSub(tb.key)}>{tb.label}</Pill_>)}
       </div>
 
       {isPregnant && sub === "kilo" && (
         <TrackerBoard
-          title="Kilo Takibi" color="purple" icon={Weight}
-          fields={["Kilo (kg)"]}
-          onLog={(vals)=>addLog("kilo",{...vals, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})})}
+          title={t("tracker_weight_title")} color="purple" icon={Weight}
+          fields={[{key:"weight_kg", label:t("field_weight_kg")}]}
+          onLog={(vals)=>addLog("kilo",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
           logs={logs.kilo}
-          renderLog={(l)=>`${l.time} · ${l["Kilo (kg)"]||0} kg`}
+          renderLog={(l)=>t("weight_log_render", l.time, l.weight_kg||0)}
         />
       )}
       {isPregnant && sub === "tekme" && (
@@ -2323,32 +2866,32 @@ function TrackTab({child}) {
 
       {sub === "emzirme" && (
         <TrackerBoard
-          title="Emzirme Takibi" color="pink" icon={Heart}
-          fields={["Sağ Göğüs","Sol Göğüs"]}
-          onLog={(vals)=>addLog("emzirme",{...vals, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})})}
+          title={t("tracker_breastfeeding_title")} color="pink" icon={Heart}
+          fields={[{key:"right_breast", label:t("field_right_breast")},{key:"left_breast", label:t("field_left_breast")}]}
+          onLog={(vals)=>addLog("emzirme",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
           logs={logs.emzirme}
-          renderLog={(l)=>`${l.time} · ${l["Sağ Göğüs"]||0} dk sağ / ${l["Sol Göğüs"]||0} dk sol`}
+          renderLog={(l)=>t("breastfeeding_log_render", l.time, l.right_breast||0, l.left_breast||0)}
         />
       )}
       {sub === "mama" && (
         <TrackerBoard
-          title="Mama & Sıvı Takibi" color="blue" icon={Utensils}
-          fields={["Mama (ml)","Anne Sütü (ml)","Su (ml)"]}
-          onLog={(vals)=>addLog("mama",{...vals, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})})}
+          title={t("tracker_formula_title")} color="blue" icon={Utensils}
+          fields={[{key:"formula_ml", label:t("field_formula_ml")},{key:"breastmilk_ml", label:t("field_breastmilk_ml")},{key:"water_ml", label:t("field_water_ml")}]}
+          onLog={(vals)=>addLog("mama",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
           logs={logs.mama}
-          renderLog={(l)=>`${l.time} · Mama ${l["Mama (ml)"]||0}ml, Anne Sütü ${l["Anne Sütü (ml)"]||0}ml, Su ${l["Su (ml)"]||0}ml`}
+          renderLog={(l)=>t("formula_log_render", l.time, l.formula_ml||0, l.breastmilk_ml||0, l.water_ml||0)}
         />
       )}
       {sub === "uyku" && (
         <TrackerBoard
-          title="Uyku Takibi" color="purple" icon={MoonIcon}
-          fields={["Süre (dk)"]}
-          onLog={(vals)=>addLog("uyku",{...vals, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})})}
+          title={t("tracker_sleep_title")} color="purple" icon={MoonIcon}
+          fields={[{key:"duration_min", label:t("field_duration_min")}]}
+          onLog={(vals)=>addLog("uyku",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
           logs={logs.uyku}
-          renderLog={(l)=>`${l.time} · ${l["Süre (dk)"]||0} dakika uyudu`}
+          renderLog={(l)=>t("sleep_log_render", l.time, l.duration_min||0)}
           extra={
             <Card style={{marginTop:14}}>
-              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:8}}>Haftalık Uyku Grafiği</div>
+              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:8}}>{t("tracker_sleep_weekly_chart")}</div>
               <ResponsiveContainer width="100%" height={140}>
                 <AreaChart data={[10,9,11,8,10.5,12,9.5].map((v,i)=>({d:`G${i+1}`,v}))}>
                   <defs><linearGradient id="sleepGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#C6B3F0" stopOpacity={0.6}/><stop offset="100%" stopColor="#C6B3F0" stopOpacity={0}/></linearGradient></defs>
@@ -2364,12 +2907,12 @@ function TrackTab({child}) {
       )}
       {sub === "bez" && (
         <TrackerBoard
-          title="Bez Takibi" color="green" icon={Droplets}
+          title={t("tracker_diaper_title")} color="green" icon={Droplets}
           fields={[]}
-          customButtons={["Çiş","Kaka","İkisi"]}
-          onLog={(vals)=>addLog("bez",{type:vals.type, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})})}
+          customButtons={[{key:"pee", label:t("diaper_pee")},{key:"poop", label:t("diaper_poop")},{key:"both", label:t("diaper_both")}]}
+          onLog={(vals)=>addLog("bez",{type:vals.type, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
           logs={logs.bez}
-          renderLog={(l)=>`${l.time} · ${l.type}`}
+          renderLog={(l)=>t("diaper_log_render", l.time, l.type)}
         />
       )}
       {sub === "beslenme" && <FoodLogSection childId={child?.id}/>}
@@ -2382,6 +2925,7 @@ function TrackTab({child}) {
 }
 
 function TrackerBoard({title,color,icon:Icon,fields,onLog,logs,renderLog,customButtons,extra}) {
+  const { t } = useLang();
   const [vals, setVals] = useState({});
   const [note, setNote] = useState("");
   return (
@@ -2394,27 +2938,27 @@ function TrackerBoard({title,color,icon:Icon,fields,onLog,logs,renderLog,customB
         {customButtons ? (
           <div style={{display:"flex",gap:8,marginBottom:10}}>
             {customButtons.map(b=>(
-              <div key={b} onClick={()=>{onLog({type:b}); showToast(`${b} kaydedildi ✓`);}} className="abp-tap" style={{flex:1,textAlign:"center",padding:"12px 0",borderRadius:14,background:"var(--"+color+")",fontWeight:700,fontSize:13}}>{b}</div>
+              <div key={b.key} onClick={()=>{onLog({type:b.label}); showToast(t("toast_item_saved", b.label));}} className="abp-tap" style={{flex:1,textAlign:"center",padding:"12px 0",borderRadius:14,background:"var(--"+color+")",fontWeight:700,fontSize:13}}>{b.label}</div>
             ))}
           </div>
         ) : (
           <>
             <div style={{display:"grid",gridTemplateColumns: fields.length>1?"1fr 1fr":"1fr", gap:10, marginBottom:10}}>
               {fields.map(f=>(
-                <input key={f} placeholder={f} value={vals[f]||""} onChange={e=>setVals({...vals,[f]:e.target.value})}
+                <input key={f.key} placeholder={f.label} value={vals[f.key]||""} onChange={e=>setVals({...vals,[f.key]:e.target.value})}
                   style={{padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none"}}/>
               ))}
             </div>
-            <input placeholder="Not ekle (opsiyonel)" value={note} onChange={e=>setNote(e.target.value)}
+            <input placeholder={t("field_note_placeholder")} value={note} onChange={e=>setNote(e.target.value)}
               style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-            <PrimaryButton onClick={()=>{onLog({...vals, not:note}); setVals({}); setNote(""); showToast("Kaydedildi ✓");}} style={{padding:12,fontSize:14}}>Kaydet</PrimaryButton>
+            <PrimaryButton onClick={()=>{onLog({...vals, not:note}); setVals({}); setNote(""); showToast(t("toast_saved"));}} style={{padding:12,fontSize:14}}>{t("save")}</PrimaryButton>
           </>
         )}
       </Card>
       {extra}
-      <SectionTitle>Geçmiş Kayıtlar</SectionTitle>
+      <SectionTitle>{t("history_title")}</SectionTitle>
       {logs.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok. İlk kaydını ekle!</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("history_empty")}</Card>
       ) : logs.slice(0,8).map((l,i)=>(
         <Card key={i} style={{marginBottom:8,fontSize:13.5}}>{renderLog(l)}</Card>
       ))}
@@ -2423,6 +2967,7 @@ function TrackerBoard({title,color,icon:Icon,fields,onLog,logs,renderLog,customB
 }
 
 function KickCounter({logs, onLog}) {
+  const { t, lang } = useLang();
   const [count, setCount] = useState(0);
   const [startTime] = useState(()=> new Date());
   const elapsedMin = Math.max(0, Math.round((Date.now() - startTime.getTime())/60000));
@@ -2432,13 +2977,13 @@ function KickCounter({logs, onLog}) {
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <IconBadge icon={Baby} color="pink" size={36}/>
           <div>
-            <div style={{fontWeight:700,fontSize:15}}>Bebek Tekmesi Sayacı</div>
-            <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>Genelde 2 saat içinde 10 hareket beklenir</div>
+            <div style={{fontWeight:700,fontSize:15}}>{t("kick_counter_title")}</div>
+            <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{t("kick_counter_desc")}</div>
           </div>
         </div>
         <div style={{textAlign:"center",padding:"18px 0"}}>
           <div className="abp-display" style={{fontSize:44,fontWeight:800}}>{count}</div>
-          <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{elapsedMin} dk içinde sayılan hareket</div>
+          <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{t("kick_counter_movement_count", elapsedMin)}</div>
         </div>
         <div onClick={()=>setCount(c=>c+1)} className="abp-tap" style={{
           width:96,height:96,borderRadius:48,margin:"0 auto",background:"linear-gradient(135deg, #E8A9C4, #B79AEA)",
@@ -2447,25 +2992,26 @@ function KickCounter({logs, onLog}) {
           <Plus size={34} color="#fff"/>
         </div>
         <div style={{display:"flex",gap:8,marginTop:16}}>
-          <GhostButton style={{flex:1,padding:12,fontSize:13}} onClick={()=>setCount(0)}>Sıfırla</GhostButton>
+          <GhostButton style={{flex:1,padding:12,fontSize:13}} onClick={()=>setCount(0)}>{t("reset")}</GhostButton>
           <PrimaryButton style={{flex:1,padding:12,fontSize:13}} onClick={()=>{
-            onLog({count, minutes:elapsedMin, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})});
+            onLog({count, minutes:elapsedMin, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})});
             setCount(0);
-            showToast("Tekme sayımı kaydedildi ✓");
-          }}>Kaydet</PrimaryButton>
+            showToast(t("toast_kick_saved"));
+          }}>{t("save")}</PrimaryButton>
         </div>
       </Card>
-      <SectionTitle>Geçmiş Kayıtlar</SectionTitle>
+      <SectionTitle>{t("history_title")}</SectionTitle>
       {logs.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok. İlk sayımını kaydet!</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("history_empty_kick")}</Card>
       ) : logs.slice(0,8).map((l,i)=>(
-        <Card key={i} style={{marginBottom:8,fontSize:13.5}}>{l.time} · {l.count} hareket · {l.minutes} dk içinde</Card>
+        <Card key={i} style={{marginBottom:8,fontSize:13.5}}>{t("kick_log_render", l.time, l.count, l.minutes)}</Card>
       ))}
     </div>
   );
 }
 
 function ContractionTimer({logs, onLog}) {
+  const { t, lang } = useLang();
   const [running, setRunning] = useState(false);
   const [startedAt, setStartedAt] = useState(null);
   const [elapsed, setElapsed] = useState(0);
@@ -2481,33 +3027,33 @@ function ContractionTimer({logs, onLog}) {
     const now = Date.now();
     const intervalMin = lastEndRef.current ? Math.round((now-lastEndRef.current)/60000) : null;
     lastEndRef.current = now;
-    onLog({durationSec, intervalMin, time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})});
+    onLog({durationSec, intervalMin, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})});
     setRunning(false);
-    showToast("Kasılma kaydedildi ✓");
+    showToast(t("toast_contraction_saved"));
   };
   return (
     <div style={{marginTop:16}}>
       <Card>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <IconBadge icon={Timer} color="blue" size={36}/>
-          <div style={{fontWeight:700,fontSize:15}}>Kasılma Takibi</div>
+          <div style={{fontWeight:700,fontSize:15}}>{t("contraction_title")}</div>
         </div>
         <div style={{textAlign:"center",padding:"14px 0"}}>
           <div className="abp-display" style={{fontSize:40,fontWeight:800}}>{String(Math.floor(elapsed/60)).padStart(2,"0")}:{String(elapsed%60).padStart(2,"0")}</div>
-          <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{running ? "Kasılma sürüyor…" : "Kasılma başladığında butona basın"}</div>
+          <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{running ? t("contraction_running") : t("contraction_idle")}</div>
         </div>
         {running ? (
-          <div onClick={stop} className="abp-tap" style={{textAlign:"center",padding:16,borderRadius:18,background:"#E38FA6",color:"#fff",fontWeight:700}}>Kasılma Bitti</div>
+          <div onClick={stop} className="abp-tap" style={{textAlign:"center",padding:16,borderRadius:18,background:"#E38FA6",color:"#fff",fontWeight:700}}>{t("contraction_stop")}</div>
         ) : (
-          <div onClick={start} className="abp-tap" style={{textAlign:"center",padding:16,borderRadius:18,background:"var(--ink)",color:"#fff",fontWeight:700}}>Kasılma Başladı</div>
+          <div onClick={start} className="abp-tap" style={{textAlign:"center",padding:16,borderRadius:18,background:"var(--ink)",color:"#fff",fontWeight:700}}>{t("contraction_start")}</div>
         )}
       </Card>
-      <div style={{fontSize:12,color:"var(--ink-faint)",margin:"10px 4px"}}>Kasılmalar 5 dakikadan sık, 1 dakikadan uzun sürüyorsa doğum kliniğinizi arayın.</div>
-      <SectionTitle>Geçmiş Kayıtlar</SectionTitle>
+      <div style={{fontSize:12,color:"var(--ink-faint)",margin:"10px 4px"}}>{t("contraction_warning")}</div>
+      <SectionTitle>{t("history_title")}</SectionTitle>
       {logs.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok.</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("history_empty_generic")}</Card>
       ) : logs.slice(0,8).map((l,i)=>(
-        <Card key={i} style={{marginBottom:8,fontSize:13.5}}>{l.time} · {l.durationSec} sn sürdü{l.intervalMin!=null?` · önceki kasılmadan ${l.intervalMin} dk sonra`:""}</Card>
+        <Card key={i} style={{marginBottom:8,fontSize:13.5}}>{t("contraction_log_render", l.time, l.durationSec, l.intervalMin)}</Card>
       ))}
     </div>
   );
@@ -2530,7 +3076,10 @@ const PREGNANCY_APPOINTMENTS = [
    Not: Bu, tüm bu artifact'ı kullanan kişiler arasında paylaşılan basit
    bir içerik havuzudur; gerçek kullanıcı rolleri veya güvenlik sağlamaz.
    ============================================================ */
-function CMSEditor({storageKey, fields, renderItem, addLabel="Ekle", emptyText="Henüz içerik eklenmedi."}) {
+function CMSEditor({storageKey, fields, renderItem, addLabel, emptyText}) {
+  const { t } = useLang();
+  const finalAddLabel = addLabel || t("cms_add_default");
+  const finalEmptyText = emptyText || t("cms_empty_default");
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [vals, setVals] = useState({});
@@ -2546,20 +3095,20 @@ function CMSEditor({storageKey, fields, renderItem, addLabel="Ekle", emptyText="
   useEffect(()=>{ load(); }, [storageKey]);
 
   const add = async () => {
-    if (fields.some(f=>f.required && !vals[f.key])) { showToast("Zorunlu alanları doldurun", "error"); return; }
+    if (fields.some(f=>f.required && !vals[f.key])) { showToast(t("cms_required_fields"), "error"); return; }
     setSaving(true);
     const item = {id: Math.random().toString(36).slice(2), ...vals};
     const list = [item, ...items];
     const ok = await storageSet(storageKey, list, true);
-    if (ok) { setItems(list); setVals({}); showToast("İçerik eklendi ✓"); }
-    else { showToast("Eklenemedi, tekrar deneyin", "error"); }
+    if (ok) { setItems(list); setVals({}); showToast(t("toast_content_added")); }
+    else { showToast(t("toast_content_add_failed"), "error"); }
     setSaving(false);
   };
   const remove = async (id) => {
     const list = items.filter(i=>i.id!==id);
     setItems(list);
     await storageSet(storageKey, list, true);
-    showToast("İçerik silindi");
+    showToast(t("toast_content_removed"));
   };
 
   return (
@@ -2569,14 +3118,14 @@ function CMSEditor({storageKey, fields, renderItem, addLabel="Ekle", emptyText="
           <input key={f.key} placeholder={f.label+(f.required?" *":"")} value={vals[f.key]||""} onChange={e=>setVals({...vals,[f.key]:e.target.value})}
             style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
         ))}
-        <PrimaryButton onClick={add} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?"Ekleniyor...":addLabel}</PrimaryButton>
+        <PrimaryButton onClick={add} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?t("cms_adding"):finalAddLabel}</PrimaryButton>
       </Card>
-      <SectionTitle>Paylaşımlı İçerik ({items.length})</SectionTitle>
+      <SectionTitle>{t("cms_shared_content", items.length)}</SectionTitle>
       {error && <ErrorBanner text={error} onRetry={load}/>}
       {loading ? (
         <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
       ) : items.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{emptyText}</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{finalEmptyText}</Card>
       ) : items.map(item=>(
         <Card key={item.id} style={{marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>{renderItem(item)}</div>
@@ -2587,23 +3136,19 @@ function CMSEditor({storageKey, fields, renderItem, addLabel="Ekle", emptyText="
   );
 }
 
-const ADMIN_TABS = [
-  {key:"articles", label:"Makaleler"},
-  {key:"activities", label:"Aktiviteler"},
-  {key:"sounds", label:"Uyku Sesleri"},
-  {key:"lullabies", label:"Ninniler"}
-];
 /* ============================================================
    TAKVİM — doktor randevuları, aşılar ve önemli tarihleri eklemek,
    düzenlemek ve silmek için kalıcı (window.storage) bir takvim.
    ============================================================ */
-const CALENDAR_TYPES = [
-  {key:"doktor", label:"Doktor Randevusu", icon:Stethoscope, color:"pink"},
-  {key:"asi", label:"Aşı", icon:Syringe, color:"blue"},
-  {key:"vitamin", label:"Vitamin/İlaç", icon:Pill, color:"green"},
-  {key:"diger", label:"Diğer", icon:Star, color:"purple"}
-];
+function getCalendarTypes(t) { return [
+  {key:"doktor", label:t("calendar_type_doctor"), icon:Stethoscope, color:"pink"},
+  {key:"asi", label:t("calendar_type_vaccine"), icon:Syringe, color:"blue"},
+  {key:"vitamin", label:t("calendar_type_vitamin"), icon:Pill, color:"green"},
+  {key:"diger", label:t("calendar_type_other"), icon:Star, color:"purple"}
+]; }
 function CalendarDetail({onBack}) {
+  const { t, lang } = useLang();
+  const CALENDAR_TYPES = getCalendarTypes(t);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
   const [showAdd, setShowAdd] = useState(false);
@@ -2633,8 +3178,8 @@ function CalendarDetail({onBack}) {
     const ok = await storageSet("calendar:events", list, false);
     if (ok) {
       setEvents(list); setTitle(""); setNote(""); setTime("10:00"); setShowAdd(false);
-      showToast("Takvime eklendi ✓");
-    } else showToast("Eklenemedi, tekrar deneyin", "error");
+      showToast(t("toast_calendar_added"));
+    } else showToast(t("toast_add_failed"), "error");
     setSaving(false);
   };
 
@@ -2645,19 +3190,19 @@ function CalendarDetail({onBack}) {
   const past = events.filter(e=>e.date < todayStr);
 
   return (
-    <Screen title="Takvim" onBack={onBack}>
+    <Screen title={t("calendar_title")} onBack={onBack}>
       <PrimaryButton onClick={()=>setShowAdd(true)} style={{marginBottom:18,padding:14,fontSize:14}}>
-        <span style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={16}/> Randevu / Etkinlik Ekle</span>
+        <span style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Plus size={16}/> {t("calendar_add_btn")}</span>
       </PrimaryButton>
 
       {loading ? (
         <><SkeletonCard/><SkeletonCard/></>
       ) : events.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz bir randevu veya etkinlik eklenmedi.</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("calendar_empty")}</Card>
       ) : (
         <>
-          <SectionTitle>Yaklaşanlar</SectionTitle>
-          {upcoming.length === 0 && <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Yaklaşan bir kayıt yok.</Card>}
+          <SectionTitle>{t("calendar_upcoming")}</SectionTitle>
+          {upcoming.length === 0 && <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("calendar_no_upcoming")}</Card>}
           {upcoming.map(ev=>{
             const meta = CALENDAR_TYPES.find(t=>t.key===ev.type) || CALENDAR_TYPES[3];
             return (
@@ -2665,7 +3210,7 @@ function CalendarDetail({onBack}) {
                 <IconBadge icon={meta.icon} color={meta.color} size={40}/>
                 <div style={{flex:1}}>
                   <div style={{fontWeight:700,fontSize:14}}>{ev.title}</div>
-                  <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{new Date(ev.date+"T00:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"})} · {ev.time}</div>
+                  <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{new Date(ev.date+"T00:00:00").toLocaleDateString(localeOf(lang),{day:"numeric",month:"long",year:"numeric"})} · {ev.time}</div>
                   {ev.note && <div style={{fontSize:11.5,color:"var(--ink-faint)",marginTop:3}}>{ev.note}</div>}
                 </div>
                 <div onClick={()=>removeEvent(ev.id)} className="abp-tap" style={{width:28,height:28,borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center"}}><X size={13} color="var(--ink-faint)"/></div>
@@ -2674,7 +3219,7 @@ function CalendarDetail({onBack}) {
           })}
           {past.length > 0 && (
             <>
-              <SectionTitle>Geçmiş</SectionTitle>
+              <SectionTitle>{t("calendar_past")}</SectionTitle>
               {past.slice().reverse().map(ev=>{
                 const meta = CALENDAR_TYPES.find(t=>t.key===ev.type) || CALENDAR_TYPES[3];
                 return (
@@ -2682,7 +3227,7 @@ function CalendarDetail({onBack}) {
                     <IconBadge icon={meta.icon} color={meta.color} size={34}/>
                     <div style={{flex:1}}>
                       <div style={{fontWeight:700,fontSize:13}}>{ev.title}</div>
-                      <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{new Date(ev.date+"T00:00:00").toLocaleDateString("tr-TR")} · {ev.time}</div>
+                      <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{new Date(ev.date+"T00:00:00").toLocaleDateString(localeOf(lang))} · {ev.time}</div>
                     </div>
                     <div onClick={()=>removeEvent(ev.id)} className="abp-tap" style={{width:26,height:26,borderRadius:13,display:"flex",alignItems:"center",justifyContent:"center"}}><X size={12} color="var(--ink-faint)"/></div>
                   </Card>
@@ -2694,11 +3239,11 @@ function CalendarDetail({onBack}) {
       )}
 
       {showAdd && (
-        <Modal title="Yeni Randevu / Etkinlik" onClose={()=>setShowAdd(false)}>
+        <Modal title={t("calendar_new_event_modal_title")} onClose={()=>setShowAdd(false)}>
           <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:10}} className="abp-scrollbar">
-            {CALENDAR_TYPES.map(t=><Pill_ key={t.key} active={type===t.key} onClick={()=>setType(t.key)}>{t.label}</Pill_>)}
+            {CALENDAR_TYPES.map(ct=><Pill_ key={ct.key} active={type===ct.key} onClick={()=>setType(ct.key)}>{ct.label}</Pill_>)}
           </div>
-          <input placeholder="Başlık (örn. Kadın Doğum Kontrolü)" value={title} onChange={e=>setTitle(e.target.value)}
+          <input placeholder={t("calendar_title_placeholder")} value={title} onChange={e=>setTitle(e.target.value)}
             style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
           <div style={{display:"flex",gap:10}}>
             <input type="date" value={date} onChange={e=>setDate(e.target.value)}
@@ -2706,9 +3251,9 @@ function CalendarDetail({onBack}) {
             <input type="time" value={time} onChange={e=>setTime(e.target.value)}
               style={{flex:1,padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
           </div>
-          <input placeholder="Not (opsiyonel)" value={note} onChange={e=>setNote(e.target.value)}
+          <input placeholder={t("calendar_note_placeholder")} value={note} onChange={e=>setNote(e.target.value)}
             style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:12}}/>
-          <PrimaryButton onClick={addEvent} disabled={!title.trim()||!date||saving} style={{padding:12,fontSize:13.5}}>{saving?"Kaydediliyor...":"Takvime Ekle"}</PrimaryButton>
+          <PrimaryButton onClick={addEvent} disabled={!title.trim()||!date||saving} style={{padding:12,fontSize:13.5}}>{saving?t("calendar_saving"):t("calendar_add_to_calendar")}</PrimaryButton>
         </Modal>
       )}
     </Screen>
@@ -2716,59 +3261,66 @@ function CalendarDetail({onBack}) {
 }
 
 function AdminPanel({onBack}) {
+  const { t } = useLang();
+  const ADMIN_TABS = [
+    {key:"articles", label:t("admin_tab_articles")},
+    {key:"activities", label:t("admin_tab_activities")},
+    {key:"sounds", label:t("admin_tab_sounds")},
+    {key:"lullabies", label:t("admin_tab_lullabies")}
+  ];
   const [unlocked, setUnlocked] = useState(false);
   const [code, setCode] = useState("");
   const [tab, setTab] = useState("articles");
 
   if (!unlocked) {
     return (
-      <Screen title="Yönetici Paneli" onBack={onBack}>
+      <Screen title={t("admin_title")} onBack={onBack}>
         <Card>
-          <div style={{fontWeight:700,fontSize:15,marginBottom:6}}>Demo Yönetici Girişi</div>
-          <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.6,marginBottom:14}}>Bu bir demo geçiş koduyla korunur (0000), gerçek kimlik doğrulama içermez.</div>
-          <input placeholder="Geçiş kodu" value={code} onChange={e=>setCode(e.target.value)} type="password"
+          <div style={{fontWeight:700,fontSize:15,marginBottom:6}}>{t("admin_login_title")}</div>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.6,marginBottom:14}}>{t("admin_login_desc")}</div>
+          <input placeholder={t("admin_code_placeholder")} value={code} onChange={e=>setCode(e.target.value)} type="password"
             style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:12}}/>
-          <PrimaryButton onClick={()=>{ if(code==="0000"){ setUnlocked(true); showToast("Giriş yapıldı ✓"); } else { showToast("Kod hatalı","error"); } }}>Giriş Yap</PrimaryButton>
+          <PrimaryButton onClick={()=>{ if(code==="0000"){ setUnlocked(true); showToast(t("toast_admin_login_ok")); } else { showToast(t("toast_admin_login_fail"),"error"); } }}>{t("admin_login_btn")}</PrimaryButton>
         </Card>
       </Screen>
     );
   }
 
   return (
-    <Screen title="Yönetici Paneli" onBack={onBack}>
+    <Screen title={t("admin_title")} onBack={onBack}>
       <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4}} className="abp-scrollbar">
-        {ADMIN_TABS.map(t=><Pill_ key={t.key} active={tab===t.key} onClick={()=>setTab(t.key)}>{t.label}</Pill_>)}
+        {ADMIN_TABS.map(tb=><Pill_ key={tb.key} active={tab===tb.key} onClick={()=>setTab(tb.key)}>{tb.label}</Pill_>)}
       </div>
 
       {tab === "articles" && (
         <CMSEditor
           storageKey="cms:articles"
-          addLabel="Makale Ekle"
-          fields={[{key:"title",label:"Başlık",required:true},{key:"body",label:"İçerik metni",required:true}]}
+          addLabel={t("admin_add_article")}
+          fields={[{key:"title",label:t("admin_field_title"),required:true},{key:"body",label:t("admin_field_body"),required:true}]}
           renderItem={(a)=>(<><div style={{fontWeight:700,fontSize:13.5}}>{a.title}</div><div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{a.body}</div></>)}
         />
       )}
       {tab === "activities" && (
         <CMSEditor
           storageKey="cms:activities"
-          addLabel="Aktivite Ekle"
-          fields={[{key:"title",label:"Başlık",required:true},{key:"skill",label:"Geliştirdiği beceri",required:true},{key:"duration",label:"Süre (örn. 15 dk)"},{key:"materials",label:"Malzeme"}]}
+          addLabel={t("admin_add_activity")}
+          fields={[{key:"title",label:t("admin_field_title"),required:true},{key:"skill",label:t("admin_field_skill"),required:true},{key:"duration",label:t("admin_field_duration")},{key:"materials",label:t("admin_field_materials")}]}
           renderItem={(a)=>(<><div style={{fontWeight:700,fontSize:13.5}}>{a.title}</div><div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{a.skill}</div></>)}
         />
       )}
       {tab === "sounds" && (
         <CMSEditor
           storageKey="cms:sounds"
-          addLabel="Uyku Sesi Ekle"
-          fields={[{key:"name",label:"Ses adı",required:true}]}
+          addLabel={t("admin_add_sound")}
+          fields={[{key:"name",label:t("admin_field_sound_name"),required:true}]}
           renderItem={(s)=>(<div style={{fontWeight:700,fontSize:13.5}}>{s.name}</div>)}
         />
       )}
       {tab === "lullabies" && (
         <CMSEditor
           storageKey="cms:lullabies"
-          addLabel="Ninni Ekle"
-          fields={[{key:"title",label:"Başlık",required:true},{key:"cat",label:"Kategori"}]}
+          addLabel={t("admin_add_lullaby")}
+          fields={[{key:"title",label:t("admin_field_title"),required:true},{key:"cat",label:t("admin_field_category")}]}
           renderItem={(l)=>(<><div style={{fontWeight:700,fontSize:13.5}}>{l.title}</div><div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{l.cat}</div></>)}
         />
       )}
@@ -2795,6 +3347,8 @@ function AppointmentList() {
 }
 
 function VaccineList({child}) {
+  const { t, lang } = useLang();
+  const VACCINE_SCHEDULE_L = getVaccineSchedule(lang);
   const [loading, setLoading] = useState(true);
   const [done, setDone] = useState({}); // { [index]: "2025-03-01" }
   const key = `vaccines:${child?.id||"default"}`;
@@ -2813,32 +3367,32 @@ function VaccineList({child}) {
     const list = {...done, [i]: dateVal};
     setDone(list);
     await storageSet(key, list, false);
-    showToast("Tamamlandı olarak işaretlendi ✓");
+    showToast(t("toast_vaccine_marked_done"));
   };
   const unmark = async (i) => {
     const list = {...done};
     delete list[i];
     setDone(list);
     await storageSet(key, list, false);
-    showToast("Yaklaşıyor olarak işaretlendi");
+    showToast(t("toast_vaccine_unmarked"));
   };
 
   const today = new Date();
 
   return (
     <div style={{marginTop:16}}>
-      <SectionTitle>Türkiye Aşı Takvimi</SectionTitle>
+      <SectionTitle>{t("vaccine_schedule_title")}</SectionTitle>
       <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:10}}>
-        {child?.name||"Çocuğunuzun"} doğum tarihine ({new Date(birth).toLocaleDateString("tr-TR")}) göre her aşının yapılması gereken tarih otomatik hesaplanır. Yapıldığında karta dokunup tarihini kaydedin — genel bir rehberdir, aile hekiminizin önerdiği program esastır.
+        {t("vaccine_schedule_desc", child?.name||t("default_child_possessive"), new Date(birth).toLocaleDateString(localeOf(lang)))}
       </div>
       {loading ? (
         <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
-      ) : VACCINE_SCHEDULE.map((v,i)=>{
+      ) : VACCINE_SCHEDULE_L.map((v,i)=>{
         const dueDate = addMonthsToDate(birth, v.ageMonths);
         const isDone = !!done[i];
         const isOverdue = !isDone && dueDate < today;
         const daysUntil = daysBetween(today, dueDate);
-        const status = isDone ? "Tamamlandı" : isOverdue ? "Gecikti" : daysUntil<=14 ? "Yaklaşıyor" : "Planlandı";
+        const status = isDone ? t("vaccine_status_done") : isOverdue ? t("vaccine_status_overdue") : daysUntil<=14 ? t("vaccine_status_upcoming") : t("vaccine_status_planned");
         const statusColor = isDone ? "#5FAE7D" : isOverdue ? "#D98BA6" : daysUntil<=14 ? "#C99A4A" : "var(--ink-faint)";
         return (
           <VaccineCard key={i} v={v} dueDate={dueDate} isDone={isDone} doneDate={done[i]} status={status} statusColor={statusColor}
@@ -2850,6 +3404,7 @@ function VaccineList({child}) {
 }
 
 function VaccineCard({v, dueDate, isDone, doneDate, status, statusColor, onMark, onUnmark}) {
+  const { t, lang } = useLang();
   const [editing, setEditing] = useState(false);
   const [dateVal, setDateVal] = useState(doneDate || todayISO());
   return (
@@ -2858,31 +3413,31 @@ function VaccineCard({v, dueDate, isDone, doneDate, status, statusColor, onMark,
         <IconBadge icon={isDone?Check:Syringe} color={isDone?"green":"blue"} size={38}/>
         <div style={{flex:1}}>
           <div style={{fontWeight:700,fontSize:14}}>{v.name}</div>
-          <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>{v.ageMonths===0?"Doğumda":`${v.ageMonths}. Ay`} · Planlanan: {formatDateTR(dueDate)}</div>
-          {isDone && doneDate && <div style={{fontSize:11.5,color:"#5FAE7D",marginTop:2}}>Yapıldı: {new Date(doneDate).toLocaleDateString("tr-TR")}</div>}
+          <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>{v.ageMonths===0?t("vaccine_at_birth"):t("vaccine_age_month", v.ageMonths)} · {t("vaccine_planned_label", formatDateTR(dueDate))}</div>
+          {isDone && doneDate && <div style={{fontSize:11.5,color:"#5FAE7D",marginTop:2}}>{t("vaccine_done_label", new Date(doneDate).toLocaleDateString(localeOf(lang)))}</div>}
         </div>
         <div style={{fontSize:11.5,fontWeight:700,color:statusColor}}>{status}</div>
       </div>
       {isDone && (
-        <div onClick={onUnmark} className="abp-tap" style={{fontSize:11.5,fontWeight:700,color:"var(--ink-faint)",marginTop:10,textAlign:"right"}}>Geri Al</div>
+        <div onClick={onUnmark} className="abp-tap" style={{fontSize:11.5,fontWeight:700,color:"var(--ink-faint)",marginTop:10,textAlign:"right"}}>{t("vaccine_undo")}</div>
       )}
       {!isDone && editing && (
         <div style={{marginTop:12,paddingTop:12,borderTop:"1px solid rgba(150,130,180,0.15)",display:"flex",gap:8,alignItems:"center"}}>
           <input type="date" value={dateVal} onChange={e=>setDateVal(e.target.value)}
             style={{flex:1,padding:"10px 12px",borderRadius:12,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13,outline:"none"}}/>
-          <div onClick={()=>{onMark(dateVal); setEditing(false);}} className="abp-tap" style={{padding:"10px 16px",borderRadius:12,background:"var(--ink)",color:"#fff",fontWeight:700,fontSize:12.5}}>Kaydet</div>
+          <div onClick={()=>{onMark(dateVal); setEditing(false);}} className="abp-tap" style={{padding:"10px 16px",borderRadius:12,background:"var(--ink)",color:"#fff",fontWeight:700,fontSize:12.5}}>{t("save")}</div>
         </div>
       )}
     </Card>
   );
 }
 
-const WEANING_REACTIONS = [
-  {key:"iyi", label:"Sorun Yok, Sevdi", color:"green"},
-  {key:"begenmedi", label:"Beğenmedi", color:"blue"},
-  {key:"hafif", label:"Hafif Reaksiyon", color:"purple"},
-  {key:"kacinilmali", label:"Kaçınılmalı / Alerji", color:"pink"}
-];
+function getWeaningReactions(t) { return [
+  {key:"iyi", label:t("weaning_reaction_good"), color:"green"},
+  {key:"begenmedi", label:t("weaning_reaction_dislike"), color:"blue"},
+  {key:"hafif", label:t("weaning_reaction_mild"), color:"purple"},
+  {key:"kacinilmali", label:t("weaning_reaction_avoid"), color:"pink"}
+]; }
 
 function WeaningCalendar({childId}) {
   const [day, setDay] = useState(1);
@@ -2919,6 +3474,8 @@ function WeaningCalendar({childId}) {
    kalıcı besin tanıtım günlüğü. Her kayıt bir tepki etiketi taşır,
    böylece hangi besinlerin tolere edildiği zamanla görülebilir. */
 function WeaningLogSection({childId, defaultFood}) {
+  const { t, lang } = useLang();
+  const WEANING_REACTIONS = getWeaningReactions(t);
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState([]);
   const [foodName, setFoodName] = useState("");
@@ -2940,31 +3497,31 @@ function WeaningLogSection({childId, defaultFood}) {
     const name = (foodName || defaultFood || "").trim();
     if (!name || saving) return;
     setSaving(true);
-    const entry = {food:name, amount:amount.trim(), reaction, note:note.trim(), date:new Date().toLocaleDateString("tr-TR"), time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
+    const entry = {food:name, amount:amount.trim(), reaction, note:note.trim(), date:new Date().toLocaleDateString(localeOf(lang)), time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
     const list = [entry, ...entries];
     const ok = await storageSet(key, list, false);
-    if (ok) { setEntries(list); setFoodName(""); setAmount(""); setNote(""); setReaction("iyi"); showToast("Ek gıda günlüğüne eklendi ✓"); }
-    else showToast("Kaydedilemedi, tekrar deneyin", "error");
+    if (ok) { setEntries(list); setFoodName(""); setAmount(""); setNote(""); setReaction("iyi"); showToast(t("toast_weaning_added")); }
+    else showToast(t("toast_save_failed"), "error");
     setSaving(false);
   };
   const remove = async (ts) => {
     const list = entries.filter(e=>e.ts!==ts);
     setEntries(list);
     await storageSet(key, list, false);
-    showToast("Kayıt silindi");
+    showToast(t("toast_entry_removed"));
   };
 
   const watchList = entries.filter(e=>e.reaction==="hafif" || e.reaction==="kacinilmali");
 
   return (
     <div style={{marginTop:20}}>
-      <SectionTitle>Bugün Neler Verildi?</SectionTitle>
+      <SectionTitle>{t("weaning_log_title")}</SectionTitle>
       <Card>
-        <input placeholder={`Örn. ${defaultFood || "Havuç Püresi"}`} value={foodName} onChange={e=>setFoodName(e.target.value)}
+        <input placeholder={t("weaning_food_placeholder", defaultFood || t("weaning_default_food_example"))} value={foodName} onChange={e=>setFoodName(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <input placeholder="Miktar (opsiyonel, ör. 2 tatlı kaşığı)" value={amount} onChange={e=>setAmount(e.target.value)}
+        <input placeholder={t("weaning_amount_placeholder")} value={amount} onChange={e=>setAmount(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <div style={{fontSize:12,color:"var(--ink-soft)",marginBottom:8}}>Tepkisi nasıldı?</div>
+        <div style={{fontSize:12,color:"var(--ink-soft)",marginBottom:8}}>{t("weaning_reaction_label")}</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:10}}>
           {WEANING_REACTIONS.map(r=>(
             <div key={r.key} onClick={()=>setReaction(r.key)} className="abp-tap" style={{
@@ -2974,22 +3531,22 @@ function WeaningLogSection({childId, defaultFood}) {
             }}>{r.label}</div>
           ))}
         </div>
-        <input placeholder="Not ekle (opsiyonel)" value={note} onChange={e=>setNote(e.target.value)}
+        <input placeholder={t("field_note_placeholder")} value={note} onChange={e=>setNote(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <PrimaryButton onClick={add} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?"Kaydediliyor...":"Günlüğe Ekle"}</PrimaryButton>
+        <PrimaryButton onClick={add} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?t("calendar_saving"):t("weaning_add_to_log")}</PrimaryButton>
       </Card>
 
       {watchList.length > 0 && (
         <InfoBlock icon={AlertCircle} color="pink" highlight
-          title="Takip Edilmesi Gereken Besinler"
-          text={`${watchList.map(w=>w.food).join(", ")} için hafif reaksiyon/kaçınma notu var. Bu besinleri tekrar vermeden önce doktorunuza danışın.`}/>
+          title={t("weaning_watchlist_title")}
+          text={t("weaning_watchlist_text", watchList.map(w=>w.food).join(", "))}/>
       )}
 
-      <SectionTitle>Geçmiş Kayıtlar</SectionTitle>
+      <SectionTitle>{t("history_title")}</SectionTitle>
       {loading ? (
         <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
       ) : entries.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok. Bugün verdiğin ilk besini ekle!</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("weaning_history_empty")}</Card>
       ) : entries.slice(0,12).map(e=>{
         const r = WEANING_REACTIONS.find(x=>x.key===e.reaction) || {};
         return (
@@ -2999,7 +3556,7 @@ function WeaningLogSection({childId, defaultFood}) {
                 <div style={{fontWeight:700,fontSize:13.5}}>{e.food}</div>
                 <div style={{fontSize:10.5,fontWeight:700,color:"var(--ink)",background:`var(--${r.color||"blue"})`,padding:"2px 8px",borderRadius:99}}>{r.label}</div>
               </div>
-              {e.amount && <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>Miktar: {e.amount}</div>}
+              {e.amount && <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{t("weaning_amount_label", e.amount)}</div>}
               {e.note && <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:2}}>{e.note}</div>}
               <div style={{fontSize:11.5,color:"var(--ink-faint)",marginTop:4}}>{e.date} · {e.time}</div>
             </div>
@@ -4530,6 +5087,7 @@ function LegalContent({sections}) {
 
 
 function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onLogout}) {
+  const { t, lang, setLang } = useLang();
   const [reminders, setReminders] = useState([
     {label:"Doktor Randevusu", time:"Yarın 10:00", on:true},
     {label:"Vitamin Hatırlatması", time:"Her gün 09:00", on:true},
@@ -4542,6 +5100,7 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
   const [renameChild, setRenameChild] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showLanguage, setShowLanguage] = useState(false);
 
   useEffect(()=>{ (async ()=>{
     const saved = await storageGet("profile:mom", false);
@@ -4551,12 +5110,12 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
   const saveMomName = async (val) => {
     setMomName(val);
     await storageSet("profile:mom", {name: val}, false);
-    showToast("Adınız güncellendi ✓");
+    showToast(t("toast_name_updated"));
   };
 
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
-      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 16px"}}>Profil</h2>
+      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 16px"}}>{t("profile_title")}</h2>
       <Card style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}} onClick={()=>setEditMom(true)}>
         <div style={{width:60,height:60,borderRadius:30,background:"var(--pink)",display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
           <User size={26}/>
@@ -4570,21 +5129,21 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
       </Card>
       {editMom && (
         <RenameModal
-          title="Adınızı Değiştirin"
+          title={t("profile_mom_name_modal_title")}
           initialValue={momName}
-          placeholder="Adınız"
+          placeholder={t("profile_mom_name_placeholder")}
           onClose={()=>setEditMom(false)}
           onSave={saveMomName}
         />
       )}
 
-      <SectionTitle action={<div onClick={onAddChild} className="abp-tap" style={{display:"flex",alignItems:"center",gap:4,fontSize:12.5,fontWeight:700,color:"var(--ink-soft)"}}><Plus size={14}/>Ekle</div>}>Çocuklarım</SectionTitle>
+      <SectionTitle action={<div onClick={onAddChild} className="abp-tap" style={{display:"flex",alignItems:"center",gap:4,fontSize:12.5,fontWeight:700,color:"var(--ink-soft)"}}><Plus size={14}/>{t("profile_add")}</div>}>{t("profile_children_title")}</SectionTitle>
       {children.map(c=>(
         <Card key={c.id} onClick={()=>onOpenChildProfile && onOpenChildProfile(c)} style={{marginBottom:10,display:"flex",alignItems:"center",gap:12}}>
           <IconBadge icon={c.status==="pregnant"?Baby:Heart} color="blue" size={38}/>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontWeight:700,fontSize:14,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{c.name}</div>
-            <div style={{fontSize:12,color:"var(--ink-soft)"}}>{c.status==="pregnant"?"Hamilelik takibi":"Doğum sonrası takip"}</div>
+            <div style={{fontSize:12,color:"var(--ink-soft)"}}>{c.status==="pregnant"?t("profile_pregnancy_tracking"):t("profile_postnatal_tracking")}</div>
           </div>
           <div
             className="abp-tap"
@@ -4597,7 +5156,7 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
             className="abp-tap"
             onClick={(e)=>{
               e.stopPropagation();
-              if (window.confirm(`"${c.name}" profilini silmek istediğinize emin misiniz?`)) {
+              if (window.confirm(t("profile_child_remove_confirm", c.name))) {
                 onRemoveChild && onRemoveChild(c.id);
               }
             }}
@@ -4610,75 +5169,87 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
       ))}
       {renameChild && (
         <RenameModal
-          title={`"${renameChild.name}" — İsmi Değiştir`}
+          title={`"${renameChild.name}"`}
           initialValue={renameChild.name}
-          placeholder="Çocuğunuzun adı"
+          placeholder={t("profile_child_rename_placeholder")}
           onClose={()=>setRenameChild(null)}
-          onSave={(val)=>{ onRenameChild && onRenameChild(renameChild.id, val); showToast("İsim güncellendi ✓"); }}
+          onSave={(val)=>{ onRenameChild && onRenameChild(renameChild.id, val); showToast(t("toast_name_updated2")); }}
         />
       )}
 
-      <SectionTitle>Premium</SectionTitle>
+      <SectionTitle>{t("profile_premium_title")}</SectionTitle>
       <Card style={{background:"linear-gradient(135deg, var(--purple), var(--pink))"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-          <Crown size={20}/><div style={{fontWeight:800,fontSize:15}}>Premium'a Geç</div>
+          <Crown size={20}/><div style={{fontWeight:800,fontSize:15}}>{t("profile_premium_upgrade")}</div>
         </div>
         <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.7}}>
-          Reklamsız kullanım · Sınırsız AI · Detaylı raporlar · Premium sesler ve aktiviteler
+          {t("profile_premium_desc")}
         </div>
-        <PrimaryButton style={{marginTop:12,padding:12,fontSize:13.5}} onClick={()=>setShowPayment(true)}>Ödeme Yöntemi Ekle</PrimaryButton>
+        <PrimaryButton style={{marginTop:12,padding:12,fontSize:13.5}} onClick={()=>setShowPayment(true)}>{t("profile_premium_btn")}</PrimaryButton>
       </Card>
 
-      <SectionTitle>Takvim</SectionTitle>
+      <SectionTitle>{t("profile_calendar_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={onOpenCalendar}>
         <IconBadge icon={CalendarDays} color="pink" size={34}/>
         <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:13.5}}>Randevu ve Etkinlik Takvimi</div>
-          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>Doktor randevuları, aşılar ve önemli tarihler</div>
+          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_calendar_card_title")}</div>
+          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_calendar_card_desc")}</div>
         </div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
 
       {showPayment && <PaymentMethodModal onClose={()=>setShowPayment(false)}/>}
 
-      <SectionTitle>Anne Pazarı</SectionTitle>
+      <SectionTitle>{t("profile_market_title")}</SectionTitle>
       <Card
         style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}
         onClick={()=>window.open("https://annepazari.netlify.app/", "_blank", "noopener,noreferrer")}
       >
         <IconBadge icon={ShoppingBag} color="green" size={34}/>
         <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:13.5}}>Anne Pazarı</div>
-          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>2. el bebek ve çocuk eşyaları alışveriş pazarı</div>
+          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_market_title")}</div>
+          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_market_desc")}</div>
         </div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
 
-      <SectionTitle>Hatırlatıcılar</SectionTitle>
+      <SectionTitle>{t("profile_reminders_title")}</SectionTitle>
       {reminders.map((r,i)=>(
         <Card key={i} style={{marginBottom:8,display:"flex",alignItems:"center",gap:12}}>
           <IconBadge icon={Bell} color="green" size={34}/>
           <div style={{flex:1}}><div style={{fontWeight:700,fontSize:13.5}}>{r.label}</div><div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{r.time}</div></div>
-          <div onClick={()=>{setReminders(rs=>rs.map((x,idx)=>idx===i?{...x,on:!x.on}:x)); showToast(reminders[i].on?"Hatırlatıcı kapatıldı":"Hatırlatıcı açıldı ✓");}} className="abp-tap" style={{width:42,height:24,borderRadius:12,background: r.on?"var(--ink)":"var(--ink-faint)",padding:2,display:"flex",justifyContent:r.on?"flex-end":"flex-start"}}>
+          <div onClick={()=>{setReminders(rs=>rs.map((x,idx)=>idx===i?{...x,on:!x.on}:x)); showToast(reminders[i].on?t("toast_reminder_off"):t("toast_reminder_on"));}} className="abp-tap" style={{width:42,height:24,borderRadius:12,background: r.on?"var(--ink)":"var(--ink-faint)",padding:2,display:"flex",justifyContent:r.on?"flex-end":"flex-start"}}>
             <div style={{width:20,height:20,borderRadius:10,background:"#fff"}}/>
           </div>
         </Card>
       ))}
 
-      <SectionTitle>Yönetim</SectionTitle>
+      <SectionTitle>{t("profile_admin_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={onOpenAdmin}>
         <IconBadge icon={Settings} color="blue" size={34}/>
         <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:13.5}}>Yönetici Paneli (Demo)</div>
-          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>Makale, aktivite, ses ve ninni ekle</div>
+          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_admin_card_title")}</div>
+          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_admin_card_desc")}</div>
         </div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
 
-      <SectionTitle>Ayarlar</SectionTitle>
+      <SectionTitle>{t("profile_settings_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={()=>setTheme(theme==="light"?"dark":"light")}>
         <IconBadge icon={theme==="light"?Sun:Moon} color="purple" size={34}/>
-        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>{theme==="light"?"Açık Tema":"Koyu Tema"}</div>
+        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>{theme==="light"?t("profile_theme_light"):t("profile_theme_dark")}</div>
+        <ChevronRight size={16} color="var(--ink-faint)"/>
+      </Card>
+      <Card
+        style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}
+        onClick={()=>setShowLanguage(true)}
+      >
+        <IconBadge icon={Globe} color="green" size={34}/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_language_card_title")}</div>
+          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_language_card_desc")}</div>
+        </div>
+        <div style={{fontSize:12,fontWeight:700,color:"var(--ink-soft)",marginRight:4}}>{LANG_LABELS[lang]}</div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
       <Card
@@ -4686,7 +5257,7 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
         onClick={()=>setShowAbout(true)}
       >
         <IconBadge icon={Info} color="blue" size={34}/>
-        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>Hakkımızda</div>
+        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>{t("profile_about")}</div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
       <Card
@@ -4694,28 +5265,50 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
         onClick={()=>setShowPrivacy(true)}
       >
         <IconBadge icon={Lock} color="purple" size={34}/>
-        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>Gizlilik Politikası (KVKK)</div>
+        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>{t("profile_privacy")}</div>
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
       <Card
         style={{display:"flex",alignItems:"center",gap:12,color:"#D98BA6"}}
         onClick={()=>{
-          if (window.confirm("Çıkış yapmak istediğinize emin misiniz?")) {
+          if (window.confirm(t("profile_logout_confirm"))) {
             onLogout && onLogout();
           }
         }}
       >
         <IconBadge icon={LogOut} color="pink" size={34}/>
-        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>Çıkış Yap</div>
+        <div style={{flex:1,fontWeight:700,fontSize:13.5}}>{t("profile_logout")}</div>
       </Card>
       {showAbout && (
-        <Modal title="Hakkımızda" onClose={()=>setShowAbout(false)}>
+        <Modal title={t("profile_about")} onClose={()=>setShowAbout(false)}>
           <LegalContent sections={ABOUT_US_SECTIONS}/>
         </Modal>
       )}
       {showPrivacy && (
-        <Modal title="Gizlilik Politikası (KVKK Aydınlatma Metni)" onClose={()=>setShowPrivacy(false)}>
+        <Modal title={t("profile_privacy")} onClose={()=>setShowPrivacy(false)}>
           <LegalContent sections={PRIVACY_POLICY_SECTIONS}/>
+        </Modal>
+      )}
+      {showLanguage && (
+        <Modal title={t("profile_language_card_title")} onClose={()=>setShowLanguage(false)}>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {Object.keys(LANG_LABELS).map(code=>(
+              <div
+                key={code}
+                className="abp-tap"
+                onClick={()=>{ setLang(code); showToast(UI_TEXT[code].toast_language_changed); setShowLanguage(false); }}
+                style={{
+                  display:"flex",alignItems:"center",justifyContent:"space-between",
+                  padding:"14px 16px",borderRadius:"var(--radius-md)",
+                  background: lang===code ? "var(--pink)" : "var(--card)",
+                  border: "1px solid rgba(150,130,180,0.15)"
+                }}
+              >
+                <span style={{fontWeight:700,fontSize:14}}>{LANG_LABELS[code]}</span>
+                {lang===code && <Check size={18} color="var(--ink)"/>}
+              </div>
+            ))}
+          </div>
         </Modal>
       )}
     </div>
@@ -5032,7 +5625,7 @@ function MarketTab({onBack}) {
 /* ============================================================
    ROOT APP
    ============================================================ */
-export default function App() {
+function AppInner() {
   const [phase, setPhase] = useState("boot"); // boot | onboarding | auth | setup | main
   const [children, setChildren] = useState([]);
   const [activeChildId, setActiveChildId] = useState(null);
@@ -5190,5 +5783,13 @@ export default function App() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <AppInner/>
+    </LanguageProvider>
   );
 }
