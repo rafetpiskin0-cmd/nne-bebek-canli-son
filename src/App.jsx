@@ -4641,6 +4641,19 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
 
       {showPayment && <PaymentMethodModal onClose={()=>setShowPayment(false)}/>}
 
+      <SectionTitle>Anne Pazarı</SectionTitle>
+      <Card
+        style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}
+        onClick={()=>window.open("https://annepazari.netlify.app/", "_blank", "noopener,noreferrer")}
+      >
+        <IconBadge icon={ShoppingBag} color="green" size={34}/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:13.5}}>Anne Pazarı</div>
+          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>2. el bebek ve çocuk eşyaları alışveriş pazarı</div>
+        </div>
+        <ChevronRight size={16} color="var(--ink-faint)"/>
+      </Card>
+
       <SectionTitle>Hatırlatıcılar</SectionTitle>
       {reminders.map((r,i)=>(
         <Card key={i} style={{marginBottom:8,display:"flex",alignItems:"center",gap:12}}>
