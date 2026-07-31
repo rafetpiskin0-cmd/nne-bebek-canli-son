@@ -41,10 +41,38 @@ import { auth } from "./firebase.js";
       kurulumunuzu yaptıktan sonra kolayca etkinleştirebilirsiniz.
    ============================================================ */
 
+// getRedirectResult() birden fazla yerden çağrılabilir (App.jsx açılışta,
+// watchAuthState de savunma amaçlı) ama Firebase bunu güvenilir şekilde
+// sadece bir kez "gerçek" sonuçla döndürür; bu yüzden tek bir paylaşılan
+// Promise'e sarıyoruz ki her çağıran aynı sonucu beklesin ve redirect
+// sonucu birden fazla kez tüketilmeye çalışılmasın.
+let redirectResultPromise = null;
+function resolveRedirectOnce() {
+  if (!redirectResultPromise) {
+    redirectResultPromise = getRedirectResult(auth).catch((e) => {
+      console.error("Redirect girişi tamamlanamadı:", e);
+      return null;
+    });
+  }
+  return redirectResultPromise;
+}
+
 export function watchAuthState(callback) {
-  return onAuthStateChanged(auth, (user) => {
+  return onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      signInAnonymously(auth).catch((e) => console.error("Anonim giriş başarısız:", e));
+      // KRİTİK: onAuthStateChanged, sayfa Google'dan redirect ile geri
+      // döndüğünde Firebase henüz redirect sonucunu işlemeden ÖNCE bir
+      // kez user=null ile tetiklenebilir. Burada hemen signInAnonymously
+      // çağrılırsa, henüz işlenmekte olan Google girişinin önüne geçilip
+      // yeni bir anonim oturum açılır ve kullanıcı "giriş ekranına geri
+      // düşmüş" gibi görünür. Bu yüzden önce olası bir redirect sonucunun
+      // işlenmesini bekliyoruz.
+      await resolveRedirectOnce();
+      if (!auth.currentUser) {
+        signInAnonymously(auth).catch((e) => console.error("Anonim giriş başarısız:", e));
+      }
+      // auth.currentUser doluysa, Firebase onAuthStateChanged'i az sonra
+      // gerçek kullanıcıyla tekrar tetikleyecek, callback o zaman çağrılır.
       return;
     }
     callback(user);
@@ -113,13 +141,8 @@ export async function signInWithGoogle() {
 // sayfa geri döndüğünde sonucu/varsa hatayı almak için). Redirect
 // akışı kullanılmadıysa sessizce null döner, hata fırlatmaz.
 export async function handleRedirectResult() {
-  try {
-    const result = await getRedirectResult(auth);
-    return result ? result.user : null;
-  } catch (e) {
-    console.error("Redirect girişi tamamlanamadı:", e);
-    return null;
-  }
+  const result = await resolveRedirectOnce();
+  return result ? result.user : null;
 }
 
 export async function registerWithEmail(name, email, password) {
