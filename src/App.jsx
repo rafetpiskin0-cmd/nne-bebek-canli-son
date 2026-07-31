@@ -5675,7 +5675,45 @@ function LegalContent({sections}) {
 }
 
 
-function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onLogout}) {
+function AccountDetail({authUser, onBack}) {
+  const [form, setForm] = useState({adSoyad:"", telefon:"", sehir:""});
+  const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const email = authUser && !authUser.isAnonymous ? (authUser.email || "—") : null;
+
+  useEffect(()=>{ (async ()=>{
+    const saved = await storageGet("profile:account", false);
+    if (saved) setForm({adSoyad: saved.adSoyad||"", telefon: saved.telefon||"", sehir: saved.sehir||""});
+    setLoaded(true);
+  })(); }, []);
+
+  const save = async () => {
+    setBusy(true);
+    const ok = await storageSet("profile:account", form, false);
+    setBusy(false);
+    if (ok) showToast("Bilgiler kaydedildi ✓");
+    else showToast("Kaydedilemedi, tekrar deneyin", "error");
+  };
+
+  if (!loaded) return null;
+
+  return (
+    <Screen title="Hesap Bilgileri" onBack={onBack}>
+      <div style={{marginBottom:18}}>
+        <div style={{fontSize:12.5,fontWeight:700,color:"var(--ink-soft)",marginBottom:6}}>Giriş yapılan e-posta</div>
+        <div style={{padding:"12px 14px",borderRadius:14,background:"var(--card)",fontSize:14.5,fontWeight:600,color:email?"var(--ink)":"var(--ink-faint)"}}>
+          {email || "Henüz e-posta ile giriş yapılmadı"}
+        </div>
+      </div>
+      <Input label="Ad Soyad" value={form.adSoyad} onChange={(v)=>setForm(f=>({...f, adSoyad:v}))} placeholder="Adınız Soyadınız"/>
+      <Input label="Telefon Numarası" value={form.telefon} onChange={(v)=>setForm(f=>({...f, telefon:v}))} placeholder="05xx xxx xx xx"/>
+      <Input label="Şehir" value={form.sehir} onChange={(v)=>setForm(f=>({...f, sehir:v}))} placeholder="Yaşadığınız şehir"/>
+      <PrimaryButton disabled={busy} style={{marginTop:14}} onClick={save}>{busy?"Kaydediliyor...":"Kaydet"}</PrimaryButton>
+    </Screen>
+  );
+}
+
+function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onOpenAccount, authUser, onLogout}) {
   const { t, lang, setLang } = useLang();
   const [reminders, setReminders] = useState([
     {label:"Doktor Randevusu", time:"Yarın 10:00", on:true},
@@ -5705,16 +5743,22 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
       <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 16px"}}>{t("profile_title")}</h2>
-      <Card style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}} onClick={()=>setEditMom(true)}>
+      <Card style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}} onClick={()=>onOpenAccount && onOpenAccount()}>
         <div style={{width:60,height:60,borderRadius:30,background:"var(--pink)",display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
           <User size={26}/>
-          <div style={{position:"absolute",bottom:-2,right:-2,width:22,height:22,borderRadius:11,background:"var(--ink)",display:"flex",alignItems:"center",justifyContent:"center"}}><Camera size={11} color="#fff"/></div>
         </div>
         <div style={{flex:1}}>
           <div style={{fontWeight:800,fontSize:16}}>{momName}</div>
-          <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>anne@ornek.com</div>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>{authUser && !authUser.isAnonymous ? (authUser.email || "Hesap bağlı") : "Henüz giriş yapılmadı"}</div>
         </div>
-        <Edit3 size={17} color="var(--ink-faint)"/>
+        <ChevronRight size={16} color="var(--ink-faint)"/>
+      </Card>
+      <Card style={{display:"flex",alignItems:"center",gap:14,marginBottom:16}} onClick={()=>setEditMom(true)}>
+        <IconBadge icon={Edit3} color="blue" size={38}/>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:14}}>{t("profile_mom_name_modal_title")}</div>
+        </div>
+        <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
       {editMom && (
         <RenameModal
@@ -6334,6 +6378,8 @@ function AppInner() {
             <CalendarDetail onBack={()=>setDetail(null)}/>
           ) : detail === "market" ? (
             <MarketTab onBack={()=>setDetail(null)}/>
+          ) : detail === "account" ? (
+            <AccountDetail authUser={authUser} onBack={()=>setDetail(null)}/>
           ) : (
             <>
               {activeTab === "today" && (
@@ -6354,8 +6400,10 @@ function AppInner() {
                   children={children}
                   theme={theme}
                   setTheme={setTheme}
+                  authUser={authUser}
                   onOpenAdmin={()=>setDetail("admin")}
                   onOpenCalendar={()=>setDetail("calendar")}
+                  onOpenAccount={()=>setDetail("account")}
                   onOpenChildProfile={(c)=>{
                     setActiveChildId(c.id);
                     setDetail(c.status==="pregnant" ? "pregnancy" : "child");
