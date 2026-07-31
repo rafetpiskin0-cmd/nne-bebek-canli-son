@@ -3,11 +3,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
   linkWithPopup,
-  linkWithRedirect,
   linkWithCredential,
-  getRedirectResult,
   EmailAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -41,58 +38,14 @@ import { auth } from "./firebase.js";
       kurulumunuzu yaptıktan sonra kolayca etkinleştirebilirsiniz.
    ============================================================ */
 
-// getRedirectResult() birden fazla yerden çağrılabilir (App.jsx açılışta,
-// watchAuthState de savunma amaçlı) ama Firebase bunu güvenilir şekilde
-// sadece bir kez "gerçek" sonuçla döndürür; bu yüzden tek bir paylaşılan
-// Promise'e sarıyoruz ki her çağıran aynı sonucu beklesin ve redirect
-// sonucu birden fazla kez tüketilmeye çalışılmasın.
-let redirectResultPromise = null;
-function resolveRedirectOnce() {
-  if (!redirectResultPromise) {
-    redirectResultPromise = getRedirectResult(auth).catch((e) => {
-      console.error("Redirect girişi tamamlanamadı:", e);
-      return null;
-    });
-  }
-  return redirectResultPromise;
-}
-
-let initialRedirectChecked = false;
-
 export function watchAuthState(callback) {
-  return onAuthStateChanged(auth, async (user) => {
-    if (!initialRedirectChecked) {
-      initialRedirectChecked = true;
-      // KRİTİK: İlk onAuthStateChanged tetiklenmesi, özellikle daha önce
-      // yerelde (IndexedDB) kayıtlı bir anonim kullanıcı varsa, olası bir
-      // Google redirect linking'i henüz işlenmeden ESKİ/bayat user
-      // nesnesiyle (isAnonymous: true) gelebilir. Bunu doğrudan callback'e
-      // iletirsek uygulama "girişi görmedi" gibi davranıp onboarding/auth
-      // ekranına döner. Bu yüzden ilk tetiklenmede önce bekleyip
-      // auth.currentUser'ın en güncel halini kullanıyoruz.
-      await resolveRedirectOnce();
-      user = auth.currentUser;
-    }
+  return onAuthStateChanged(auth, (user) => {
     if (!user) {
-      if (!auth.currentUser) {
-        signInAnonymously(auth).catch((e) => console.error("Anonim giriş başarısız:", e));
-      }
+      signInAnonymously(auth).catch((e) => console.error("Anonim giriş başarısız:", e));
       return;
     }
     callback(user);
   });
-}
-
-// Popup engellendiğinde/başarısız olduğunda hangi hatalarda redirect'e
-// düşeceğimizi belirler. Kullanıcı bilerek popup'ı kapattıysa
-// (popup-closed-by-user) yeniden yönlendirmeye zorlamıyoruz.
-function shouldFallbackToRedirect(e) {
-  return [
-    "auth/popup-blocked",
-    "auth/operation-not-supported-in-this-environment",
-    "auth/cancelled-popup-request",
-    "auth/web-storage-unsupported",
-  ].includes(e && e.code);
 }
 
 export async function signInWithGoogle() {
@@ -107,35 +60,17 @@ export async function signInWithGoogle() {
     return result.user;
   } catch (e) {
     // Hesap başka bir yöntemle zaten varsa, doğrudan giriş yapmayı dene.
-    // ÖNEMLİ: bu ikinci deneme de popup engeline takılabilir (özellikle
-    // linkWithPopup'ın hemen ardından art arda açılan ikinci popup bazı
-    // tarayıcılarda kullanıcı jestinden kopuk sayılıp engellenebiliyor),
-    // bu yüzden bunu da kendi try/catch'i içinde ele alıp gerekirse
-    // redirect'e düşürüyoruz. Aksi halde auth/popup-blocked hatası
-    // yakalanmadan dışarı fırlar.
     if (e.code === "auth/credential-already-in-use" || e.code === "auth/email-already-in-use") {
-      try {
-        const result = await signInWithPopup(auth, provider);
-        return result.user;
-      } catch (e2) {
-        if (shouldFallbackToRedirect(e2)) {
-          await signInWithRedirect(auth, provider);
-          return null; // sayfa yönlendirilecek, buraya dönülmeyecek
-        }
-        throw e2;
-      }
+      const result = await signInWithPopup(auth, provider);
+      return result.user;
     }
-    // Popup engellendi veya bu ortamda desteklenmiyor → sayfa yönlendirmeli
-    // girişe düş. Bu çağrı sayfayı Google'a yönlendirir; sonuç, sayfa geri
-    // döndüğünde handleRedirectResult() ile alınır (bu fonksiyon burada
-    // bir Promise döndürmez, sayfa zaten yeniden yüklenir).
-    if (shouldFallbackToRedirect(e)) {
-      if (current && current.isAnonymous) {
-        await linkWithRedirect(current, provider);
-      } else {
-        await signInWithRedirect(auth, provider);
-      }
-      return null; // sayfa yönlendirilecek, buraya dönülmeyecek
+    // NOT: Buradaki redirect fallback kasıtlı olarak kaldırıldı — mevcut
+    // hosting kurulumunda (authDomain ≠ uygulama domaini) redirect akışı
+    // tarayıcılar tarafından sessizce engelleniyor ve kullanıcıyı hiç
+    // uyarı vermeden başa atıyordu. Popup engellenirse kullanıcıya net bir
+    // hata gösterip tekrar denemesini istiyoruz.
+    if (e.code === "auth/popup-blocked") {
+      throw new Error("Tarayıcınız açılır pencereyi (popup) engelledi. Lütfen bu site için popup izni verip tekrar deneyin.");
     }
     throw e;
   }
@@ -144,9 +79,10 @@ export async function signInWithGoogle() {
 // Uygulama açılışında bir kez çağrılmalıdır (redirect ile giriş sonrası
 // sayfa geri döndüğünde sonucu/varsa hatayı almak için). Redirect
 // akışı kullanılmadıysa sessizce null döner, hata fırlatmaz.
+// Redirect akışı artık kullanılmıyor (bkz. yukarıdaki not); bu fonksiyon
+// App.jsx'teki mevcut çağrıyı kırmamak için no-op olarak bırakıldı.
 export async function handleRedirectResult() {
-  const result = await resolveRedirectOnce();
-  return result ? result.user : null;
+  return null;
 }
 
 export async function registerWithEmail(name, email, password) {
