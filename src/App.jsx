@@ -47,7 +47,7 @@ const UI_TEXT = {
     profile_calendar_title: "Takvim",
     profile_calendar_card_title: "Randevu ve Etkinlik Takvimi",
     profile_calendar_card_desc: "Doktor randevuları, aşılar ve önemli tarihler",
-    profile_market_title: "Anne Pazarı",
+    profile_market_title: "WordBabe Satış",
     profile_market_desc: "2. el bebek ve çocuk eşyaları alışveriş pazarı",
     profile_reminders_title: "Hatırlatıcılar",
     profile_admin_title: "Yönetim",
@@ -84,7 +84,7 @@ const UI_TEXT = {
     today_age_years: (y,m)=>`${y} yaş ${m} ay`,
     today_age_months: (m)=>`${m} aylık`,
     today_child_day: (d)=>`Bebeğiniz bugün ${d}. gününde 👶`,
-    today_market_title: "Anne Pazarı",
+    today_market_title: "WordBabe Satış",
     today_market_desc: "2. el bebek kıyafeti, oyuncak ve eşyaları keşfet ya da satışa çıkar",
     today_cards_title: "Bugünün Kartları",
     today_cards_refresh_note: "İçerikler her gün otomatik olarak yenilenir.",
@@ -237,6 +237,7 @@ const UI_TEXT = {
     poop_history_empty: "Henüz kayıt yok. İlk kaydını ekle!",
     poop_days_ago: (days)=>`${days} gündür`,
     poop_consult_doctor: "Doktora danışın",
+    shopping_cart_title: "Sepetim",
     shopping_own_list_title: "Kendi Listeni Oluştur",
     shopping_placeholder: "Örn. Bebek maması",
     toast_list_added: "Liste eklendi ✓",
@@ -247,6 +248,8 @@ const UI_TEXT = {
     place_directions: "Yol tarifi →",
     nearby_title: "Yakınımda",
     nearby_subtitle: "Konumuna göre en yakın eczaneler ve bebek mağazaları.",
+    nearby_refresh_location: "Konumu Yenile",
+    nearby_location_changed: "Konumunuz değişti, listeler yeni konumunuza göre güncellendi ✓",
     nearby_denied: "Konum izni verilmedi",
     nearby_unsupported: "Cihazın konumu desteklemiyor",
     nearby_error: "Konum alınamadı",
@@ -519,6 +522,7 @@ const UI_TEXT = {
     poop_history_empty: "No entries yet. Add your first one!",
     poop_days_ago: (days)=>`${days} days`,
     poop_consult_doctor: "Consult your doctor",
+    shopping_cart_title: "My Cart",
     shopping_own_list_title: "Create Your Own List",
     shopping_placeholder: "E.g. Baby formula",
     toast_list_added: "Added to list ✓",
@@ -529,6 +533,8 @@ const UI_TEXT = {
     place_directions: "Directions →",
     nearby_title: "Nearby",
     nearby_subtitle: "Closest pharmacies and baby stores based on your location.",
+    nearby_refresh_location: "Refresh Location",
+    nearby_location_changed: "Your location changed, lists were updated for the new location ✓",
     nearby_denied: "Location permission not granted",
     nearby_unsupported: "Your device doesn't support location",
     nearby_error: "Couldn't get location",
@@ -801,6 +807,7 @@ const UI_TEXT = {
     poop_history_empty: "Noch keine Einträge. Fügen Sie den ersten hinzu!",
     poop_days_ago: (days)=>`seit ${days} Tagen`,
     poop_consult_doctor: "Arzt konsultieren",
+    shopping_cart_title: "Mein Warenkorb",
     shopping_own_list_title: "Eigene Liste erstellen",
     shopping_placeholder: "Z. B. Babynahrung",
     toast_list_added: "Zur Liste hinzugefügt ✓",
@@ -811,6 +818,8 @@ const UI_TEXT = {
     place_directions: "Wegbeschreibung →",
     nearby_title: "In der Nähe",
     nearby_subtitle: "Nächstgelegene Apotheken und Babygeschäfte basierend auf Ihrem Standort.",
+    nearby_refresh_location: "Standort aktualisieren",
+    nearby_location_changed: "Ihr Standort hat sich geändert, die Listen wurden aktualisiert ✓",
     nearby_denied: "Standortberechtigung nicht erteilt",
     nearby_unsupported: "Ihr Gerät unterstützt keine Standortbestimmung",
     nearby_error: "Standort konnte nicht ermittelt werden",
@@ -1561,22 +1570,43 @@ const ONBOARDING_SLIDES = [
 ];
 
 const SHOPPING_BY_AGE_TR = {
-  "0-3 Ay": ["Bebek Bezi","Islak Mendil","Zıbın Takımı","Kundak","Emzik","Biberon"],
-  "6 Ay": ["Mama Sandalyesi","Kaşık","Suluk","Diş Kaşıyıcı","Bebek Öğütücü"],
-  "12 Ay": ["Yürüteç/Denge Aracı","Eğitici Oyuncaklar","Yumuşak Ayakkabı","Kaşık-Çatal Seti"],
-  "24 Ay": ["Üç Tekerlekli Bisiklet","Boyama Seti","Kitaplık","Puzzle"]
+  "Hastane Çantası (Doğum Öncesi)": ["Zıbın (5-6 adet)","Body (5-6 adet)","Tulum (3-4 adet)","Kundak/Battaniye","Bebek Bezi (Yenidoğan)","Islak Mendil","Bebek Şapkası","Patik/Çorap","Kalın Battaniye","Göbek Bandı","Bebek Tırnak Makası"],
+  "0-3 Ay — Bakım & Hijyen": ["Bebek Bezi","Islak Mendil","Pamuk","Bebek Şampuanı","Bebek Sabunu/Duş Jeli","Bebek Losyonu","Pişik Kremi","Bebek Yağı","Serum Fizyolojik","Aspiratör","Termometre","Tırnak Makası/Törpü","Saç Fırçası/Tarak","Banyo Küveti","Kapüşonlu Banyo Havlusu"],
+  "0-3 Ay — Giyim": ["Zıbın","Body","Tulum","Kundak","Patik/Çorap","Eldiven","Bere/Şapke","Uyku Tulumu"],
+  "0-3 Ay — Beslenme": ["Emzik","Biberon","Biberon Fırçası","Biberon Sterilizatörü","Mama Isıtıcı","Emzirme Yastığı","Göğüs Pedi","Süt Sağma Pompası","Süt Saklama Poşeti","Mama Önlüğü"],
+  "0-3 Ay — Uyku & Güvenlik": ["Beşik/Karyola","Bebek Yatak Seti","Bebek Uyku Tulumu","Bebek Monitörü","Gece Lambası","Uyku Pozisyoneri","Beşik Filesi"],
+  "0-3 Ay — Dışarıda": ["Bebek Arabası","Puset","Ana Kucağı (Port Bebe)","Kanguru (Bebek Taşıyıcı)","Oto Koltuğu (0+ Grup)","Anne Çantası","Yağmurluk/Rüzgarlık"],
+  "3-6 Ay": ["Diş Kaşıyıcı","Banyo Oyuncakları","Aktivite Matı","Ayna Oyuncak","Çıngırak","Salıncak/Ana Kucağı Sallanır","Bebek Jimnastik Seti"],
+  "6-9 Ay": ["Mama Sandalyesi","Yumuşak Uçlu Kaşık-Çatal Seti","Alıştırma Bardağı","Bebek Öğütücü/Blender","Kırma Mama Kapları","Uzun Kollu Önlük","Emekleme Dizliği","Oyun Parkı (Park Yatağı)","Merdiven/Kapı Güvenlik Kapısı"],
+  "9-12 Ay": ["Destekli Yürüteç","Denge Bisikleti","Yumuşak Tabanlı İlk Ayakkabı","Bloklar/İstif Oyuncakları","Bez/Karton Kitap","Priz Koruyucu","Köşe Koruyucu"],
+  "12-24 Ay": ["Yürüteç/Denge Aracı","Eğitici Oyuncaklar","Yumuşak Ayakkabı/Sandalet","Kaşık-Çatal Seti","Lazımlık/Klozet Adaptörü","Banyo Basamağı","Oto Koltuğu (Grup 1)","Kum Havuzu Oyuncakları"],
+  "2-3 Yaş": ["Üç Tekerlekli Bisiklet","Boyama Seti","Kitaplık","Puzzle","Legolar/Yapı Oyuncakları","Lazımlık Eğitim Seti","Büyük Çocuk Yatağı","Kreş Sırt Çantası"]
 };
 const SHOPPING_BY_AGE_EN = {
-  "0-3 mo": ["Diapers","Wet Wipes","Onesie Set","Swaddle","Pacifier","Baby Bottle"],
-  "6 mo": ["High Chair","Spoon","Sippy Cup","Teether","Baby Food Grinder"],
-  "12 mo": ["Walker/Balance Bike","Educational Toys","Soft Shoes","Spoon-Fork Set"],
-  "24 mo": ["Tricycle","Coloring Set","Bookshelf","Puzzle"]
+  "Hospital Bag (Pre-birth)": ["Onesies (5-6)","Bodysuits (5-6)","Rompers (3-4)","Swaddle/Blanket","Newborn Diapers","Wet Wipes","Baby Hat","Booties/Socks","Warm Blanket","Umbilical Band","Baby Nail Clipper"],
+  "0-3 mo — Care & Hygiene": ["Diapers","Wet Wipes","Cotton Pads","Baby Shampoo","Baby Wash/Soap","Baby Lotion","Diaper Rash Cream","Baby Oil","Saline Solution","Nasal Aspirator","Thermometer","Nail Clipper/File","Hairbrush/Comb","Baby Bathtub","Hooded Bath Towel"],
+  "0-3 mo — Clothing": ["Onesies","Bodysuits","Rompers","Swaddle","Booties/Socks","Mittens","Hat/Cap","Sleep Sack"],
+  "0-3 mo — Feeding": ["Pacifier","Baby Bottle","Bottle Brush","Bottle Sterilizer","Bottle Warmer","Nursing Pillow","Breast Pads","Breast Pump","Milk Storage Bags","Feeding Bib"],
+  "0-3 mo — Sleep & Safety": ["Crib/Bassinet","Crib Bedding Set","Sleep Sack","Baby Monitor","Night Light","Sleep Positioner","Crib Net (Mosquito)"],
+  "0-3 mo — On the Go": ["Stroller","Pushchair","Bassinet Pram","Baby Carrier","Car Seat (Group 0+)","Diaper Bag","Rain/Wind Cover"],
+  "3-6 mo": ["Teether","Bath Toys","Activity Mat","Mirror Toy","Rattle","Baby Swing/Rocker","Gym Set"],
+  "6-9 mo": ["High Chair","Soft-Tip Spoon-Fork Set","Sippy Cup","Baby Food Blender","Feeding Bowls","Long-Sleeve Bib","Knee Pads for Crawling","Play Pen","Stair/Door Safety Gate"],
+  "9-12 mo": ["Push Walker","Balance Bike","Soft-Sole First Shoes","Stacking Blocks","Board/Cloth Books","Outlet Covers","Corner Guards"],
+  "12-24 mo": ["Walker/Balance Bike","Educational Toys","Soft Shoes/Sandals","Spoon-Fork Set","Potty/Toilet Seat","Bath Step Stool","Car Seat (Group 1)","Sandbox Toys"],
+  "2-3 y": ["Tricycle","Coloring Set","Bookshelf","Puzzle","Building Blocks/Lego","Potty Training Set","Toddler Bed","Preschool Backpack"]
 };
 const SHOPPING_BY_AGE_DE = {
-  "0-3 Mon.": ["Windeln","Feuchttücher","Body-Set","Pucktuch","Schnuller","Babyflasche"],
-  "6 Mon.": ["Hochstuhl","Löffel","Trinklernbecher","Beißring","Babynahrungsmühle"],
-  "12 Mon.": ["Lauflernwagen/Laufrad","Lernspielzeug","Weiche Schuhe","Löffel-Gabel-Set"],
-  "24 Mon.": ["Dreirad","Malset","Bücherregal","Puzzle"]
+  "Klinik-Tasche (vor der Geburt)": ["Bodys (5-6)","Strampler (5-6)","Overalls (3-4)","Pucktuch/Decke","Neugeborenenwindeln","Feuchttücher","Babymütze","Söckchen","Warme Decke","Nabelbinde","Baby-Nagelschere"],
+  "0-3 Mon. — Pflege & Hygiene": ["Windeln","Feuchttücher","Wattepads","Baby-Shampoo","Baby-Waschgel","Babylotion","Wundschutzcreme","Babyöl","Kochsalzlösung","Nasensauger","Fieberthermometer","Nagelschere/-feile","Haarbürste/Kamm","Babybadewanne","Kapuzenhandtuch"],
+  "0-3 Mon. — Kleidung": ["Bodys","Strampler","Overalls","Pucktuch","Söckchen","Fäustlinge","Mütze","Schlafsack"],
+  "0-3 Mon. — Fütterung": ["Schnuller","Babyflasche","Flaschenbürste","Sterilisator","Flaschenwärmer","Stillkissen","Stilleinlagen","Milchpumpe","Milchbeutel","Lätzchen"],
+  "0-3 Mon. — Schlafen & Sicherheit": ["Babybett/Wiege","Bettwäsche-Set","Schlafsack","Babyphone","Nachtlicht","Schlafpositionierer","Bettnetz"],
+  "0-3 Mon. — Unterwegs": ["Kinderwagen","Buggy","Babyschale","Babytrage","Autositz (Gruppe 0+)","Wickeltasche","Regen-/Windschutz"],
+  "3-6 Mon.": ["Beißring","Badespielzeug","Activity-Decke","Spiegel-Spielzeug","Rassel","Babyschaukel","Gym-Set"],
+  "6-9 Mon.": ["Hochstuhl","Weiches Löffel-Gabel-Set","Trinklernbecher","Babynahrungsmühle","Fütterschalen","Langarm-Lätzchen","Krabbelknieschoner","Laufgitter","Treppen-/Türschutzgitter"],
+  "9-12 Mon.": ["Lauflernwagen","Laufrad","Weiche erste Schuhe","Stapelbausteine","Pappbilderbücher","Steckdosenschutz","Eckenschutz"],
+  "12-24 Mon.": ["Lauflernwagen/Laufrad","Lernspielzeug","Weiche Schuhe/Sandalen","Löffel-Gabel-Set","Töpfchen/Toilettensitz","Badetritt","Autositz (Gruppe 1)","Sandkastenspielzeug"],
+  "2-3 Jahre": ["Dreirad","Malset","Bücherregal","Puzzle","Bausteine/Lego","Töpfchentraining-Set","Kinderbett","Kita-Rucksack"]
 };
 const SHOPPING_BY_AGE_BY_LANG = { tr: SHOPPING_BY_AGE_TR, en: SHOPPING_BY_AGE_EN, de: SHOPPING_BY_AGE_DE };
 function getShoppingByAge(lang) { return SHOPPING_BY_AGE_BY_LANG[lang] || SHOPPING_BY_AGE_TR; }
@@ -1657,15 +1687,30 @@ const MOM_HEALTH_ARTICLES = [
   {title:"Cinsel Sağlıkta Doğum Sonrası Süreç", cat:"Cinsel Sağlık", icon:Sparkles,
     body:"Doğum sonrası cinsel yaşama dönüş için genel öneri, doktor kontrolünden sonra (genellikle 6 hafta civarı) vücudunuzun iyileşmesini beklemektir. Hormonal değişiklikler nedeniyle vajinal kuruluk ve isteksizlik yaşamak son derece normaldir, kayganlaştırıcı kullanmak yardımcı olabilir. Partnerinizle açık iletişim kurmak ve kendinize zaman tanımak bu sürecin doğal bir parçasıdır; ağrı veya kanama yaşarsanız doktorunuza danışın."}
 ];
+// Rozetler artık sabit "kazanıldı" bayrağı yerine, annenin uygulamada
+// gerçekten yaptığı işlemlere (emzirme sayısı, anı günlüğü kayıtları,
+// çocuğun yaşı) göre otomatik olarak açılır. Her rozet, elindeki verilerle
+// (ctx) bir { earned, current, target } sonucu üreten bir check fonksiyonu
+// taşır.
 const BADGES = [
-  {title:"100 Gün Emzirme", icon: Heart},
-  {title:"İlk Diş", icon: Smile},
-  {title:"İlk Adım", icon: Activity},
-  {title:"İlk Kelime", icon: MessageCircle},
-  {title:"İlk Doğum Günü", icon: Star},
-  {title:"1 Yaş", icon: Award},
-  {title:"2 Yaş", icon: Award},
-  {title:"3 Yaş", icon: Award}
+  {title:"100 Emzirme", icon: Heart,
+    check: (ctx)=>({earned: ctx.emzirmeCount>=100, current: Math.min(ctx.emzirmeCount,100), target:100})},
+  {title:"İlk Gülümseme", icon: Smile,
+    check: (ctx)=>({earned: ctx.hasMemory("İlk Gülümseme"), current: ctx.hasMemory("İlk Gülümseme")?1:0, target:1})},
+  {title:"İlk Diş", icon: Smile,
+    check: (ctx)=>({earned: ctx.hasMemory("İlk Diş"), current: ctx.hasMemory("İlk Diş")?1:0, target:1})},
+  {title:"İlk Adım", icon: Activity,
+    check: (ctx)=>({earned: ctx.hasMemory("İlk Adım"), current: ctx.hasMemory("İlk Adım")?1:0, target:1})},
+  {title:"İlk Kelime", icon: MessageCircle,
+    check: (ctx)=>({earned: ctx.hasMemory("İlk Kelime"), current: ctx.hasMemory("İlk Kelime")?1:0, target:1})},
+  {title:"10 Anı Kaydı", icon: Star,
+    check: (ctx)=>({earned: ctx.memoryCount>=10, current: Math.min(ctx.memoryCount,10), target:10})},
+  {title:"1 Yaş", icon: Award,
+    check: (ctx)=>({earned: ctx.ageMonths!=null && ctx.ageMonths>=12, current: Math.min(ctx.ageMonths??0,12), target:12})},
+  {title:"2 Yaş", icon: Award,
+    check: (ctx)=>({earned: ctx.ageMonths!=null && ctx.ageMonths>=24, current: Math.min(ctx.ageMonths??0,24), target:24})},
+  {title:"3 Yaş", icon: Award,
+    check: (ctx)=>({earned: ctx.ageMonths!=null && ctx.ageMonths>=36, current: Math.min(ctx.ageMonths??0,36), target:36})}
 ];
 
 /* ============================================================
@@ -3421,7 +3466,13 @@ function TrackTab({child}) {
         <TrackerBoard
           title={t("tracker_breastfeeding_title")} color="pink" icon={Heart}
           fields={[{key:"right_breast", label:t("field_right_breast")},{key:"left_breast", label:t("field_left_breast")}]}
-          onLog={(vals)=>addLog("emzirme",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})})}
+          onLog={async (vals)=>{
+            addLog("emzirme",{...vals, time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"})});
+            // Rozetler (örn. "100 Emzirme") gerçek kullanım sayısına göre
+            // otomatik açılabilsin diye toplam emzirme sayısı kalıcı olarak saklanır.
+            const prev = (await storageGet("stats:emzirmeCount", false)) || {count:0};
+            await storageSet("stats:emzirmeCount", {count:(prev.count||0)+1}, false);
+          }}
           logs={logs.emzirme}
           renderLog={(l)=>t("breastfeeding_log_render", l.time, l.right_breast||0, l.left_breast||0)}
         />
@@ -4505,12 +4556,48 @@ function ShoppingListSection() {
 
   const totalChecked = Object.values(checked).filter(Boolean).length;
 
+  // Sepet: işaretlenmiş tüm ürünler (kendi listem + yaşa göre liste) tek bir
+  // "sepetim" görünümünde toplanır; buradan kaldırmak (işareti geri almak)
+  // ürünü sepetten atar ve alınacaklar listesine geri döner.
+  const cartItems = [];
+  customItems.forEach(it=>{
+    const key = "custom:"+it.id;
+    if (checked[key]) cartItems.push({key, label: it.text});
+  });
+  Object.entries(SHOPPING_L).forEach(([age, items])=>{
+    items.forEach(it=>{
+      const key = age+":"+it;
+      if (checked[key]) cartItems.push({key, label: it});
+    });
+  });
+
   if (loading) {
     return <div style={{marginTop:16}}><SkeletonCard/><SkeletonCard/></div>;
   }
 
   return (
     <div style={{marginTop:16}}>
+      <Card style={{marginBottom:12, background:"linear-gradient(135deg, #E8A9C4, #B79AEA)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <div style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.28)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+            <ShoppingBag size={19} color="#fff"/>
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontWeight:800,fontSize:14.5,color:"#fff"}}>{t("shopping_cart_title")}</div>
+            <div style={{fontSize:11.5,color:"rgba(255,255,255,0.9)",marginTop:2}}>{t("shopping_checked_count", cartItems.length)}</div>
+          </div>
+        </div>
+        {cartItems.length > 0 && (
+          <div style={{marginTop:12,display:"flex",flexWrap:"wrap",gap:8}}>
+            {cartItems.map(ci=>(
+              <div key={ci.key} onClick={()=>toggleCheck(ci.key)} className="abp-tap" style={{display:"flex",alignItems:"center",gap:6,background:"rgba(255,255,255,0.22)",borderRadius:99,padding:"6px 10px 6px 12px"}}>
+                <span style={{fontSize:12,fontWeight:700,color:"#fff",textDecoration:"line-through"}}>{ci.label}</span>
+                <X size={12} color="#fff"/>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
       <Card>
         <div style={{fontWeight:800,fontSize:15,marginBottom:10}}>{t("shopping_own_list_title")}</div>
         <div style={{display:"flex",gap:8}}>
@@ -4655,10 +4742,17 @@ function NearbyTab() {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const {latitude, longitude} = pos.coords;
+        const prev = coords;
         setCoords({lat:latitude, lon:longitude});
         setGeoStatus("ready");
         storageSet("nearby:lastCoords", {lat:latitude, lon:longitude, ts:Date.now()}, false);
         loadNearby(latitude, longitude);
+        // Konum önemli ölçüde değiştiyse (örn. tatile gidildiyse) kullanıcıyı
+        // bilgilendir; eczane/mağaza listeleri zaten yeni konuma göre yenilendi.
+        if (prev) {
+          const movedKm = haversineKm(prev.lat, prev.lon, latitude, longitude);
+          if (movedKm > 5) showToast(t("nearby_location_changed"));
+        }
       },
       (err) => {
         setGeoStatus(err.code===1 ? "denied" : "error");
@@ -4681,8 +4775,20 @@ function NearbyTab() {
 
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
-      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 4px"}}>{t("nearby_title")}</h2>
-      <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:14}}>{t("nearby_subtitle")}</div>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:10}}>
+        <div>
+          <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 4px"}}>{t("nearby_title")}</h2>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:14}}>{t("nearby_subtitle")}</div>
+        </div>
+        {coords && (
+          <div onClick={requestLocation} className="abp-tap" style={{display:"flex",alignItems:"center",gap:5,flexShrink:0,padding:"7px 11px",borderRadius:99,background:"var(--card)",boxShadow:"var(--shadow-sm)",fontSize:11,fontWeight:700,color:"var(--ink-soft)"}}>
+            {geoStatus==="loading" ? (
+              <div className="abp-spin-slow" style={{width:11,height:11,borderRadius:"50%",border:"2px solid var(--ink-faint)",borderTopColor:"var(--ink)"}}/>
+            ) : <MapPin size={12}/>}
+            {t("nearby_refresh_location")}
+          </div>
+        )}
+      </div>
 
       {geoStatus!=="ready" && (
         <Card style={{marginBottom:14, textAlign:"center", padding:"26px 18px"}}>
@@ -4823,9 +4929,123 @@ function NearbyTab() {
   );
 }
 
-function ActivitiesTab() {
+const DIET_DAILY_GOALS = [
+  {key:"su", label:"2-2.5L su içtim"},
+  {key:"protein", label:"Yeterli protein aldım"},
+  {key:"sebzemeyve", label:"Sebze/meyve tükettim"},
+  {key:"vitamin", label:"Vitamin/takviyemi aldım"}
+];
+
+// Anne diyeti haftalık programı: anne istediği zaman "0"dan başlayabilir,
+// programı sıfırlayabilir; her gün için günlük hedefler işaretlenir ve
+// hafta numarası başlangıç tarihine göre otomatik hesaplanır.
+function MomDietWeeklyTracker() {
+  const [loading, setLoading] = useState(true);
+  const [program, setProgram] = useState(null); // {startDate, days: {"YYYY-MM-DD": {su:true,...}}}
+
+  const load = async () => {
+    setLoading(true);
+    const saved = await storageGet("diet:weeklyProgram", false);
+    setProgram(saved || null);
+    setLoading(false);
+  };
+  useEffect(()=>{ load(); }, []);
+
+  const startProgram = async () => {
+    const fresh = {startDate: todayISO(), days:{}};
+    setProgram(fresh);
+    await storageSet("diet:weeklyProgram", fresh, false);
+    showToast("Diyet programı 0. günden başlatıldı ✓");
+  };
+
+  const resetProgram = async () => {
+    await startProgram();
+  };
+
+  const toggleGoal = async (dateKey, goalKey) => {
+    const days = {...(program.days||{})};
+    const dayVals = {...(days[dateKey]||{})};
+    dayVals[goalKey] = !dayVals[goalKey];
+    days[dateKey] = dayVals;
+    const next = {...program, days};
+    setProgram(next);
+    await storageSet("diet:weeklyProgram", next, false);
+  };
+
+  if (loading) return <SkeletonCard/>;
+
+  if (!program) {
+    return (
+      <Card style={{textAlign:"center", padding:"22px 16px"}}>
+        <div style={{width:52,height:52,borderRadius:20,background:"var(--pink)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px"}}>
+          <Utensils size={22}/>
+        </div>
+        <div style={{fontWeight:800,fontSize:14.5,marginBottom:6}}>Haftalık Anne Diyeti Programı</div>
+        <div style={{fontSize:12,color:"var(--ink-soft)",marginBottom:14,lineHeight:1.5}}>Hazır olduğunuzda programı 0. günden başlatabilirsiniz. İstediğiniz zaman sıfırlayıp yeniden başlayabilirsiniz.</div>
+        <PrimaryButton onClick={startProgram} style={{maxWidth:220,margin:"0 auto"}}>Programı Başlat (0. Gün)</PrimaryButton>
+      </Card>
+    );
+  }
+
+  const start = new Date(program.startDate);
+  const totalDays = Math.max(0, daysBetween(start, new Date()));
+  const weekNumber = Math.floor(totalDays/7) + 1;
+  const dayOfWeek = (totalDays % 7) + 1; // 1..7
+
+  // Bu haftanın 7 günü (Pazartesi mantığı değil, programın başladığı güne göre)
+  const weekStartOffset = Math.floor(totalDays/7) * 7;
+  const weekDates = Array.from({length:7}, (_,i)=>{
+    const d = new Date(start);
+    d.setDate(d.getDate() + weekStartOffset + i);
+    return d;
+  });
+
+  return (
+    <Card>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:4}}>
+        <div>
+          <div style={{fontWeight:800,fontSize:15}}>Hafta {weekNumber}</div>
+          <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{dayOfWeek}. gün · Program {formatDateTR(start)} tarihinde başladı</div>
+        </div>
+        <div onClick={resetProgram} className="abp-tap" style={{fontSize:11,fontWeight:700,color:"var(--ink-faint)",border:"1px solid rgba(150,130,180,0.25)",borderRadius:99,padding:"6px 12px"}}>0'la Başlat</div>
+      </div>
+      <div style={{marginTop:12}}>
+        {weekDates.map((d,i)=>{
+          const dateKey = d.toISOString().slice(0,10);
+          const isFuture = d > new Date();
+          const dayVals = (program.days||{})[dateKey] || {};
+          const doneCount = DIET_DAILY_GOALS.filter(g=>dayVals[g.key]).length;
+          return (
+            <div key={dateKey} style={{padding:"9px 0",borderBottom: i<6?"1px solid rgba(150,130,180,0.12)":"none", opacity:isFuture?0.4:1}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6}}>
+                <div style={{fontWeight:700,fontSize:12.5}}>{d.toLocaleDateString("tr-TR",{weekday:"short", day:"2-digit", month:"short"})}</div>
+                <div style={{fontSize:11,color:"var(--ink-faint)"}}>{doneCount}/{DIET_DAILY_GOALS.length}</div>
+              </div>
+              <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                {DIET_DAILY_GOALS.map(g=>{
+                  const on = !!dayVals[g.key];
+                  return (
+                    <div key={g.key} onClick={()=>!isFuture && toggleGoal(dateKey, g.key)} className="abp-tap"
+                      style={{display:"flex",alignItems:"center",gap:5,padding:"5px 9px",borderRadius:99,background: on?"var(--pink)":"var(--bg)",fontSize:10.5,fontWeight:700, cursor:isFuture?"default":"pointer"}}>
+                      {on && <Check size={10}/>} {g.label}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Card>
+  );
+}
+
+function ActivitiesTab({child}) {
   const { t, lang } = useLang();
   const [section, setSection] = useState("gunluk");
+  const [emzirmeCount, setEmzirmeCount] = useState(0);
+  const [memoryEntries, setMemoryEntries] = useState([]);
+  const [badgeLoading, setBadgeLoading] = useState(true);
   const [playing, setPlaying] = useState(null);
   const [speakingStory, setSpeakingStory] = useState(null);
   const [speakingLullaby, setSpeakingLullaby] = useState(null);
@@ -4881,6 +5101,37 @@ function ActivitiesTab() {
     })();
     return ()=>{ alive = false; };
   }, []);
+
+  useEffect(()=>{
+    if (section !== "rozet") return;
+    let alive = true;
+    setBadgeLoading(true);
+    (async ()=>{
+      const [emzStat, memories] = await Promise.all([
+        storageGet("stats:emzirmeCount", false),
+        storageGet("memories:entries", false)
+      ]);
+      if (!alive) return;
+      setEmzirmeCount((emzStat && emzStat.count) || 0);
+      setMemoryEntries(memories || []);
+      setBadgeLoading(false);
+    })();
+    return ()=>{ alive = false; };
+  }, [section]);
+
+  const badgeCtx = useMemo(()=>{
+    const memoryTitles = new Set(memoryEntries.map(m=>m.type));
+    let ageMonths = null;
+    if (child && child.status !== "pregnant" && child.birth) {
+      ageMonths = childAgeInfo(child.birth).months;
+    }
+    return {
+      emzirmeCount,
+      memoryCount: memoryEntries.length,
+      hasMemory: (typeName)=>memoryTitles.has(typeName),
+      ageMonths
+    };
+  }, [emzirmeCount, memoryEntries, child]);
 
   const allActivities = [...ACTIVITIES_POOL, ...cmsActivities];
   const allSounds = [...SLEEP_SOUNDS, ...cmsSounds];
@@ -5040,7 +5291,8 @@ function ActivitiesTab() {
 
       {section === "annediyeti" && (
         <div style={{marginTop:16}}>
-          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:12,lineHeight:1.6}}>Aşağıdaki plan genel bir örnektir; emzirme, hamilelik veya özel sağlık durumunuza göre doktorunuz/diyetisyeninizle birlikte kişiselleştirilmesi önerilir.</div>
+          <MomDietWeeklyTracker/>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",margin:"18px 0 12px",lineHeight:1.6}}>Aşağıdaki plan genel bir örnektir; emzirme, hamilelik veya özel sağlık durumunuza göre doktorunuz/diyetisyeninizle birlikte kişiselleştirilmesi önerilir.</div>
           <Card>
             <div style={{fontWeight:800,fontSize:15}}>Bugünkü Örnek Beslenme Planı</div>
             <div style={{marginTop:12}}>
@@ -5124,18 +5376,36 @@ function ActivitiesTab() {
       {section === "ani" && <MemoryJournal/>}
 
       {section === "rozet" && (
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginTop:16}}>
-          {BADGES.map((b,i)=>{
-            const Icon = b.icon; const earned = i < 3;
-            return (
-              <Card key={i} style={{textAlign:"center", opacity: earned?1:0.55}}>
-                <div style={{width:52,height:52,borderRadius:26,background: earned?"var(--pink)":"var(--purple)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 8px"}}>
-                  {earned ? <Icon size={22}/> : <Lock size={18}/>}
-                </div>
-                <div style={{fontWeight:700,fontSize:12.5}}>{b.title}</div>
-              </Card>
-            );
-          })}
+        <div style={{marginTop:16}}>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:12,lineHeight:1.6}}>Rozetler, uygulamada gerçekten yaptığınız kayıtlara (emzirme, anı günlüğü, çocuğunuzun yaşı) göre otomatik olarak açılır.</div>
+          {badgeLoading ? (
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}><SkeletonCard/><SkeletonCard/></div>
+          ) : (
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              {BADGES.map((b,i)=>{
+                const Icon = b.icon;
+                const result = b.check(badgeCtx);
+                const earned = !!result.earned;
+                const pct = result.target ? clamp(Math.round((result.current/result.target)*100),0,100) : (earned?100:0);
+                return (
+                  <Card key={i} style={{textAlign:"center", opacity: earned?1:0.7}}>
+                    <div style={{width:52,height:52,borderRadius:26,background: earned?"var(--pink)":"var(--purple)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 8px"}}>
+                      {earned ? <Icon size={22}/> : <Lock size={18}/>}
+                    </div>
+                    <div style={{fontWeight:700,fontSize:12.5,marginBottom:6}}>{b.title}</div>
+                    {!earned && (
+                      <>
+                        <div style={{height:5,borderRadius:99,background:"var(--bg)",overflow:"hidden",margin:"0 auto 4px"}}>
+                          <div style={{height:"100%",width:`${pct}%`,background:"var(--ink-faint)",borderRadius:99}}/>
+                        </div>
+                        <div style={{fontSize:10.5,color:"var(--ink-faint)"}}>{result.current}/{result.target}</div>
+                      </>
+                    )}
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -5143,6 +5413,32 @@ function ActivitiesTab() {
 }
 
 const MEMORY_TYPES = ["İlk Gülümseme","İlk Diş","İlk Adım","İlk Kelime","İlk Emekleme","İlk Banyo","İlk Saç Kesimi","İlk Okul Günü","Diğer"];
+
+// Seçilen bir fotoğrafı, storage limitlerini aşmamak için makul bir boyuta
+// küçültüp base64 (data URL) olarak döndürür.
+function resizeImageFile(file, maxSize=640, quality=0.72) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("read-failed"));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("decode-failed"));
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxSize) { height = Math.round(height * (maxSize/width)); width = maxSize; }
+        else if (height > maxSize) { width = Math.round(width * (maxSize/height)); height = maxSize; }
+        const canvas = document.createElement("canvas");
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function MemoryJournal() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -5151,20 +5447,64 @@ function MemoryJournal() {
   const [type, setType] = useState(MEMORY_TYPES[0]);
   const [photoUrl, setPhotoUrl] = useState("");
   const [saving, setSaving] = useState(false);
+  const [galleryPermission, setGalleryPermission] = useState(null); // null=henüz sorulmadı, true/false
+  const [askPermission, setAskPermission] = useState(false);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const fileInputRef = useRef(null);
 
   const load = async () => {
     setLoading(true); setError(null);
-    const saved = await storageGet("memories:entries", false);
+    const [saved, perm] = await Promise.all([
+      storageGet("memories:entries", false),
+      storageGet("memories:galleryPermission", false)
+    ]);
     if (saved) setEntries(saved);
     else if (saved === null) setEntries([]);
+    if (perm && typeof perm.granted === "boolean") setGalleryPermission(perm.granted);
     setLoading(false);
   };
   useEffect(()=>{ load(); }, []);
 
+  const openGallery = () => {
+    if (galleryPermission === true) { fileInputRef.current?.click(); return; }
+    setAskPermission(true);
+  };
+
+  const grantPermission = async () => {
+    setAskPermission(false);
+    setGalleryPermission(true);
+    await storageSet("memories:galleryPermission", {granted:true, ts:Date.now()}, false);
+    // İzin verildikten sonra galeri seçiciyi hemen aç; tarayıcı/işletim
+    // sistemi kendi galeri erişim iznini burada ayrıca soracaktır.
+    setTimeout(()=>fileInputRef.current?.click(), 50);
+  };
+
+  const declinePermission = async () => {
+    setAskPermission(false);
+    setGalleryPermission(false);
+    await storageSet("memories:galleryPermission", {granted:false, ts:Date.now()}, false);
+    showToast("Galeri izni verilmedi, fotoğrafsız devam edebilirsiniz");
+  };
+
+  const onFileChosen = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) { showToast("Lütfen bir fotoğraf seçin", "error"); return; }
+    setPhotoBusy(true);
+    try {
+      const dataUrl = await resizeImageFile(file);
+      setPhotoUrl(dataUrl);
+    } catch {
+      showToast("Fotoğraf yüklenemedi, tekrar deneyin", "error");
+    }
+    setPhotoBusy(false);
+  };
+
   const save = async () => {
     if (!text.trim() || saving) return;
     setSaving(true);
-    const entry = {title:text.trim(), type, photoUrl:photoUrl.trim()||null, date:new Date().toLocaleDateString("tr-TR"), ts:Date.now()};
+    const entry = {title:text.trim(), type, photoUrl:photoUrl||null, date:new Date().toLocaleDateString("tr-TR"), ts:Date.now()};
     const list = [entry, ...entries];
     const ok = await storageSet("memories:entries", list, false);
     if (ok) {
@@ -5190,10 +5530,39 @@ function MemoryJournal() {
         </div>
         <input placeholder="Bugün ne oldu, kısaca anlat..." value={text} onChange={e=>setText(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <input placeholder="Fotoğraf bağlantısı (opsiyonel URL)" value={photoUrl} onChange={e=>setPhotoUrl(e.target.value)}
-          style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
+
+        <input ref={fileInputRef} type="file" accept="image/*" capture="environment" onChange={onFileChosen} style={{display:"none"}}/>
+
+        {photoUrl ? (
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <img src={photoUrl} alt="" style={{width:52,height:52,borderRadius:14,objectFit:"cover",flexShrink:0}}/>
+            <div style={{flex:1,fontSize:12,color:"var(--ink-soft)"}}>Fotoğraf eklendi</div>
+            <div onClick={()=>setPhotoUrl("")} className="abp-tap" style={{width:28,height:28,borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center"}}><X size={13} color="var(--ink-faint)"/></div>
+          </div>
+        ) : (
+          <div onClick={openGallery} className="abp-tap" style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8,padding:"12px 0",borderRadius:14,border:"1.5px dashed rgba(150,130,180,0.35)",marginBottom:10,color:"var(--ink-soft)",fontSize:13,fontWeight:700}}>
+            <Camera size={16}/> {photoBusy ? "Yükleniyor..." : "Galeriden Fotoğraf Ekle"}
+          </div>
+        )}
+
         <PrimaryButton onClick={save} disabled={!text.trim()||saving} style={{padding:12,fontSize:13.5}}>{saving?"Kaydediliyor...":"Kaydet"}</PrimaryButton>
       </Card>
+
+      {askPermission && (
+        <Modal title="Galeri Erişim İzni" onClose={declinePermission}>
+          <div style={{textAlign:"center",padding:"6px 0 4px"}}>
+            <div style={{width:56,height:56,borderRadius:20,background:"var(--pink)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 14px"}}>
+              <Camera size={24} color="var(--ink)"/>
+            </div>
+            <div style={{fontSize:13.5,lineHeight:1.6,color:"var(--ink-soft)",marginBottom:18}}>
+              Anı Günlüğüne fotoğraf ekleyebilmek için galerinize erişim izni istiyoruz. Fotoğraflarınız yalnızca sizin cihazınızda/hesabınızda saklanır.
+            </div>
+            <PrimaryButton onClick={grantPermission} style={{marginBottom:10}}>İzin Ver</PrimaryButton>
+            <div onClick={declinePermission} className="abp-tap" style={{textAlign:"center",fontSize:13,color:"var(--ink-faint)",fontWeight:700,padding:8}}>Şimdi Değil</div>
+          </div>
+        </Modal>
+      )}
+
       <SectionTitle>Anı Zaman Çizelgesi</SectionTitle>
       {error && <ErrorBanner text={error} onRetry={load}/>}
       {loading ? (
@@ -5644,18 +6013,18 @@ function RenameModal({title, initialValue, placeholder, onSave, onClose}) {
    ============================================================ */
 const ABOUT_US_SECTIONS = [
   {h:"Biz Kimiz?", p:"Anne & Bebek, [AD SOYAD 1] ve [AD SOYAD 2] tarafından kurulan, hamilelik ve bebek bakım sürecinde ailelere destek olmayı amaçlayan bir mobil uygulamadır. Şirket değil, şahıs olarak iki kurucu ortak tarafından geliştirilip işletilmektedir."},
-  {h:"Ne Sunuyoruz?", p:"Uygulama içerisinde bebek gelişim takibi, uyku sesleri ve ninniler, uyku hikayeleri, anne sağlığı ile ilgili bilgilendirici içerikler, yapay zeka destekli soru-cevap asistanı, yakındaki bebek mağazalarını bulma ve anneler arasında ikinci el eşya alışverişi (Anne Pazarı) gibi özellikler sunulmaktadır."},
+  {h:"Ne Sunuyoruz?", p:"Uygulama içerisinde bebek gelişim takibi, uyku sesleri ve ninniler, uyku hikayeleri, anne sağlığı ile ilgili bilgilendirici içerikler, yapay zeka destekli soru-cevap asistanı, yakındaki bebek mağazalarını bulma ve anneler arasında ikinci el eşya alışverişi (WordBabe Satış) gibi özellikler sunulmaktadır."},
   {h:"Sağlık İçeriği Uyarısı", p:"Uygulamadaki sağlık, beslenme ve gelişimle ilgili tüm içerikler yalnızca genel bilgilendirme amaçlıdır; bir doktorun veya sağlık profesyonelinin tavsiyesinin yerini tutmaz. Sağlığınız veya bebeğinizin sağlığıyla ilgili endişeleriniz için mutlaka bir uzmana danışın."},
   {h:"Yapay Zeka Asistanı Uyarısı", p:"Uygulama içindeki soru-cevap asistanı yapay zeka (AI) teknolojisiyle çalışır ve verdiği yanıtlar hatalı veya eksik olabilir. Bu yanıtlar tıbbi teşhis veya tedavi tavsiyesi olarak değerlendirilmemelidir."},
   {h:"İletişim", p:"Görüş, öneri ve talepleriniz için: [E-POSTA ADRESİ]"}
 ];
 const PRIVACY_POLICY_SECTIONS = [
   {h:"Veri Sorumlusu", p:"6698 sayılı Kişisel Verilerin Korunması Kanunu (\"KVKK\") uyarınca, bu uygulama kapsamında işlenen kişisel verileriniz bakımından veri sorumlusu [AD SOYAD 1] ve [AD SOYAD 2]'dir (bundan sonra \"Uygulama Sahipleri\" olarak anılacaktır)."},
-  {h:"Hangi Verileri Topluyoruz?", p:"(a) Hesap bilgileri: ad, e-posta adresi ve Google/Apple ile giriş yaptığınızda ilgili sağlayıcıdan alınan kimlik bilgileri; (b) Bebeğinize/çocuğunuza ait olarak sizin girdiğiniz bilgiler (doğum tarihi, gelişim/büyüme kayıtları gibi); (c) Uygulama içi yapay zeka asistanına yönelttiğiniz sorular ve içerikleri; (d) Yakındaki mağaza/hizmet bulma özelliğini kullandığınızda konum bilginiz; (e) Anne Pazarı bölümünde oluşturduğunuz ilan bilgileri; (f) Uygulama kullanım tercihleri (tema, hatırlatıcılar gibi)."},
+  {h:"Hangi Verileri Topluyoruz?", p:"(a) Hesap bilgileri: ad, e-posta adresi ve Google/Apple ile giriş yaptığınızda ilgili sağlayıcıdan alınan kimlik bilgileri; (b) Bebeğinize/çocuğunuza ait olarak sizin girdiğiniz bilgiler (doğum tarihi, gelişim/büyüme kayıtları gibi); (c) Uygulama içi yapay zeka asistanına yönelttiğiniz sorular ve içerikleri; (d) Yakındaki mağaza/hizmet bulma özelliğini kullandığınızda konum bilginiz; (e) WordBabe Satış bölümünde oluşturduğunuz ilan bilgileri; (f) Uygulama kullanım tercihleri (tema, hatırlatıcılar gibi)."},
   {h:"Özel Nitelikli Veri Uyarısı", p:"Bebeğinize/çocuğunuza ait girdiğiniz sağlık ve gelişim bilgileri KVKK kapsamında özel nitelikli kişisel veri sayılabilir. Bu bilgileri uygulamaya girerek, veli/vasi sıfatınızla bu verilerin işlenmesine açık rıza verdiğinizi kabul edersiniz."},
   {h:"Verileri Neden İşliyoruz?", p:"Verileriniz; hesabınızın oluşturulması ve yönetilmesi, uygulama özelliklerinin (takip, hatırlatıcı, ninni/ses, AI asistan, ilan, konum bazlı arama) size sunulabilmesi, uygulamanın geliştirilmesi ve güvenliğinin sağlanması amacıyla işlenir."},
   {h:"Verileriniz Kimlerle Paylaşılıyor?", p:"Verileriniz, uygulamanın altyapısını sağlayan Google Firebase (kimlik doğrulama ve Firestore veritabanı barındırma), yapay zeka asistanı için Google Gemini API ve konum/harita özellikleri için Google Haritalar gibi hizmet sağlayıcılarla, yalnızca ilgili hizmetin çalışabilmesi için gerekli ölçüde paylaşılır. Bu sağlayıcılar kişisel verilerinizi kendi gizlilik politikaları çerçevesinde işler."},
-  {h:"Anne Pazarı İlanları", p:"Anne Pazarı bölümünde paylaştığınız ilan bilgileri (fotoğraf, açıklama, fiyat gibi) diğer tüm kullanıcılar tarafından görüntülenebilir. İlan içeriğinize kişisel iletişim bilgisi eklerseniz bunun da görünür olacağını unutmayın."},
+  {h:"WordBabe Satış İlanları", p:"WordBabe Satış bölümünde paylaştığınız ilan bilgileri (fotoğraf, açıklama, fiyat gibi) diğer tüm kullanıcılar tarafından görüntülenebilir. İlan içeriğinize kişisel iletişim bilgisi eklerseniz bunun da görünür olacağını unutmayın."},
   {h:"Verilerin Saklanma Süresi", p:"Verileriniz, hesabınız aktif olduğu sürece ve yukarıda belirtilen amaçların gerektirdiği süre boyunca saklanır; hesabınızı sildiğinizde ilgili veriler mevzuatın izin verdiği ölçüde silinir veya anonim hale getirilir."},
   {h:"KVKK Kapsamındaki Haklarınız", p:"KVKK'nın 11. maddesi uyarınca; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse buna ilişkin bilgi talep etme, işlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme, yurt içinde/dışında aktarıldığı üçüncü kişileri bilme, eksik/yanlış işlenmişse düzeltilmesini isteme, silinmesini/yok edilmesini isteme ve bu işlemlerin verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme haklarına sahipsiniz."},
   {h:"Başvuru Yöntemi", p:"Yukarıdaki haklarınızı kullanmak için taleplerinizi [E-POSTA ADRESİ] adresine iletebilirsiniz."},
@@ -6101,7 +6470,7 @@ function MarketTab({onBack}) {
 
   if (loadingNick) {
     return (
-      <Screen title="Anne Pazarı" onBack={onBack}>
+      <Screen title="WordBabe Satış" onBack={onBack}>
         <SkeletonCard/>
       </Screen>
     );
@@ -6109,10 +6478,10 @@ function MarketTab({onBack}) {
 
   if (!nickname) {
     return (
-      <Screen title="Anne Pazarı" onBack={onBack}>
+      <Screen title="WordBabe Satış" onBack={onBack}>
         <Card style={{textAlign:"center"}}>
           <IconBadge icon={ShoppingBag} color="pink" size={48}/>
-          <div style={{fontWeight:800,fontSize:15.5,margin:"12px 0 6px"}}>Anne Pazarı'na Hoş Geldiniz</div>
+          <div style={{fontWeight:800,fontSize:15.5,margin:"12px 0 6px"}}>WordBabe Satış'a Hoş Geldiniz</div>
           <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:14,lineHeight:1.5}}>İlan verebilmek ve satıcılarla görünür olabilmek için önce bir takma ad belirleyin. Bu ad, tüm ilanlarınızda görünecek.</div>
           <input placeholder="Örn. Ayşe Anne" value={nickInput} onChange={e=>setNickInput(e.target.value)}
             style={{width:"100%",padding:"14px 16px",borderRadius:16,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:14.5,color:"var(--ink)",outline:"none",marginBottom:12,textAlign:"center"}}/>
@@ -6131,7 +6500,7 @@ function MarketTab({onBack}) {
   });
 
   return (
-    <Screen title="Anne Pazarı" onBack={onBack} right={
+    <Screen title="WordBabe Satış" onBack={onBack} right={
       <div onClick={()=>setShowPost(true)} className="abp-tap" style={{width:36,height:36,borderRadius:18,background:"var(--pink)",display:"flex",alignItems:"center",justifyContent:"center"}}>
         <Plus size={18}/>
       </div>
@@ -6391,7 +6760,7 @@ function AppInner() {
                 />
               )}
               {activeTab === "track" && <TrackTab child={activeChild}/>}
-              {activeTab === "activities" && <ActivitiesTab/>}
+              {activeTab === "activities" && <ActivitiesTab child={activeChild}/>}
               {activeTab === "nearby" && <NearbyTab/>}
               {activeTab === "community" && <CommunityChat/>}
               {activeTab === "assistant" && <AssistantTab/>}
