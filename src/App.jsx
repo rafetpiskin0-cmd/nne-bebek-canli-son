@@ -1792,9 +1792,7 @@ async function reverseGeocodeTR(lat, lon) {
 const OVERPASS_MIRRORS = [
   "https://overpass-api.de/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
-  "https://overpass.kumi.systems/api/interpreter",
-  "https://overpass.openstreetmap.ru/api/interpreter",
-  "https://overpass.nchc.org.tw/api/interpreter"
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
 ];
 
 function fetchWithTimeout(url, options, timeoutMs) {
@@ -1835,17 +1833,30 @@ async function overpassNearbyOnce(lat, lon, radiusM, tagPairs) {
 
   let lastErr = null;
   for (const endpoint of OVERPASS_MIRRORS) {
+    // Önce POST dener; bir ağ/CORS sorunu nedeniyle POST başarısız olursa
+    // aynı aynaya GET isteğiyle bir kez daha şans verir (bazı aynalarda POST
+    // engellenmiş olabilir). İkisi de başarısız olursa sıradaki aynaya geçer.
     try {
       const res = await fetchWithTimeout(endpoint, {
         method: "POST",
         headers: {"Content-Type":"application/x-www-form-urlencoded"},
         body: "data=" + encodeURIComponent(query)
-      }, 16000);
+      }, 20000);
       if (!res.ok) throw new Error("overpass_error");
       const data = await res.json();
       return parseOverpassElements(data);
     } catch (e) {
-      lastErr = e; // bu ayna başarısız oldu, sıradaki aynayı dene
+      lastErr = e;
+      try {
+        const res2 = await fetchWithTimeout(`${endpoint}?data=${encodeURIComponent(query)}`, {
+          method: "GET"
+        }, 20000);
+        if (!res2.ok) throw new Error("overpass_error");
+        const data2 = await res2.json();
+        return parseOverpassElements(data2);
+      } catch (e2) {
+        lastErr = e2; // bu ayna da başarısız oldu, sıradaki aynayı dene
+      }
     }
   }
   throw lastErr || new Error("overpass_error");
@@ -2745,7 +2756,7 @@ function TodayTab({child, onOpenPregnancy, onOpenChild, onOpenMarket}) {
         )}
       </div>
 
-      <div className="abp-fade-up abp-tap" onClick={onOpenMarket} style={{
+      <div className="abp-fade-up abp-tap" onClick={()=>window.open("https://annepazari.netlify.app/", "_blank", "noopener,noreferrer")} style={{
         marginTop:18, borderRadius:"var(--radius-lg)", padding:16,
         background:"linear-gradient(120deg, #F6B8CE 0%, #E8A9C4 45%, #C6B3F0 100%)",
         display:"flex", alignItems:"center", gap:14, boxShadow:"var(--shadow-sm)", position:"relative", overflow:"hidden"
