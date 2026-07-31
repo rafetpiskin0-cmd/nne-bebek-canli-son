@@ -74,10 +74,24 @@ export async function signInWithGoogle() {
     const result = await signInWithPopup(auth, provider);
     return result.user;
   } catch (e) {
-    // Hesap başka bir yöntemle zaten varsa, doğrudan giriş yapmayı dene
+    // Hesap başka bir yöntemle zaten varsa, doğrudan giriş yapmayı dene.
+    // ÖNEMLİ: bu ikinci deneme de popup engeline takılabilir (özellikle
+    // linkWithPopup'ın hemen ardından art arda açılan ikinci popup bazı
+    // tarayıcılarda kullanıcı jestinden kopuk sayılıp engellenebiliyor),
+    // bu yüzden bunu da kendi try/catch'i içinde ele alıp gerekirse
+    // redirect'e düşürüyoruz. Aksi halde auth/popup-blocked hatası
+    // yakalanmadan dışarı fırlar.
     if (e.code === "auth/credential-already-in-use" || e.code === "auth/email-already-in-use") {
-      const result = await signInWithPopup(auth, provider);
-      return result.user;
+      try {
+        const result = await signInWithPopup(auth, provider);
+        return result.user;
+      } catch (e2) {
+        if (shouldFallbackToRedirect(e2)) {
+          await signInWithRedirect(auth, provider);
+          return null; // sayfa yönlendirilecek, buraya dönülmeyecek
+        }
+        throw e2;
+      }
     }
     // Popup engellendi veya bu ortamda desteklenmiyor → sayfa yönlendirmeli
     // girişe düş. Bu çağrı sayfayı Google'a yönlendirir; sonuç, sayfa geri
