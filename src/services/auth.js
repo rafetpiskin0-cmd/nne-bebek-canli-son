@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithCredential,
   linkWithPopup,
   linkWithCredential,
   EmailAuthProvider,
@@ -59,16 +60,20 @@ export async function signInWithGoogle() {
     const result = await signInWithPopup(auth, provider);
     return result.user;
   } catch (e) {
-    // Hesap başka bir yöntemle zaten varsa, doğrudan giriş yapmayı dene.
-    if (e.code === "auth/credential-already-in-use" || e.code === "auth/email-already-in-use") {
-      const result = await signInWithPopup(auth, provider);
-      return result.user;
+    // Bu Google hesabı zaten başka (kalıcı) bir hesaba bağlıysa link
+    // başarısız olur. Firebase bu hatanın içinde, popup'ta az önce
+    // tamamlanmış olan Google girişinin credential'ını zaten veriyor —
+    // bu yüzden İKİNCİ bir popup AÇMIYORUZ (tarayıcı bunu, kullanıcı
+    // tıklamasından kopuk bir kod akışından geldiği için engelliyordu,
+    // asıl "auth/popup-blocked" hatasının sebebi buydu). Var olan
+    // credential ile doğrudan giriş yapıyoruz.
+    if (e.code === "auth/credential-already-in-use") {
+      const cred = GoogleAuthProvider.credentialFromError(e);
+      if (cred) {
+        const result = await signInWithCredential(auth, cred);
+        return result.user;
+      }
     }
-    // NOT: Buradaki redirect fallback kasıtlı olarak kaldırıldı — mevcut
-    // hosting kurulumunda (authDomain ≠ uygulama domaini) redirect akışı
-    // tarayıcılar tarafından sessizce engelleniyor ve kullanıcıyı hiç
-    // uyarı vermeden başa atıyordu. Popup engellenirse kullanıcıya net bir
-    // hata gösterip tekrar denemesini istiyoruz.
     if (e.code === "auth/popup-blocked") {
       throw new Error("Tarayıcınız açılır pencereyi (popup) engelledi. Lütfen bu site için popup izni verip tekrar deneyin.");
     }
