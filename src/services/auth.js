@@ -57,22 +57,26 @@ function resolveRedirectOnce() {
   return redirectResultPromise;
 }
 
+let initialRedirectChecked = false;
+
 export function watchAuthState(callback) {
   return onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      // KRİTİK: onAuthStateChanged, sayfa Google'dan redirect ile geri
-      // döndüğünde Firebase henüz redirect sonucunu işlemeden ÖNCE bir
-      // kez user=null ile tetiklenebilir. Burada hemen signInAnonymously
-      // çağrılırsa, henüz işlenmekte olan Google girişinin önüne geçilip
-      // yeni bir anonim oturum açılır ve kullanıcı "giriş ekranına geri
-      // düşmüş" gibi görünür. Bu yüzden önce olası bir redirect sonucunun
-      // işlenmesini bekliyoruz.
+    if (!initialRedirectChecked) {
+      initialRedirectChecked = true;
+      // KRİTİK: İlk onAuthStateChanged tetiklenmesi, özellikle daha önce
+      // yerelde (IndexedDB) kayıtlı bir anonim kullanıcı varsa, olası bir
+      // Google redirect linking'i henüz işlenmeden ESKİ/bayat user
+      // nesnesiyle (isAnonymous: true) gelebilir. Bunu doğrudan callback'e
+      // iletirsek uygulama "girişi görmedi" gibi davranıp onboarding/auth
+      // ekranına döner. Bu yüzden ilk tetiklenmede önce bekleyip
+      // auth.currentUser'ın en güncel halini kullanıyoruz.
       await resolveRedirectOnce();
+      user = auth.currentUser;
+    }
+    if (!user) {
       if (!auth.currentUser) {
         signInAnonymously(auth).catch((e) => console.error("Anonim giriş başarısız:", e));
       }
-      // auth.currentUser doluysa, Firebase onAuthStateChanged'i az sonra
-      // gerçek kullanıcıyla tekrar tetikleyecek, callback o zaman çağrılır.
       return;
     }
     callback(user);
