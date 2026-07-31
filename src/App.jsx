@@ -190,6 +190,129 @@ const UI_TEXT = {
     weaning_watchlist_text: (foods)=>`${foods} için hafif reaksiyon/kaçınma notu var. Bu besinleri tekrar vermeden önce doktorunuza danışın.`,
     weaning_history_empty: "Henüz kayıt yok. Bugün verdiğin ilk besini ekle!",
     weaning_amount_label: (amt)=>`Miktar: ${amt}`,
+    weaning_calendar_day: (d)=>`Ek Gıda · ${d}. Gün`,
+    weaning_amount_recommend: (mult, gram)=>`Önerilen miktar: ${mult}x porsiyon (${gram})`,
+    weaning_prep_title: "Nasıl Hazırlanır?",
+    weaning_allergy_title: "Alerji Belirtileri",
+    weaning_allergy_text: "Kızarıklık, döküntü, kusma veya huzursuzluk görülürse besini kesip doktorunuza danışın.",
+    weaning_alt_title: "Alternatif Besin",
+    weaning_avoid_title: "Verilmemesi Gerekenler",
+    foodlog_error: "Yemek günlüğü yüklenemedi.",
+    toast_meal_saved: "Öğün kaydedildi ✓",
+    foodlog_title: "Bugün Ne Yedi?",
+    foodlog_placeholder: "Örn. Somon balığı ve patates püresi",
+    foodlog_note_placeholder: "Not ekle (opsiyonel, ör. az yedi / bayıldı)",
+    foodlog_add_btn: "Yemek Listesine Ekle",
+    foodlog_history_title: "Geçmiş Öğünler",
+    foodlog_history_empty: "Henüz kayıt yok. İlk öğününü ekle!",
+    foodlog_suggestions_title: "Yaşa Göre Beslenme Önerileri",
+    age_group_1: "6-8 Ay", age_group_2: "9-11 Ay", age_group_3: "12+ Ay",
+    teething_today_restless_title: "Bugün Huzursuz mu?",
+    teething_today_restless_desc: "Cevabına göre önerileri sıralayalım",
+    teething_yes_restless: "Evet, Huzursuz",
+    teething_no_calm: "Hayır, Sakin",
+    teething_last_log: (date,time,restless)=>`Son kayıt: ${date} · ${time} — ${restless?"Huzursuzdu":"Sakindi"}`,
+    toast_teething_restless: "Huzursuzluk kaydedildi, öneriler güncellendi ✓",
+    toast_teething_calm: "Bugün sakin olarak kaydedildi ✓",
+    teething_priority_title: "Bugün İçin Öncelikli Öneriler",
+    teething_calm_title: "Bebeğiniz Sakin — Genel Bilgi",
+    teething_priority_text: "Bebeğiniz huzursuzsa önce soğuk ve doğal yöntemleri deneyin; ihtiyaç halinde eczacınıza danışarak jel desteğini değerlendirebilirsiniz.",
+    teething_calm_text: "Şu an belirgin bir huzursuzluk yok; yine de diş etlerini günlük kontrol etmek ve doğal yöntemleri hazır bulundurmak faydalı olur.",
+    teething_relief_methods_title: "Rahatlatıcı Yöntemler",
+    teething_footer_note: "Ateş, aşırı ağlama, iştahsızlık veya ishal gibi belirtiler eşlik ediyorsa bunu diş çıkarmaya bağlamadan önce doktorunuza danışın.",
+    poop_reason_sert_warn: (d)=>`${d} gündür sert/topak kaka görülüyor — bu kabızlık belirtisi olabilir. Bol sıvı, lifli meyve püreleri (erik, armut) ve karın masajı deneyebilirsiniz; 3 günü aşarsa doktorunuza danışın.`,
+    poop_reason_sert_info: "Tek seferlik sertlik genelde geçicidir; su/sıvı alımını artırıp izlemeye devam edin.",
+    poop_reason_sulu_warn: (d)=>`${d} gündür sulu/cıvık kaka ishal belirtisi olabilir. Sıvı kaybına karşı bol sıvı verin; ${d>=3?"vakit kaybetmeden doktorunuza başvurun.":"devam ederse doktorunuza danışın."}`,
+    poop_reason_sulu_info: "Tek seferlik sulu kaka genelde zararsızdır, tekrarlarsa izlemeye devam edin.",
+    poop_reason_yesil_warn: (d)=>`${d} gündür yeşilimsi kaka görülüyor; genelde beslenmeyle ilgilidir ama uzun sürüyorsa doktorunuza danışabilirsiniz.`,
+    poop_reason_yesil_info: "Yeşilimsi renk çoğunlukla zararsızdır ve beslenmeyle ilişkilidir.",
+    poop_reason_mukuslu: (d)=>`${d>1?`${d} gündür `:""}Mukuslu kaka sindirim sisteminde hafif tahriş belirtisi olabilir; ${d>=2?"devam ederse doktorunuza danışın.":"izlemeye devam edin."}`,
+    poop_reason_kanli: "Kakada kan görülmesi ciddi olabilir; vakit kaybetmeden doktorunuza başvurun.",
+    poop_reason_default: "Kıvam normal aralıkta görünüyor, takibe devam edin.",
+    poop_save_title: "Kaka Kıvamını Kaydet",
+    poop_days_question: "Kaç gündür bu kıvamda? (Örn. 2 gündür yumuşak kaka yapıyor)",
+    toast_poop_saved: (label,days)=>`${label} · ${days} gündür kaydedildi ✓`,
+    poop_reasons_title: "Bu Kayda Göre Olası Nedenler",
+    constipation_tips_title: "Kabızlık İçin Genel Öneriler",
+    poop_history_empty: "Henüz kayıt yok. İlk kaydını ekle!",
+    poop_days_ago: (days)=>`${days} gündür`,
+    poop_consult_doctor: "Doktora danışın",
+    shopping_own_list_title: "Kendi Listeni Oluştur",
+    shopping_placeholder: "Örn. Bebek maması",
+    toast_list_added: "Liste eklendi ✓",
+    shopping_my_list: (n)=>`Listem (${n})`,
+    shopping_checked_count: (n)=>`${n} işaretli`,
+    shopping_by_age_title: "Yaşa Göre Öneriler",
+    place_no_address: "Adres bilgisi yok",
+    place_directions: "Yol tarifi →",
+    nearby_title: "Yakınımda",
+    nearby_subtitle: "Konumuna göre en yakın eczaneler ve bebek mağazaları.",
+    nearby_denied: "Konum izni verilmedi",
+    nearby_unsupported: "Cihazın konumu desteklemiyor",
+    nearby_error: "Konum alınamadı",
+    nearby_idle_title: "Konumunu bul, en yakınları görelim",
+    nearby_denied_desc: "Tarayıcı/telefon ayarlarından bu site için konum iznini açıp tekrar dene.",
+    nearby_idle_desc: "Konumunu paylaşman en yakın eczane ve bebek mağazalarını harita üzerinde göstermemizi sağlar.",
+    nearby_locating: "Konum alınıyor...",
+    nearby_find_btn: "Konumumu Bul",
+    toast_location_denied: "Konum izni reddedildi",
+    toast_location_failed: "Konum alınamadı, tekrar deneyin",
+    nearby_pharmacies: "Eczaneler",
+    nearby_baby_stores: "Bebek Mağazaları",
+    nearby_country: "Türkiye",
+    nearby_local_area: "Yakın Çevre",
+    nearby_location_found: "Konumun bulundu",
+    nearby_duty_pharmacy_title: "Bugün Nöbetçi Eczaneler",
+    nearby_duty_pharmacy_desc: (loc)=>`${loc} için güncel listeyi gör`,
+    nearby_duty_pharmacy_desc_default: "İlin için güncel listeyi gör",
+    nearby_closest_pharmacies: "En Yakın Eczaneler",
+    nearby_searching_pharmacies: "Yakındaki eczaneler aranıyor...",
+    nearby_pharmacy_load_error: "Eczaneler yüklenirken bağlantı sorunu oluştu.",
+    nearby_retry: "Tekrar Dene",
+    nearby_no_pharmacies: "Yakında kayıtlı eczane bulunamadı.",
+    nearby_closest_baby_stores: "En Yakın Bebek Mağazaları",
+    nearby_searching_baby_stores: "Yakındaki bebek mağazaları aranıyor...",
+    nearby_baby_store_load_error: "Bebek mağazaları yüklenirken bağlantı sorunu oluştu.",
+    nearby_no_baby_stores: "Yakında kayıtlı bebek mağazası bulunamadı.",
+    nearby_search_google_maps: "Google Haritalar'da ara →",
+    activities_title: "Etkinlikler",
+    activities_section_daily: "Günlük Aktivite", activities_section_craft: "El İşi", activities_section_story: "Hikayeler",
+    activities_section_lullaby: "Ninniler", activities_section_sound: "Uyku Sesleri", activities_section_diet: "Anne Diyeti",
+    activities_section_health: "Anne Sağlığı", activities_section_shopping: "Alışveriş Listesi", activities_section_memory: "Anı Günlüğü", activities_section_badge: "Rozetler",
+    age_all: "Tümü",
+    activities_skill_label: (skill)=>`Geliştirdiği beceri: ${skill}`,
+    craft_how_to: "Nasıl yapılır?",
+    craft_materials_title: "Gerekli Malzemeler",
+    craft_steps_title: "Adım Adım Yapılışı",
+    craft_dev_tip_title: "Gelişim İpucu",
+    story_listen_note: "Tarayıcının sesli okuma özelliğiyle gerçekten dinlenebilir.",
+    story_reading_now: " · Okunuyor...",
+    lullaby_listen_note: "Sözlerini yumuşak bir sesle dinleyebilirsiniz.",
+    lullaby_playing_now: " · Dinleniyor...",
+    sound_now_playing: (name)=>`${name} çalıyor`,
+    timer_15: "15 dk", timer_30: "30 dk", timer_60: "1 saat", timer_inf: "Sonsuz",
+    age_filter_0_6: "0-6 ay", age_filter_6_12: "6-12 ay", age_filter_12_24: "12-24 ay", age_filter_2_3y: "2-3 yaş", age_filter_3plus: "3+ yaş",
+    community_title: "Anne Sohbeti",
+    community_intro: "Diğer annelerle sohbet edebileceğiniz paylaşımlı bir alan. Burada yazdıklarınızı bu uygulamayı kullanan herkes görebilir — lütfen kişisel bilgilerinizi (telefon, adres vb.) paylaşmayın.",
+    community_pick_nickname: "Önce bir takma ad seçin",
+    community_nickname_placeholder: "Örn. Ayşe Anne",
+    community_join_btn: "Sohbete Katıl",
+    toast_nickname_saved: "Takma adınız kaydedildi ✓",
+    community_writing_as: (name)=>`${name} olarak yazıyorsunuz · herkese açık paylaşımlı alan`,
+    community_no_messages: "Henüz mesaj yok. İlk mesajı sen yaz!",
+    community_message_placeholder: "Bir mesaj yaz...",
+    toast_message_send_failed: "Mesaj gönderilemedi, tekrar deneyin",
+    assistant_title: "Yapay Zeka Anne Asistanı",
+    assistant_disclaimer: "Sadece bilgilendirme amaçlıdır, tanı koymaz.",
+    assistant_input_placeholder: "Bir şey sorun...",
+    assistant_history_title: "Geçmiş Sohbetler",
+    assistant_no_chats: "Henüz sohbet yok.",
+    assistant_message_count: (n)=>`${n} mesaj`,
+    assistant_fallback_reply: "Şu anda yanıt üretemedim, tekrar dener misiniz?",
+    assistant_error: "Yanıt alınamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+    toast_assistant_failed: "Asistan yanıt veremedi",
+    new_chat: "Yeni Sohbet",
+    assistant_greeting: "Merhaba! Ben Anne Asistanınız 🤍 Hamilelik, bebek bakımı veya gelişimle ilgili merak ettiklerinizi sorabilirsiniz. Acil durumlarda lütfen doktorunuza başvurun.",
   },
   en: {
     nav_today: "Today", nav_track: "Track", nav_activities: "Activities",
@@ -349,6 +472,129 @@ const UI_TEXT = {
     weaning_watchlist_text: (foods)=>`There's a mild reaction/avoidance note for ${foods}. Check with your doctor before offering these foods again.`,
     weaning_history_empty: "No entries yet. Add the first food you gave today!",
     weaning_amount_label: (amt)=>`Amount: ${amt}`,
+    weaning_calendar_day: (d)=>`Weaning · Day ${d}`,
+    weaning_amount_recommend: (mult, gram)=>`Suggested amount: ${mult}x portion (${gram})`,
+    weaning_prep_title: "How to Prepare",
+    weaning_allergy_title: "Allergy Signs",
+    weaning_allergy_text: "If you notice redness, rash, vomiting or fussiness, stop the food and consult your doctor.",
+    weaning_alt_title: "Alternative Food",
+    weaning_avoid_title: "Foods to Avoid",
+    foodlog_error: "Couldn't load the food log.",
+    toast_meal_saved: "Meal saved ✓",
+    foodlog_title: "What Did They Eat Today?",
+    foodlog_placeholder: "E.g. Salmon and mashed potatoes",
+    foodlog_note_placeholder: "Add a note (optional, e.g. ate little / loved it)",
+    foodlog_add_btn: "Add to Food List",
+    foodlog_history_title: "Past Meals",
+    foodlog_history_empty: "No entries yet. Add your first meal!",
+    foodlog_suggestions_title: "Nutrition Suggestions by Age",
+    age_group_1: "6-8 mo", age_group_2: "9-11 mo", age_group_3: "12+ mo",
+    teething_today_restless_title: "Restless Today?",
+    teething_today_restless_desc: "Let's order the suggestions based on the answer",
+    teething_yes_restless: "Yes, Restless",
+    teething_no_calm: "No, Calm",
+    teething_last_log: (date,time,restless)=>`Last entry: ${date} · ${time} — ${restless?"Restless":"Calm"}`,
+    toast_teething_restless: "Restlessness logged, suggestions updated ✓",
+    toast_teething_calm: "Logged as calm today ✓",
+    teething_priority_title: "Priority Suggestions For Today",
+    teething_calm_title: "Your Baby Is Calm — General Info",
+    teething_priority_text: "If your baby is restless, try cold and natural methods first; if needed, consult your pharmacist about gel support.",
+    teething_calm_text: "There's no notable restlessness right now; still, it's useful to check the gums daily and keep natural methods on hand.",
+    teething_relief_methods_title: "Relief Methods",
+    teething_footer_note: "If symptoms like fever, excessive crying, loss of appetite, or diarrhea accompany this, consult your doctor before attributing it to teething.",
+    poop_reason_sert_warn: (d)=>`Hard/pellet-like stool has been seen for ${d} days — this may indicate constipation. You can try plenty of fluids, fibrous fruit purees (prune, pear) and tummy massage; consult your doctor if it exceeds 3 days.`,
+    poop_reason_sert_info: "A one-time hard stool is usually temporary; increase water/fluid intake and keep monitoring.",
+    poop_reason_sulu_warn: (d)=>`Watery/runny stool for ${d} days may indicate diarrhea. Give plenty of fluids to prevent fluid loss; ${d>=3?"see your doctor without delay.":"consult your doctor if it continues."}`,
+    poop_reason_sulu_info: "A one-time watery stool is usually harmless; keep monitoring if it recurs.",
+    poop_reason_yesil_warn: (d)=>`Greenish stool has been seen for ${d} days; usually diet-related, but consult your doctor if it persists long.`,
+    poop_reason_yesil_info: "A greenish color is mostly harmless and related to diet.",
+    poop_reason_mukuslu: (d)=>`${d>1?`For ${d} days, `:""}Mucousy stool may indicate mild irritation in the digestive system; ${d>=2?"consult your doctor if it continues.":"keep monitoring."}`,
+    poop_reason_kanli: "Blood in the stool can be serious; see your doctor without delay.",
+    poop_reason_default: "Consistency looks within the normal range, keep monitoring.",
+    poop_save_title: "Log Stool Consistency",
+    poop_days_question: "How many days has it been like this? (e.g. soft stool for 2 days)",
+    toast_poop_saved: (label,days)=>`${label} · ${days} days logged ✓`,
+    poop_reasons_title: "Possible Reasons Based on This Entry",
+    constipation_tips_title: "General Tips for Constipation",
+    poop_history_empty: "No entries yet. Add your first one!",
+    poop_days_ago: (days)=>`${days} days`,
+    poop_consult_doctor: "Consult your doctor",
+    shopping_own_list_title: "Create Your Own List",
+    shopping_placeholder: "E.g. Baby formula",
+    toast_list_added: "Added to list ✓",
+    shopping_my_list: (n)=>`My List (${n})`,
+    shopping_checked_count: (n)=>`${n} checked`,
+    shopping_by_age_title: "Suggestions by Age",
+    place_no_address: "No address available",
+    place_directions: "Directions →",
+    nearby_title: "Nearby",
+    nearby_subtitle: "Closest pharmacies and baby stores based on your location.",
+    nearby_denied: "Location permission not granted",
+    nearby_unsupported: "Your device doesn't support location",
+    nearby_error: "Couldn't get location",
+    nearby_idle_title: "Find your location to see what's nearby",
+    nearby_denied_desc: "Enable location permission for this site in your browser/phone settings and try again.",
+    nearby_idle_desc: "Sharing your location lets us show the closest pharmacies and baby stores on the map.",
+    nearby_locating: "Getting location...",
+    nearby_find_btn: "Find My Location",
+    toast_location_denied: "Location permission denied",
+    toast_location_failed: "Couldn't get location, please try again",
+    nearby_pharmacies: "Pharmacies",
+    nearby_baby_stores: "Baby Stores",
+    nearby_country: "Türkiye",
+    nearby_local_area: "Nearby Area",
+    nearby_location_found: "Location found",
+    nearby_duty_pharmacy_title: "Today's Duty Pharmacies",
+    nearby_duty_pharmacy_desc: (loc)=>`See the current list for ${loc}`,
+    nearby_duty_pharmacy_desc_default: "See the current list for your province",
+    nearby_closest_pharmacies: "Closest Pharmacies",
+    nearby_searching_pharmacies: "Searching for nearby pharmacies...",
+    nearby_pharmacy_load_error: "There was a connection issue while loading pharmacies.",
+    nearby_retry: "Try Again",
+    nearby_no_pharmacies: "No registered pharmacies found nearby.",
+    nearby_closest_baby_stores: "Closest Baby Stores",
+    nearby_searching_baby_stores: "Searching for nearby baby stores...",
+    nearby_baby_store_load_error: "There was a connection issue while loading baby stores.",
+    nearby_no_baby_stores: "No registered baby stores found nearby.",
+    nearby_search_google_maps: "Search on Google Maps →",
+    activities_title: "Activities",
+    activities_section_daily: "Daily Activity", activities_section_craft: "Crafts", activities_section_story: "Stories",
+    activities_section_lullaby: "Lullabies", activities_section_sound: "Sleep Sounds", activities_section_diet: "Mom's Diet",
+    activities_section_health: "Mom's Health", activities_section_shopping: "Shopping List", activities_section_memory: "Memory Journal", activities_section_badge: "Badges",
+    age_all: "All",
+    activities_skill_label: (skill)=>`Skill developed: ${skill}`,
+    craft_how_to: "How to make it?",
+    craft_materials_title: "Materials Needed",
+    craft_steps_title: "Step-by-Step Instructions",
+    craft_dev_tip_title: "Development Tip",
+    story_listen_note: "You can actually listen using your browser's text-to-speech feature.",
+    story_reading_now: " · Reading...",
+    lullaby_listen_note: "You can listen to the lyrics in a soft voice.",
+    lullaby_playing_now: " · Playing...",
+    sound_now_playing: (name)=>`Playing ${name}`,
+    timer_15: "15 min", timer_30: "30 min", timer_60: "1 hour", timer_inf: "Infinite",
+    age_filter_0_6: "0-6 mo", age_filter_6_12: "6-12 mo", age_filter_12_24: "12-24 mo", age_filter_2_3y: "2-3 yr", age_filter_3plus: "3+ yr",
+    community_title: "Mom Chat",
+    community_intro: "A shared space where you can chat with other moms. Anyone using this app can see what you write here — please don't share personal information (phone, address, etc.).",
+    community_pick_nickname: "First, choose a nickname",
+    community_nickname_placeholder: "E.g. Mom Alex",
+    community_join_btn: "Join the Chat",
+    toast_nickname_saved: "Your nickname has been saved ✓",
+    community_writing_as: (name)=>`You're writing as ${name} · public shared space`,
+    community_no_messages: "No messages yet. Write the first one!",
+    community_message_placeholder: "Write a message...",
+    toast_message_send_failed: "Couldn't send message, please try again",
+    assistant_title: "AI Mom Assistant",
+    assistant_disclaimer: "For informational purposes only, does not diagnose.",
+    assistant_input_placeholder: "Ask something...",
+    assistant_history_title: "Past Chats",
+    assistant_no_chats: "No chats yet.",
+    assistant_message_count: (n)=>`${n} messages`,
+    assistant_fallback_reply: "I couldn't generate a response right now, could you try again?",
+    assistant_error: "Couldn't get a response. Check your connection and try again.",
+    toast_assistant_failed: "The assistant couldn't respond",
+    new_chat: "New Chat",
+    assistant_greeting: "Hello! I'm your Mom Assistant 🤍 You can ask me anything about pregnancy, baby care or development. In emergencies, please contact your doctor.",
   },
   de: {
     nav_today: "Heute", nav_track: "Verfolgen", nav_activities: "Aktivitäten",
@@ -508,6 +754,129 @@ const UI_TEXT = {
     weaning_watchlist_text: (foods)=>`Es gibt einen Hinweis auf eine leichte Reaktion/Vermeidung bei ${foods}. Sprechen Sie mit Ihrem Arzt, bevor Sie diese Lebensmittel erneut anbieten.`,
     weaning_history_empty: "Noch keine Einträge. Fügen Sie das erste Lebensmittel von heute hinzu!",
     weaning_amount_label: (amt)=>`Menge: ${amt}`,
+    weaning_calendar_day: (d)=>`Beikost · Tag ${d}`,
+    weaning_amount_recommend: (mult, gram)=>`Empfohlene Menge: ${mult}x Portion (${gram})`,
+    weaning_prep_title: "Zubereitung",
+    weaning_allergy_title: "Allergiezeichen",
+    weaning_allergy_text: "Bei Rötung, Ausschlag, Erbrechen oder Unruhe das Lebensmittel absetzen und einen Arzt konsultieren.",
+    weaning_alt_title: "Alternatives Lebensmittel",
+    weaning_avoid_title: "Zu vermeidende Lebensmittel",
+    foodlog_error: "Das Essenstagebuch konnte nicht geladen werden.",
+    toast_meal_saved: "Mahlzeit gespeichert ✓",
+    foodlog_title: "Was hat es heute gegessen?",
+    foodlog_placeholder: "Z. B. Lachs und Kartoffelpüree",
+    foodlog_note_placeholder: "Notiz hinzufügen (optional, z. B. wenig gegessen / hat's geliebt)",
+    foodlog_add_btn: "Zur Essensliste hinzufügen",
+    foodlog_history_title: "Frühere Mahlzeiten",
+    foodlog_history_empty: "Noch keine Einträge. Fügen Sie die erste Mahlzeit hinzu!",
+    foodlog_suggestions_title: "Ernährungsvorschläge nach Alter",
+    age_group_1: "6-8 Mon.", age_group_2: "9-11 Mon.", age_group_3: "12+ Mon.",
+    teething_today_restless_title: "Heute unruhig?",
+    teething_today_restless_desc: "Basierend auf der Antwort ordnen wir die Vorschläge",
+    teething_yes_restless: "Ja, Unruhig",
+    teething_no_calm: "Nein, Ruhig",
+    teething_last_log: (date,time,restless)=>`Letzter Eintrag: ${date} · ${time} — ${restless?"Unruhig":"Ruhig"}`,
+    toast_teething_restless: "Unruhe protokolliert, Vorschläge aktualisiert ✓",
+    toast_teething_calm: "Heute als ruhig protokolliert ✓",
+    teething_priority_title: "Priorisierte Vorschläge für heute",
+    teething_calm_title: "Ihr Baby ist ruhig — Allgemeine Info",
+    teething_priority_text: "Wenn Ihr Baby unruhig ist, probieren Sie zuerst kalte und natürliche Methoden; bei Bedarf können Sie mit Ihrem Apotheker über eine Gel-Unterstützung sprechen.",
+    teething_calm_text: "Derzeit gibt es keine nennenswerte Unruhe; dennoch ist es hilfreich, das Zahnfleisch täglich zu kontrollieren und natürliche Methoden bereitzuhalten.",
+    teething_relief_methods_title: "Linderungsmethoden",
+    teething_footer_note: "Wenn Symptome wie Fieber, übermäßiges Weinen, Appetitlosigkeit oder Durchfall auftreten, konsultieren Sie Ihren Arzt, bevor Sie dies dem Zahnen zuschreiben.",
+    poop_reason_sert_warn: (d)=>`Seit ${d} Tagen wird harter/klumpiger Stuhl beobachtet — dies kann ein Zeichen für Verstopfung sein. Versuchen Sie viel Flüssigkeit, ballaststoffreiche Fruchtpürees (Pflaume, Birne) und Bauchmassage; konsultieren Sie Ihren Arzt, wenn es länger als 3 Tage andauert.`,
+    poop_reason_sert_info: "Einmalig harter Stuhl ist meist vorübergehend; erhöhen Sie die Flüssigkeitszufuhr und beobachten Sie weiter.",
+    poop_reason_sulu_warn: (d)=>`Wässriger/breiiger Stuhl seit ${d} Tagen kann auf Durchfall hindeuten. Geben Sie viel Flüssigkeit gegen Flüssigkeitsverlust; ${d>=3?"suchen Sie unverzüglich Ihren Arzt auf.":"konsultieren Sie Ihren Arzt, wenn es anhält."}`,
+    poop_reason_sulu_info: "Einmalig wässriger Stuhl ist meist harmlos, bei Wiederholung weiter beobachten.",
+    poop_reason_yesil_warn: (d)=>`Seit ${d} Tagen wird grünlicher Stuhl beobachtet; meist ernährungsbedingt, konsultieren Sie aber Ihren Arzt, wenn es lange anhält.`,
+    poop_reason_yesil_info: "Eine grünliche Farbe ist meist harmlos und ernährungsbedingt.",
+    poop_reason_mukuslu: (d)=>`${d>1?`Seit ${d} Tagen `:""}Schleimiger Stuhl kann auf eine leichte Reizung des Verdauungssystems hindeuten; ${d>=2?"konsultieren Sie Ihren Arzt, wenn es anhält.":"beobachten Sie weiter."}`,
+    poop_reason_kanli: "Blut im Stuhl kann ernst sein; suchen Sie unverzüglich Ihren Arzt auf.",
+    poop_reason_default: "Die Konsistenz sieht im normalen Bereich aus, beobachten Sie weiter.",
+    poop_save_title: "Stuhlkonsistenz protokollieren",
+    poop_days_question: "Seit wie vielen Tagen ist es so? (z. B. seit 2 Tagen weicher Stuhl)",
+    toast_poop_saved: (label,days)=>`${label} · seit ${days} Tagen protokolliert ✓`,
+    poop_reasons_title: "Mögliche Gründe basierend auf diesem Eintrag",
+    constipation_tips_title: "Allgemeine Tipps bei Verstopfung",
+    poop_history_empty: "Noch keine Einträge. Fügen Sie den ersten hinzu!",
+    poop_days_ago: (days)=>`seit ${days} Tagen`,
+    poop_consult_doctor: "Arzt konsultieren",
+    shopping_own_list_title: "Eigene Liste erstellen",
+    shopping_placeholder: "Z. B. Babynahrung",
+    toast_list_added: "Zur Liste hinzugefügt ✓",
+    shopping_my_list: (n)=>`Meine Liste (${n})`,
+    shopping_checked_count: (n)=>`${n} markiert`,
+    shopping_by_age_title: "Vorschläge nach Alter",
+    place_no_address: "Keine Adresse verfügbar",
+    place_directions: "Wegbeschreibung →",
+    nearby_title: "In der Nähe",
+    nearby_subtitle: "Nächstgelegene Apotheken und Babygeschäfte basierend auf Ihrem Standort.",
+    nearby_denied: "Standortberechtigung nicht erteilt",
+    nearby_unsupported: "Ihr Gerät unterstützt keine Standortbestimmung",
+    nearby_error: "Standort konnte nicht ermittelt werden",
+    nearby_idle_title: "Finden Sie Ihren Standort, um zu sehen, was in der Nähe ist",
+    nearby_denied_desc: "Aktivieren Sie die Standortberechtigung für diese Website in Ihren Browser-/Telefoneinstellungen und versuchen Sie es erneut.",
+    nearby_idle_desc: "Wenn Sie Ihren Standort teilen, können wir Ihnen die nächstgelegenen Apotheken und Babygeschäfte auf der Karte anzeigen.",
+    nearby_locating: "Standort wird ermittelt...",
+    nearby_find_btn: "Meinen Standort finden",
+    toast_location_denied: "Standortberechtigung verweigert",
+    toast_location_failed: "Standort konnte nicht ermittelt werden, bitte erneut versuchen",
+    nearby_pharmacies: "Apotheken",
+    nearby_baby_stores: "Babygeschäfte",
+    nearby_country: "Türkei",
+    nearby_local_area: "Nähere Umgebung",
+    nearby_location_found: "Standort gefunden",
+    nearby_duty_pharmacy_title: "Heutige Notdienst-Apotheken",
+    nearby_duty_pharmacy_desc: (loc)=>`Aktuelle Liste für ${loc} ansehen`,
+    nearby_duty_pharmacy_desc_default: "Aktuelle Liste für Ihre Provinz ansehen",
+    nearby_closest_pharmacies: "Nächstgelegene Apotheken",
+    nearby_searching_pharmacies: "Suche nach Apotheken in der Nähe...",
+    nearby_pharmacy_load_error: "Beim Laden der Apotheken ist ein Verbindungsproblem aufgetreten.",
+    nearby_retry: "Erneut versuchen",
+    nearby_no_pharmacies: "Keine registrierten Apotheken in der Nähe gefunden.",
+    nearby_closest_baby_stores: "Nächstgelegene Babygeschäfte",
+    nearby_searching_baby_stores: "Suche nach Babygeschäften in der Nähe...",
+    nearby_baby_store_load_error: "Beim Laden der Babygeschäfte ist ein Verbindungsproblem aufgetreten.",
+    nearby_no_baby_stores: "Keine registrierten Babygeschäfte in der Nähe gefunden.",
+    nearby_search_google_maps: "Auf Google Maps suchen →",
+    activities_title: "Aktivitäten",
+    activities_section_daily: "Tägliche Aktivität", activities_section_craft: "Basteln", activities_section_story: "Geschichten",
+    activities_section_lullaby: "Schlaflieder", activities_section_sound: "Schlafgeräusche", activities_section_diet: "Ernährung der Mutter",
+    activities_section_health: "Gesundheit der Mutter", activities_section_shopping: "Einkaufsliste", activities_section_memory: "Erinnerungstagebuch", activities_section_badge: "Abzeichen",
+    age_all: "Alle",
+    activities_skill_label: (skill)=>`Geförderte Fähigkeit: ${skill}`,
+    craft_how_to: "Wie geht das?",
+    craft_materials_title: "Benötigte Materialien",
+    craft_steps_title: "Schritt-für-Schritt-Anleitung",
+    craft_dev_tip_title: "Entwicklungstipp",
+    story_listen_note: "Sie können es mit der Vorlesefunktion Ihres Browsers wirklich anhören.",
+    story_reading_now: " · Wird vorgelesen...",
+    lullaby_listen_note: "Sie können sich den Text mit sanfter Stimme anhören.",
+    lullaby_playing_now: " · Wird abgespielt...",
+    sound_now_playing: (name)=>`${name} spielt`,
+    timer_15: "15 Min.", timer_30: "30 Min.", timer_60: "1 Std.", timer_inf: "Unendlich",
+    age_filter_0_6: "0-6 Mon.", age_filter_6_12: "6-12 Mon.", age_filter_12_24: "12-24 Mon.", age_filter_2_3y: "2-3 J.", age_filter_3plus: "3+ J.",
+    community_title: "Mama-Chat",
+    community_intro: "Ein gemeinsamer Bereich, in dem Sie sich mit anderen Müttern austauschen können. Alle, die diese App nutzen, können sehen, was Sie hier schreiben — teilen Sie bitte keine persönlichen Informationen (Telefon, Adresse usw.).",
+    community_pick_nickname: "Wählen Sie zuerst einen Spitznamen",
+    community_nickname_placeholder: "Z. B. Mama Lena",
+    community_join_btn: "Am Chat teilnehmen",
+    toast_nickname_saved: "Ihr Spitzname wurde gespeichert ✓",
+    community_writing_as: (name)=>`Sie schreiben als ${name} · öffentlicher gemeinsamer Bereich`,
+    community_no_messages: "Noch keine Nachrichten. Schreiben Sie die erste!",
+    community_message_placeholder: "Eine Nachricht schreiben...",
+    toast_message_send_failed: "Nachricht konnte nicht gesendet werden, bitte erneut versuchen",
+    assistant_title: "KI-Mama-Assistent",
+    assistant_disclaimer: "Nur zu Informationszwecken, stellt keine Diagnose.",
+    assistant_input_placeholder: "Fragen Sie etwas...",
+    assistant_history_title: "Frühere Chats",
+    assistant_no_chats: "Noch keine Chats.",
+    assistant_message_count: (n)=>`${n} Nachrichten`,
+    assistant_fallback_reply: "Ich konnte gerade keine Antwort generieren, könnten Sie es erneut versuchen?",
+    assistant_error: "Keine Antwort erhalten. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+    toast_assistant_failed: "Der Assistent konnte nicht antworten",
+    new_chat: "Neuer Chat",
+    assistant_greeting: "Hallo! Ich bin Ihr Mama-Assistent 🤍 Sie können mich alles zu Schwangerschaft, Babypflege oder Entwicklung fragen. Wenden Sie sich im Notfall bitte an Ihren Arzt.",
   }
 };
 
@@ -881,7 +1250,7 @@ const VACCINE_SCHEDULE = getVaccineSchedule("tr");
 const VACCINES = VACCINE_SCHEDULE.map(v=>({age: v.ageMonths===0?"Doğumda":`${v.ageMonths}. Ay`, name:v.name}));
 
 
-const WEANING_FOODS = [
+const WEANING_FOODS_TR = [
   {name:"Elma Püresi", gram:"1-2 tatlı kaşığı", prep:"Elmayı soyup buharda pişirin, iyice ezin.", alt:"Armut püresi", allergy:"Nadir, gaz yapabilir."},
   {name:"Muz Ezmesi", gram:"2-3 tatlı kaşığı", prep:"Olgun muzu çatalla ezin, pişirmeye gerek yok.", alt:"Avokado ezmesi", allergy:"Düşük risk."},
   {name:"Havuç Püresi", gram:"1-2 tatlı kaşığı", prep:"Buharda yumuşayana kadar pişirip ezin.", alt:"Balkabağı püresi", allergy:"Düşük risk."},
@@ -897,65 +1266,187 @@ const WEANING_FOODS = [
   {name:"Şeftali Püresi", gram:"1-2 tatlı kaşığı", prep:"Kabuğunu soyup buharda pişirip ezin.", alt:"Kayısı püresi", allergy:"Düşük risk."},
   {name:"Ispanak Karışımı", gram:"1 tatlı kaşığı", prep:"Az miktarda haşlayıp başka bir sebzeyle karıştırın.", alt:"Kabak ile karıştırılabilir", allergy:"Nitrat içeriği nedeniyle az miktarda verin."}
 ];
-const AVOID_FOODS = ["Bal (1 yaş altı botulizm riski)","Tuz ve şeker eklenmiş yiyecekler","İnek sütü (1 yaş altı ana içecek olarak)","Bütün fındık/fıstık (boğulma riski)","İşlenmiş/paketli gıdalar","Az pişmiş yumurta ve et"];
+const WEANING_FOODS_EN = [
+  {name:"Apple Puree", gram:"1-2 teaspoons", prep:"Peel and steam the apple, then mash well.", alt:"Pear puree", allergy:"Rare, may cause gas."},
+  {name:"Mashed Banana", gram:"2-3 teaspoons", prep:"Mash a ripe banana with a fork, no cooking needed.", alt:"Mashed avocado", allergy:"Low risk."},
+  {name:"Carrot Puree", gram:"1-2 teaspoons", prep:"Steam until soft, then mash.", alt:"Pumpkin puree", allergy:"Low risk."},
+  {name:"Baby Rice Cereal", gram:"1-2 tablespoons, thinned", prep:"Mix with breast milk/formula until smooth.", alt:"Oat cereal", allergy:"Gluten-free, low risk."},
+  {name:"Sweet Potato Puree", gram:"1-2 teaspoons", prep:"Bake or steam, then mash.", alt:"Squash puree", allergy:"Low risk."},
+  {name:"Mashed Avocado", gram:"1-2 teaspoons", prep:"Mash a ripe avocado with a fork.", alt:"Mashed banana", allergy:"Low risk."},
+  {name:"Pear Puree", gram:"1-2 teaspoons", prep:"Steam and mash.", alt:"Apple puree", allergy:"Low risk."},
+  {name:"Zucchini Puree", gram:"1-2 teaspoons", prep:"Steam and mash.", alt:"Carrot puree", allergy:"Low risk."},
+  {name:"Broccoli Puree", gram:"1 teaspoon", prep:"Steam until soft, mash/strain well.", alt:"Cauliflower puree", allergy:"May cause gas, introduce gradually."},
+  {name:"Oatmeal", gram:"1-2 tablespoons", prep:"Cook finely ground oats with milk/water.", alt:"Rice cereal", allergy:"Low risk."},
+  {name:"Mixed Vegetable Puree", gram:"2-3 teaspoons", prep:"Boil carrot, zucchini and potato together, then mash.", alt:"Single-vegetable puree", allergy:"Introduce each new vegetable one at a time."},
+  {name:"Lentil Puree (fine)", gram:"1-2 teaspoons", prep:"Cook red lentils thoroughly, strain and mash.", alt:"Chickpea puree (later months)", allergy:"First legume trial, introduce gradually."},
+  {name:"Peach Puree", gram:"1-2 teaspoons", prep:"Peel, steam and mash.", alt:"Apricot puree", allergy:"Low risk."},
+  {name:"Spinach Mix", gram:"1 teaspoon", prep:"Boil briefly and mix with another vegetable.", alt:"Can be mixed with zucchini", allergy:"Give in small amounts due to nitrate content."}
+];
+const WEANING_FOODS_DE = [
+  {name:"Apfelmus", gram:"1-2 Teelöffel", prep:"Apfel schälen, dünsten und gut pürieren.", alt:"Birnenmus", allergy:"Selten, kann Blähungen verursachen."},
+  {name:"Bananenmus", gram:"2-3 Teelöffel", prep:"Reife Banane mit einer Gabel zerdrücken, kein Kochen nötig.", alt:"Avocadomus", allergy:"Geringes Risiko."},
+  {name:"Karottenpüree", gram:"1-2 Teelöffel", prep:"Dünsten, bis weich, dann pürieren.", alt:"Kürbispüree", allergy:"Geringes Risiko."},
+  {name:"Baby-Reisbrei", gram:"1-2 Esslöffel, verdünnt", prep:"Mit Muttermilch/Fläschchen glatt rühren.", alt:"Haferbrei", allergy:"Glutenfrei, geringes Risiko."},
+  {name:"Süßkartoffelpüree", gram:"1-2 Teelöffel", prep:"Backen/dünsten, dann pürieren.", alt:"Kürbispüree", allergy:"Geringes Risiko."},
+  {name:"Avocadomus", gram:"1-2 Teelöffel", prep:"Reife Avocado mit einer Gabel zerdrücken.", alt:"Bananenmus", allergy:"Geringes Risiko."},
+  {name:"Birnenmus", gram:"1-2 Teelöffel", prep:"Dünsten und pürieren.", alt:"Apfelmus", allergy:"Geringes Risiko."},
+  {name:"Zucchinipüree", gram:"1-2 Teelöffel", prep:"Dünsten und pürieren.", alt:"Karottenpüree", allergy:"Geringes Risiko."},
+  {name:"Brokkolipüree", gram:"1 Teelöffel", prep:"Dünsten bis weich, gut pürieren/passieren.", alt:"Blumenkohlpüree", allergy:"Kann Blähungen verursachen, langsam einführen."},
+  {name:"Haferbrei", gram:"1-2 Esslöffel", prep:"Fein gemahlenen Hafer mit Milch/Wasser kochen.", alt:"Reisbrei", allergy:"Geringes Risiko."},
+  {name:"Gemüsepüree gemischt", gram:"2-3 Teelöffel", prep:"Karotte, Zucchini und Kartoffel zusammen kochen und pürieren.", alt:"Einzelnes Gemüsepüree", allergy:"Jedes neue Gemüse einzeln einführen."},
+  {name:"Linsenpüree (fein)", gram:"1-2 Teelöffel", prep:"Rote Linsen gut kochen, passieren und pürieren.", alt:"Kichererbsenpüree (später)", allergy:"Erster Hülsenfrucht-Versuch, langsam einführen."},
+  {name:"Pfirsichpüree", gram:"1-2 Teelöffel", prep:"Schälen, dünsten und pürieren.", alt:"Aprikosenpüree", allergy:"Geringes Risiko."},
+  {name:"Spinat-Mix", gram:"1 Teelöffel", prep:"Kurz kochen und mit einem anderen Gemüse mischen.", alt:"Kann mit Zucchini gemischt werden", allergy:"Wegen Nitratgehalt nur in kleinen Mengen geben."}
+];
+const WEANING_FOODS_BY_LANG = { tr: WEANING_FOODS_TR, en: WEANING_FOODS_EN, de: WEANING_FOODS_DE };
+function getWeaningFoods(lang) { return WEANING_FOODS_BY_LANG[lang] || WEANING_FOODS_TR; }
+const WEANING_FOODS = WEANING_FOODS_TR;
+const AVOID_FOODS_TR = ["Bal (1 yaş altı botulizm riski)","Tuz ve şeker eklenmiş yiyecekler","İnek sütü (1 yaş altı ana içecek olarak)","Bütün fındık/fıstık (boğulma riski)","İşlenmiş/paketli gıdalar","Az pişmiş yumurta ve et"];
+const AVOID_FOODS_EN = ["Honey (botulism risk under age 1)","Foods with added salt and sugar","Cow's milk (as a main drink under age 1)","Whole nuts/peanuts (choking hazard)","Processed/packaged foods","Undercooked eggs and meat"];
+const AVOID_FOODS_DE = ["Honig (Botulismus-Risiko unter 1 Jahr)","Lebensmittel mit zugesetztem Salz und Zucker","Kuhmilch (als Hauptgetränk unter 1 Jahr)","Ganze Nüsse/Erdnüsse (Erstickungsgefahr)","Verarbeitete/verpackte Lebensmittel","Nicht durchgegarte Eier und Fleisch"];
+const AVOID_FOODS_BY_LANG = { tr: AVOID_FOODS_TR, en: AVOID_FOODS_EN, de: AVOID_FOODS_DE };
+function getAvoidFoods(lang) { return AVOID_FOODS_BY_LANG[lang] || AVOID_FOODS_TR; }
+const AVOID_FOODS = AVOID_FOODS_TR;
+
 
 /* ============================================================
    BESLENME GÜNLÜĞÜ ÖNERİLERİ — yaşa göre örnek, dengeli besin
    kombinasyonları. Anneler kendi verdikleri yemekleri de serbestçe
    kaydedebilir; bu liste sadece fikir vermesi için bir öneri havuzudur.
    ============================================================ */
-const FOOD_COMBO_SUGGESTIONS = [
-  {age:"6-8 Ay", combo:"Somon Balığı ve Patates Püresi", tag:"Balık", detail:"Omega-3 ve demir açısından zengindir; haşlanmış patatesle ezilerek pürüzsüz kıvamda verilebilir."},
-  {age:"6-8 Ay", combo:"Tatlı Patates ve Nohut Püresi", tag:"Baklagil", detail:"Lif ve B vitamini kaynağıdır, kabızlığı önlemeye yardımcı olabilir."},
-  {age:"6-8 Ay", combo:"Avokado ve Muz Ezmesi", tag:"Meyve", detail:"Sağlıklı yağlar ve enerji sağlar, pişirmeye gerek yoktur."},
-  {age:"6-8 Ay", combo:"Karışık Sebze ve Zeytinyağı Püresi", tag:"Sebze", detail:"Havuç, kabak ve patatesi birlikte haşlayıp az zeytinyağıyla ezin."},
-  {age:"9-11 Ay", combo:"Tavuklu Sebze Yemeği (Ezilmiş)", tag:"Et/Tavuk", detail:"Protein ve demir kaynağıdır; sebzelerle birlikte hafif ezilmiş kıvamda sunulabilir."},
-  {age:"9-11 Ay", combo:"Kırmızı Mercimek Çorbası ve Yoğurt", tag:"Baklagil", detail:"Bitkisel protein ve probiyotik desteği bir arada verilir."},
-  {age:"9-11 Ay", combo:"Yumurta Sarısı ve Ekmek Parçaları", tag:"Yumurta", detail:"İyi pişmiş yumurta sarısı demir ve kolin açısından zengindir."},
-  {age:"9-11 Ay", combo:"Balık (Levrek/Somon) ve Pirinç Pilavı", tag:"Balık", detail:"Küçük parçalar halinde, kılçıksız ve iyi pişmiş şekilde sunulmalıdır."},
-  {age:"12+ Ay", combo:"Köfte ve Haşlanmış Sebzeler", tag:"Et", detail:"Küçük lokmalar halinde verilerek çiğneme becerisi desteklenir."},
-  {age:"12+ Ay", combo:"Tam Tahıllı Makarna ve Ispanaklı Sos", tag:"Tahıl", detail:"Kompleks karbonhidrat ve demir bir arada sunulur."},
-  {age:"12+ Ay", combo:"Nohutlu Sebze Yemeği ve Yoğurt", tag:"Baklagil", detail:"Lif, protein ve kalsiyum dengesi sağlar."},
-  {age:"12+ Ay", combo:"Izgara Tavuk ve Bulgur Pilavı", tag:"Et/Tavuk", detail:"Aile sofrasına geçişte tuzsuz/az baharatlı hazırlanabilir."}
+const FOOD_COMBO_SUGGESTIONS_TR = [
+  {age:"a1", combo:"Somon Balığı ve Patates Püresi", tag:"Balık", detail:"Omega-3 ve demir açısından zengindir; haşlanmış patatesle ezilerek pürüzsüz kıvamda verilebilir."},
+  {age:"a1", combo:"Tatlı Patates ve Nohut Püresi", tag:"Baklagil", detail:"Lif ve B vitamini kaynağıdır, kabızlığı önlemeye yardımcı olabilir."},
+  {age:"a1", combo:"Avokado ve Muz Ezmesi", tag:"Meyve", detail:"Sağlıklı yağlar ve enerji sağlar, pişirmeye gerek yoktur."},
+  {age:"a1", combo:"Karışık Sebze ve Zeytinyağı Püresi", tag:"Sebze", detail:"Havuç, kabak ve patatesi birlikte haşlayıp az zeytinyağıyla ezin."},
+  {age:"a2", combo:"Tavuklu Sebze Yemeği (Ezilmiş)", tag:"Et/Tavuk", detail:"Protein ve demir kaynağıdır; sebzelerle birlikte hafif ezilmiş kıvamda sunulabilir."},
+  {age:"a2", combo:"Kırmızı Mercimek Çorbası ve Yoğurt", tag:"Baklagil", detail:"Bitkisel protein ve probiyotik desteği bir arada verilir."},
+  {age:"a2", combo:"Yumurta Sarısı ve Ekmek Parçaları", tag:"Yumurta", detail:"İyi pişmiş yumurta sarısı demir ve kolin açısından zengindir."},
+  {age:"a2", combo:"Balık (Levrek/Somon) ve Pirinç Pilavı", tag:"Balık", detail:"Küçük parçalar halinde, kılçıksız ve iyi pişmiş şekilde sunulmalıdır."},
+  {age:"a3", combo:"Köfte ve Haşlanmış Sebzeler", tag:"Et", detail:"Küçük lokmalar halinde verilerek çiğneme becerisi desteklenir."},
+  {age:"a3", combo:"Tam Tahıllı Makarna ve Ispanaklı Sos", tag:"Tahıl", detail:"Kompleks karbonhidrat ve demir bir arada sunulur."},
+  {age:"a3", combo:"Nohutlu Sebze Yemeği ve Yoğurt", tag:"Baklagil", detail:"Lif, protein ve kalsiyum dengesi sağlar."},
+  {age:"a3", combo:"Izgara Tavuk ve Bulgur Pilavı", tag:"Et/Tavuk", detail:"Aile sofrasına geçişte tuzsuz/az baharatlı hazırlanabilir."}
 ];
+const FOOD_COMBO_SUGGESTIONS_EN = [
+  {age:"a1", combo:"Salmon and Mashed Potatoes", tag:"Fish", detail:"Rich in omega-3 and iron; can be served mashed with boiled potatoes for a smooth texture."},
+  {age:"a1", combo:"Sweet Potato and Chickpea Puree", tag:"Legume", detail:"A source of fiber and B vitamins; may help prevent constipation."},
+  {age:"a1", combo:"Avocado and Banana Mash", tag:"Fruit", detail:"Provides healthy fats and energy, no cooking required."},
+  {age:"a1", combo:"Mixed Vegetable and Olive Oil Puree", tag:"Vegetable", detail:"Boil carrot, zucchini and potato together and mash with a little olive oil."},
+  {age:"a2", combo:"Chicken and Vegetable Meal (Mashed)", tag:"Meat/Chicken", detail:"A source of protein and iron; can be served lightly mashed with vegetables."},
+  {age:"a2", combo:"Red Lentil Soup and Yogurt", tag:"Legume", detail:"Combines plant protein with probiotic support."},
+  {age:"a2", combo:"Egg Yolk and Bread Pieces", tag:"Egg", detail:"Well-cooked egg yolk is rich in iron and choline."},
+  {age:"a2", combo:"Fish (Sea Bass/Salmon) and Rice Pilaf", tag:"Fish", detail:"Should be served in small pieces, boneless and well cooked."},
+  {age:"a3", combo:"Meatballs and Boiled Vegetables", tag:"Meat", detail:"Served in small bites to support chewing skills."},
+  {age:"a3", combo:"Whole Grain Pasta with Spinach Sauce", tag:"Grain", detail:"Combines complex carbohydrates with iron."},
+  {age:"a3", combo:"Chickpea Vegetable Stew and Yogurt", tag:"Legume", detail:"Provides a balance of fiber, protein and calcium."},
+  {age:"a3", combo:"Grilled Chicken and Bulgur Pilaf", tag:"Meat/Chicken", detail:"Can be prepared unsalted/lightly seasoned when transitioning to family meals."}
+];
+const FOOD_COMBO_SUGGESTIONS_DE = [
+  {age:"a1", combo:"Lachs und Kartoffelpüree", tag:"Fisch", detail:"Reich an Omega-3 und Eisen; kann mit gekochten Kartoffeln zu einer glatten Konsistenz püriert serviert werden."},
+  {age:"a1", combo:"Süßkartoffel- und Kichererbsenpüree", tag:"Hülsenfrucht", detail:"Eine Quelle für Ballaststoffe und B-Vitamine; kann helfen, Verstopfung vorzubeugen."},
+  {age:"a1", combo:"Avocado- und Bananenmus", tag:"Obst", detail:"Liefert gesunde Fette und Energie, kein Kochen nötig."},
+  {age:"a1", combo:"Gemischtes Gemüse- und Olivenölpüree", tag:"Gemüse", detail:"Karotte, Zucchini und Kartoffel zusammen kochen und mit etwas Olivenöl pürieren."},
+  {age:"a2", combo:"Hühnchen-Gemüse-Gericht (Püriert)", tag:"Fleisch/Huhn", detail:"Eine Quelle für Protein und Eisen; kann leicht püriert mit Gemüse serviert werden."},
+  {age:"a2", combo:"Rote-Linsen-Suppe und Joghurt", tag:"Hülsenfrucht", detail:"Kombiniert pflanzliches Protein mit probiotischer Unterstützung."},
+  {age:"a2", combo:"Eigelb und Brotstückchen", tag:"Ei", detail:"Gut durchgekochtes Eigelb ist reich an Eisen und Cholin."},
+  {age:"a2", combo:"Fisch (Wolfsbarsch/Lachs) und Reispilaw", tag:"Fisch", detail:"Sollte in kleinen Stücken, ohne Gräten und gut durchgekocht serviert werden."},
+  {age:"a3", combo:"Fleischbällchen und gekochtes Gemüse", tag:"Fleisch", detail:"In kleinen Häppchen serviert, um die Kaufähigkeit zu fördern."},
+  {age:"a3", combo:"Vollkornnudeln mit Spinatsauce", tag:"Getreide", detail:"Kombiniert komplexe Kohlenhydrate mit Eisen."},
+  {age:"a3", combo:"Kichererbsen-Gemüse-Eintopf und Joghurt", tag:"Hülsenfrucht", detail:"Bietet eine Balance aus Ballaststoffen, Protein und Kalzium."},
+  {age:"a3", combo:"Gegrilltes Hühnchen und Bulgurpilaw", tag:"Fleisch/Huhn", detail:"Kann beim Übergang zu Familienmahlzeiten ungesalzen/leicht gewürzt zubereitet werden."}
+];
+const FOOD_COMBO_BY_LANG = { tr: FOOD_COMBO_SUGGESTIONS_TR, en: FOOD_COMBO_SUGGESTIONS_EN, de: FOOD_COMBO_SUGGESTIONS_DE };
+function getFoodComboSuggestions(lang) { return FOOD_COMBO_BY_LANG[lang] || FOOD_COMBO_SUGGESTIONS_TR; }
+const FOOD_COMBO_SUGGESTIONS = FOOD_COMBO_SUGGESTIONS_TR;
 
 /* ============================================================
    DİŞ ÇIKARMA — rahatlatıcı yöntemler ve neden işe yaradıkları.
    Bilgiler genel kaynaklardan derlenmiştir; ilaç/jel içeren ürünler
    için mutlaka doktor/eczacıya danışılması gerektiği belirtilir.
    ============================================================ */
-const TEETHING_RELIEF_ITEMS = [
-  {name:"Soğuk Diş Kaşıyıcı (Teether)", type:"Doğal Yöntem", icon:Smile, color:"blue",
+const TEETHING_RELIEF_ITEMS_TR = [
+  {key:"teether", name:"Soğuk Diş Kaşıyıcı (Teether)", type:"Doğal Yöntem", icon:Smile, color:"blue",
     why:"Buzdolabında soğutulmuş (dondurucuda değil) silikon kaşıyıcılar, diş etindeki sinir uçlarını geçici olarak hissizleştirir ve şişliği azaltır; bebeğin çiğneme ihtiyacını güvenle karşılar.",
     note:"Dondurucuda bekletmeyin — aşırı sertleşen kaşıyıcı diş etine zarar verebilir."},
-  {name:"Soğuk, Nemli Gazlı Bez", type:"Doğal Yöntem", icon:Droplet, color:"blue",
+  {key:"gauze", name:"Soğuk, Nemli Gazlı Bez", type:"Doğal Yöntem", icon:Droplet, color:"blue",
     why:"Temiz bir bezi soğuk suyla ıslatıp hafifçe diş etine sürmek hem soğuk etkisiyle rahatlatır hem de hafif masaj basıncıyla kaşıntı hissini azaltır.",
     note:"Her kullanımdan önce ve sonra bezi temiz tutun."},
-  {name:"Parmakla Diş Eti Masajı", type:"Doğal Yöntem", icon:Heart, color:"pink",
+  {key:"massage", name:"Parmakla Diş Eti Masajı", type:"Doğal Yöntem", icon:Heart, color:"pink",
     why:"Temiz parmakla nazikçe uygulanan baskı, diş etindeki basınç hissini dengeleyerek ağrı algısını azaltabilir.",
     note:"Ellerinizi mutlaka yıkayın ve tırnaklarınızın kısa olduğundan emin olun."},
-  {name:"Soğutulmuş Meyve Filesi", type:"Doğal Yöntem", icon:Utensils, color:"green",
+  {key:"fruitnet", name:"Soğutulmuş Meyve Filesi", type:"Doğal Yöntem", icon:Utensils, color:"green",
     why:"Ek gıdaya başlamış bebeklerde file içine konan soğuk meyve (armut, muz gibi) hem soğuk rahatlığı sağlar hem de boğulma riski olmadan çiğneme pratiği yaptırır.",
     note:"Sadece 6 ay ve üzeri, ek gıdaya başlamış bebeklerde kullanılmalıdır."},
-  {name:"Calgel Diş Jeli", type:"Eczane Ürünü", icon:Pill, color:"purple",
+  {key:"calgel", name:"Calgel Diş Jeli", type:"Eczane Ürünü", icon:Pill, color:"purple",
     why:"İçeriğindeki lidokain hidroklorür diş etindeki sinir uçlarını geçici olarak uyuşturarak ağrıyı hafifletir; setilpiridinyum klorür ise antiseptik etkiyle bölgeyi mikroplara karşı korur.",
     note:"3 aydan küçük bebeklerde kullanılmaz. Kullanmadan önce mutlaka eczacınıza/doktorunuza danışın ve ambalajdaki doz talimatına uyun."},
-  {name:"Dentinox Diş Jeli", type:"Eczane Ürünü", icon:Pill, color:"purple",
+  {key:"dentinox", name:"Dentinox Diş Jeli", type:"Eczane Ürünü", icon:Pill, color:"purple",
     why:"Lidokain hidroklorür ile birlikte papatya (kamomil) tentürü içerir; lidokain bölgesel uyuşma sağlarken papatya diş etindeki hafif tahrişi yatıştırıcı etki gösterir.",
     note:"Kullanmadan önce doktorunuza/eczacınıza danışın, ambalajdaki doz talimatına uyun."},
-  {name:"Kehribar Kolye", type:"Önerilmez", icon:AlertCircle, color:"pink", warn:true,
+  {key:"amber", name:"Kehribar Kolye", type:"Önerilmez", icon:AlertCircle, color:"pink", warn:true,
     why:"Isıyla 'ağrı kesici madde' salındığı iddiası bilimsel olarak kanıtlanmamıştır; etkisi kanıtlanmış bir yöntem değildir.",
     note:"Boğulma ve boğazına dolanma riski nedeniyle başta FDA olmak üzere birçok sağlık otoritesi bebeklerde kullanılmamasını önerir."}
 ];
+const TEETHING_RELIEF_ITEMS_EN = [
+  {key:"teether", name:"Cold Teether", type:"Natural Method", icon:Smile, color:"blue",
+    why:"Silicone teethers cooled in the fridge (not the freezer) temporarily numb the nerve endings in the gums and reduce swelling, safely satisfying the baby's need to chew.",
+    note:"Don't leave it in the freezer — an overly hardened teether can harm the gums."},
+  {key:"gauze", name:"Cold, Damp Gauze", type:"Natural Method", icon:Droplet, color:"blue",
+    why:"Wetting a clean cloth with cold water and gently rubbing it on the gums soothes with the cold effect and reduces the itchy feeling with light massage pressure.",
+    note:"Keep the cloth clean before and after each use."},
+  {key:"massage", name:"Finger Gum Massage", type:"Natural Method", icon:Heart, color:"pink",
+    why:"Gentle pressure applied with a clean finger can balance the pressure sensation in the gums and reduce the perception of pain.",
+    note:"Always wash your hands and make sure your nails are short."},
+  {key:"fruitnet", name:"Chilled Fruit Feeder Net", type:"Natural Method", icon:Utensils, color:"green",
+    why:"For babies who have started solids, cold fruit (like pear or banana) placed in a feeder net provides cold relief and lets baby practice chewing without a choking risk.",
+    note:"Should only be used for babies 6 months and older who have started solids."},
+  {key:"calgel", name:"Calgel Teething Gel", type:"Pharmacy Product", icon:Pill, color:"purple",
+    why:"The lidocaine hydrochloride it contains temporarily numbs the nerve endings in the gums to relieve pain; cetylpyridinium chloride protects the area from germs with an antiseptic effect.",
+    note:"Not for use in babies under 3 months. Always consult your pharmacist/doctor before use and follow the dosage instructions on the package."},
+  {key:"dentinox", name:"Dentinox Teething Gel", type:"Pharmacy Product", icon:Pill, color:"purple",
+    why:"Contains lidocaine hydrochloride along with chamomile tincture; lidocaine provides local numbing while chamomile soothes mild irritation in the gums.",
+    note:"Consult your doctor/pharmacist before use and follow the dosage instructions on the package."},
+  {key:"amber", name:"Amber Necklace", type:"Not Recommended", icon:AlertCircle, color:"pink", warn:true,
+    why:"The claim that a 'pain-relieving substance' is released by body heat has not been scientifically proven; it is not a method with proven effectiveness.",
+    note:"Due to the risk of choking and strangulation, many health authorities, including the FDA, recommend against using it on babies."}
+];
+const TEETHING_RELIEF_ITEMS_DE = [
+  {key:"teether", name:"Kalter Beißring", type:"Natürliche Methode", icon:Smile, color:"blue",
+    why:"Im Kühlschrank (nicht im Gefrierfach) gekühlte Silikon-Beißringe betäuben vorübergehend die Nervenenden im Zahnfleisch und lindern Schwellungen; sie stillen sicher das Kaubedürfnis des Babys.",
+    note:"Nicht im Gefrierfach aufbewahren — ein zu hart gewordener Beißring kann das Zahnfleisch verletzen."},
+  {key:"gauze", name:"Kalte, feuchte Mullbinde", type:"Natürliche Methode", icon:Droplet, color:"blue",
+    why:"Ein sauberes Tuch mit kaltem Wasser befeuchten und sanft über das Zahnfleisch reiben, lindert durch die Kälte und reduziert das Juckgefühl durch leichten Massagedruck.",
+    note:"Halten Sie das Tuch vor und nach jeder Verwendung sauber."},
+  {key:"massage", name:"Zahnfleischmassage mit dem Finger", type:"Natürliche Methode", icon:Heart, color:"pink",
+    why:"Sanfter Druck mit einem sauberen Finger kann das Druckgefühl im Zahnfleisch ausgleichen und die Schmerzwahrnehmung verringern.",
+    note:"Waschen Sie unbedingt Ihre Hände und achten Sie auf kurze Fingernägel."},
+  {key:"fruitnet", name:"Gekühltes Obst im Beißnetz", type:"Natürliche Methode", icon:Utensils, color:"green",
+    why:"Bei Babys, die bereits Beikost bekommen, sorgt kaltes Obst (z. B. Birne, Banane) im Beißnetz für Kälteentlastung und ermöglicht Kauübung ohne Erstickungsgefahr.",
+    note:"Nur für Babys ab 6 Monaten, die bereits Beikost erhalten."},
+  {key:"calgel", name:"Calgel Zahnungsgel", type:"Apothekenprodukt", icon:Pill, color:"purple",
+    why:"Das enthaltene Lidocainhydrochlorid betäubt die Nervenenden im Zahnfleisch vorübergehend und lindert den Schmerz; Cetylpyridiniumchlorid schützt den Bereich antiseptisch vor Keimen.",
+    note:"Nicht für Babys unter 3 Monaten. Konsultieren Sie vor der Anwendung unbedingt Ihren Apotheker/Arzt und befolgen Sie die Dosierungsanleitung auf der Packung."},
+  {key:"dentinox", name:"Dentinox Zahnungsgel", type:"Apothekenprodukt", icon:Pill, color:"purple",
+    why:"Enthält Lidocainhydrochlorid zusammen mit Kamillentinktur; Lidocain sorgt für lokale Betäubung, während Kamille leichte Reizungen im Zahnfleisch lindert.",
+    note:"Konsultieren Sie vor der Anwendung Ihren Arzt/Apotheker und befolgen Sie die Dosierungsanleitung auf der Packung."},
+  {key:"amber", name:"Bernsteinkette", type:"Nicht empfohlen", icon:AlertCircle, color:"pink", warn:true,
+    why:"Die Behauptung, dass durch Körperwärme ein 'schmerzlinderndes Mittel' freigesetzt wird, ist wissenschaftlich nicht belegt; es handelt sich nicht um eine Methode mit nachgewiesener Wirkung.",
+    note:"Aufgrund des Erstickungs- und Strangulationsrisikos raten viele Gesundheitsbehörden, darunter die FDA, von der Verwendung bei Babys ab."}
+];
+const TEETHING_RELIEF_BY_LANG = { tr: TEETHING_RELIEF_ITEMS_TR, en: TEETHING_RELIEF_ITEMS_EN, de: TEETHING_RELIEF_ITEMS_DE };
+function getTeethingReliefItems(lang) { return TEETHING_RELIEF_BY_LANG[lang] || TEETHING_RELIEF_ITEMS_TR; }
+const TEETHING_RELIEF_ITEMS = TEETHING_RELIEF_ITEMS_TR;
 
-/* Bugün huzursuz mu? cevabına göre önceliklendirilmiş öneri sırası */
-const TEETHING_RESTLESS_TIP_ORDER = ["Soğuk Diş Kaşıyıcı (Teether)","Soğuk, Nemli Gazlı Bez","Parmakla Diş Eti Masajı","Soğutulmuş Meyve Filesi","Calgel Diş Jeli","Dentinox Diş Jeli"];
-const TEETHING_CALM_TIP_ORDER = ["Parmakla Diş Eti Masajı","Soğuk Diş Kaşıyıcı (Teether)","Soğutulmuş Meyve Filesi"];
+/* Bugün huzursuz mu? cevabına göre önceliklendirilmiş öneri sırası (anahtar bazlı) */
+const TEETHING_RESTLESS_TIP_ORDER = ["teether","gauze","massage","fruitnet","calgel","dentinox"];
+const TEETHING_CALM_TIP_ORDER = ["massage","teether","fruitnet"];
+
 
 /* ============================================================
    KAKA TAKİBİ — kıvam türleri ve kabızlık için genel öneriler
    ============================================================ */
-const STOOL_TYPES = [
+const STOOL_TYPES_TR = [
   {key:"sert", label:"Sert / Topak", color:"pink", flag:"Kabızlık belirtisi olabilir", urgent:false},
   {key:"normal", label:"Normal / Şekilli", color:"green", flag:"Normal görünüyor", urgent:false},
   {key:"yumusak", label:"Yumuşak", color:"green", flag:"Normal görünüyor", urgent:false},
@@ -964,7 +1455,28 @@ const STOOL_TYPES = [
   {key:"mukuslu", label:"Mukuslu", color:"purple", flag:"Sindirim sistemi tahrişi olabilir", urgent:false},
   {key:"kanli", label:"Kanlı", color:"pink", flag:"Vakit kaybetmeden doktorunuza başvurun", urgent:true}
 ];
-const CONSTIPATION_TIPS = [
+const STOOL_TYPES_EN = [
+  {key:"sert", label:"Hard / Pellet-like", color:"pink", flag:"May indicate constipation", urgent:false},
+  {key:"normal", label:"Normal / Formed", color:"green", flag:"Looks normal", urgent:false},
+  {key:"yumusak", label:"Soft", color:"green", flag:"Looks normal", urgent:false},
+  {key:"sulu", label:"Watery / Runny", color:"blue", flag:"May be diarrhea if frequent, monitor fluids", urgent:false},
+  {key:"yesil", label:"Greenish", color:"purple", flag:"Usually harmless, consult a doctor if it persists", urgent:false},
+  {key:"mukuslu", label:"Mucousy", color:"purple", flag:"May indicate digestive irritation", urgent:false},
+  {key:"kanli", label:"Bloody", color:"pink", flag:"See your doctor without delay", urgent:true}
+];
+const STOOL_TYPES_DE = [
+  {key:"sert", label:"Hart / Klumpig", color:"pink", flag:"Kann auf Verstopfung hindeuten", urgent:false},
+  {key:"normal", label:"Normal / Geformt", color:"green", flag:"Sieht normal aus", urgent:false},
+  {key:"yumusak", label:"Weich", color:"green", flag:"Sieht normal aus", urgent:false},
+  {key:"sulu", label:"Wässrig / Breiig", color:"blue", flag:"Bei häufigem Auftreten kann es Durchfall sein, Flüssigkeit beobachten", urgent:false},
+  {key:"yesil", label:"Grünlich", color:"purple", flag:"Meist harmlos, bei längerem Andauern Arzt konsultieren", urgent:false},
+  {key:"mukuslu", label:"Schleimig", color:"purple", flag:"Kann auf Reizung des Verdauungssystems hindeuten", urgent:false},
+  {key:"kanli", label:"Blutig", color:"pink", flag:"Suchen Sie unverzüglich Ihren Arzt auf", urgent:true}
+];
+const STOOL_TYPES_BY_LANG = { tr: STOOL_TYPES_TR, en: STOOL_TYPES_EN, de: STOOL_TYPES_DE };
+function getStoolTypes(lang) { return STOOL_TYPES_BY_LANG[lang] || STOOL_TYPES_TR; }
+const STOOL_TYPES = STOOL_TYPES_TR;
+const CONSTIPATION_TIPS_TR = [
   "6 aydan büyükse bebeğinizin günlük su alımını artırın.",
   "Erik, armut ve kayısı gibi lifli meyve püreleri bağırsak hareketini destekleyebilir.",
   "Bacaklarını bisiklet çevirir gibi nazikçe hareket ettirmek bağırsakları rahatlatabilir.",
@@ -972,6 +1484,25 @@ const CONSTIPATION_TIPS = [
   "Ilık bir banyo karın kaslarını gevşeterek rahatlamaya yardımcı olabilir.",
   "3 günden uzun süredir kakası gelmiyorsa, kakasında kan varsa veya şiddetli ağlama/karın şişliği görülüyorsa vakit kaybetmeden doktorunuza başvurun."
 ];
+const CONSTIPATION_TIPS_EN = [
+  "If your baby is older than 6 months, increase their daily water intake.",
+  "Fibrous fruit purees like prune, pear and apricot can support bowel movement.",
+  "Gently moving the legs in a bicycling motion can relax the bowels.",
+  "A gentle clockwise massage on the belly can be soothing.",
+  "A warm bath can help by relaxing the abdominal muscles.",
+  "See your doctor without delay if there's been no stool for more than 3 days, if there's blood in the stool, or if there's severe crying/abdominal bloating."
+];
+const CONSTIPATION_TIPS_DE = [
+  "Wenn Ihr Baby älter als 6 Monate ist, erhöhen Sie die tägliche Wasseraufnahme.",
+  "Ballaststoffreiche Fruchtpürees wie Pflaume, Birne und Aprikose können die Darmbewegung unterstützen.",
+  "Die Beine sanft wie beim Fahrradfahren zu bewegen kann den Darm entspannen.",
+  "Eine sanfte, im Uhrzeigersinn ausgeführte Bauchmassage kann beruhigend wirken.",
+  "Ein warmes Bad kann helfen, indem es die Bauchmuskeln entspannt.",
+  "Suchen Sie unverzüglich Ihren Arzt auf, wenn seit mehr als 3 Tagen kein Stuhlgang war, wenn Blut im Stuhl ist oder wenn starkes Weinen/Bauchblähung auftritt."
+];
+const CONSTIPATION_TIPS_BY_LANG = { tr: CONSTIPATION_TIPS_TR, en: CONSTIPATION_TIPS_EN, de: CONSTIPATION_TIPS_DE };
+function getConstipationTips(lang) { return CONSTIPATION_TIPS_BY_LANG[lang] || CONSTIPATION_TIPS_TR; }
+const CONSTIPATION_TIPS = CONSTIPATION_TIPS_TR;
 
 // NOT: "noise" tipindeki sesler (white/pink/brown) tarayıcıda Web Audio API
 // ile GERÇEK ZAMANLI ÜRETİLİR — dosya gerektirmez, her zaman çalışır.
@@ -1029,12 +1560,27 @@ const ONBOARDING_SLIDES = [
   {icon: Heart, title:"Sağlıklı Anne & Mutlu Bebek", desc:"Beslenmeden uykuya, tüm yolculuğunuzda yanınızdayız.", color:"green"}
 ];
 
-const SHOPPING_BY_AGE = {
+const SHOPPING_BY_AGE_TR = {
   "0-3 Ay": ["Bebek Bezi","Islak Mendil","Zıbın Takımı","Kundak","Emzik","Biberon"],
   "6 Ay": ["Mama Sandalyesi","Kaşık","Suluk","Diş Kaşıyıcı","Bebek Öğütücü"],
   "12 Ay": ["Yürüteç/Denge Aracı","Eğitici Oyuncaklar","Yumuşak Ayakkabı","Kaşık-Çatal Seti"],
   "24 Ay": ["Üç Tekerlekli Bisiklet","Boyama Seti","Kitaplık","Puzzle"]
 };
+const SHOPPING_BY_AGE_EN = {
+  "0-3 mo": ["Diapers","Wet Wipes","Onesie Set","Swaddle","Pacifier","Baby Bottle"],
+  "6 mo": ["High Chair","Spoon","Sippy Cup","Teether","Baby Food Grinder"],
+  "12 mo": ["Walker/Balance Bike","Educational Toys","Soft Shoes","Spoon-Fork Set"],
+  "24 mo": ["Tricycle","Coloring Set","Bookshelf","Puzzle"]
+};
+const SHOPPING_BY_AGE_DE = {
+  "0-3 Mon.": ["Windeln","Feuchttücher","Body-Set","Pucktuch","Schnuller","Babyflasche"],
+  "6 Mon.": ["Hochstuhl","Löffel","Trinklernbecher","Beißring","Babynahrungsmühle"],
+  "12 Mon.": ["Lauflernwagen/Laufrad","Lernspielzeug","Weiche Schuhe","Löffel-Gabel-Set"],
+  "24 Mon.": ["Dreirad","Malset","Bücherregal","Puzzle"]
+};
+const SHOPPING_BY_AGE_BY_LANG = { tr: SHOPPING_BY_AGE_TR, en: SHOPPING_BY_AGE_EN, de: SHOPPING_BY_AGE_DE };
+function getShoppingByAge(lang) { return SHOPPING_BY_AGE_BY_LANG[lang] || SHOPPING_BY_AGE_TR; }
+const SHOPPING_BY_AGE = SHOPPING_BY_AGE_TR;
 
 const ACTIVITIES_POOL = [
   {title:"Ce-e Oyunu", skill:"Nesne kalıcılığı, sosyal bağ", duration:"5 dk", materials:"Yok", age:"0-6 ay"},
@@ -1464,15 +2010,22 @@ function stopSleepSound() {
 
 // "15 dk" / "30 dk" / "1 saat" / "Sonsuz" gibi bir etiketi otomatik-durdurma
 // süresine çevirir; süre dolunca sesi kapatıp onAutoStop'u tetikler.
-function scheduleSleepSoundAutoStop(timerLabel, onAutoStop) {
+function scheduleSleepSoundAutoStop(ms, onAutoStop) {
   if (_abpSoundTimerId) { clearTimeout(_abpSoundTimerId); _abpSoundTimerId = null; }
-  const map = {"15 dk":15*60000, "30 dk":30*60000, "1 saat":60*60000};
-  const ms = map[timerLabel];
-  if (!ms) return; // "Sonsuz" veya tanınmayan değer → otomatik durdurma yok
+  if (!ms) return; // sonsuz veya tanınmayan değer → otomatik durdurma yok
   _abpSoundTimerId = setTimeout(() => {
     stopSleepSound();
     if (onAutoStop) onAutoStop();
   }, ms);
+}
+const TIMER_OPTIONS_KEYS = [
+  {key:"15", ms:15*60000},
+  {key:"30", ms:30*60000},
+  {key:"60", ms:60*60000},
+  {key:"inf", ms:null}
+];
+function getTimerOptions(t) {
+  return TIMER_OPTIONS_KEYS.map(o=>({...o, label: t("timer_"+o.key)}));
 }
 
 /* ============================================================
@@ -2676,7 +3229,7 @@ function ChildDetail({child, onBack}) {
   }), []);
 
   const [playingSound, setPlayingSound] = useState(null);
-  const [soundTimer, setSoundTimer] = useState("30 dk");
+  const [soundTimer, setSoundTimer] = useState(30*60000);
   const quickSounds = SLEEP_SOUNDS.slice(0,6); // Beyaz, Kahverengi, Pembe Gürültü, Rahim Sesi, Kalp Atışı, Yağmur
 
   return (
@@ -2783,8 +3336,8 @@ function ChildDetail({child, onBack}) {
               <div style={{fontSize:13,fontWeight:700}}>{playingSound} çalıyor</div>
             </div>
             <div style={{display:"flex",gap:8}}>
-              {["15 dk","30 dk","1 saat","Sonsuz"].map(t=>(
-                <Pill_ key={t} active={soundTimer===t} onClick={()=>{ setSoundTimer(t); scheduleSleepSoundAutoStop(t, ()=>setPlayingSound(null)); }}>{t}</Pill_>
+              {TIMER_OPTIONS_KEYS.map(opt=>(
+                <Pill_ key={opt.key} active={soundTimer===opt.ms} onClick={()=>{ setSoundTimer(opt.ms); scheduleSleepSoundAutoStop(opt.ms, ()=>setPlayingSound(null)); }}>{{15:"15 dk",30:"30 dk",60:"1 saat"}[opt.ms/60000] || "Sonsuz"}</Pill_>
               ))}
             </div>
           </div>
@@ -3440,27 +3993,30 @@ function getWeaningReactions(t) { return [
 ]; }
 
 function WeaningCalendar({childId}) {
+  const { t, lang } = useLang();
+  const foods = getWeaningFoods(lang);
+  const avoidFoods = getAvoidFoods(lang);
   const [day, setDay] = useState(1);
-  const food = WEANING_FOODS[(day-1) % WEANING_FOODS.length];
+  const food = foods[(day-1) % foods.length];
   const gramMultiplier = day <= 10 ? 1 : day <= 20 ? 1.5 : 2;
   return (
     <div style={{marginTop:16}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
         <div onClick={()=>setDay(d=>clamp(d-1,1,30))} className="abp-tap" style={{width:34,height:34,borderRadius:17,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center"}}><ChevronLeft size={16}/></div>
-        <div style={{fontWeight:800}} className="abp-display">Ek Gıda · {day}. Gün</div>
+        <div style={{fontWeight:800}} className="abp-display">{t("weaning_calendar_day", day)}</div>
         <div onClick={()=>setDay(d=>clamp(d+1,1,30))} className="abp-tap" style={{width:34,height:34,borderRadius:17,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center"}}><ChevronRight size={16}/></div>
       </div>
       <Card>
         <IconBadge icon={Utensils} color="green" size={44}/>
         <div style={{fontWeight:800,fontSize:16,marginTop:10}}>{food.name}</div>
-        <div style={{fontSize:13,color:"var(--ink-soft)",marginTop:4}}>Önerilen miktar: {gramMultiplier}x porsiyon ({food.gram})</div>
+        <div style={{fontSize:13,color:"var(--ink-soft)",marginTop:4}}>{t("weaning_amount_recommend", gramMultiplier, food.gram)}</div>
       </Card>
-      <InfoBlock icon={BookOpen} color="blue" title="Nasıl Hazırlanır?" text={food.prep}/>
-      <InfoBlock icon={AlertCircle} color="pink" title="Alerji Belirtileri" text="Kızarıklık, döküntü, kusma veya huzursuzluk görülürse besini kesip doktorunuza danışın."/>
-      <InfoBlock icon={Sparkles} color="purple" title="Alternatif Besin" text={food.alt}/>
-      <SectionTitle>Verilmemesi Gerekenler</SectionTitle>
+      <InfoBlock icon={BookOpen} color="blue" title={t("weaning_prep_title")} text={food.prep}/>
+      <InfoBlock icon={AlertCircle} color="pink" title={t("weaning_allergy_title")} text={t("weaning_allergy_text")}/>
+      <InfoBlock icon={Sparkles} color="purple" title={t("weaning_alt_title")} text={food.alt}/>
+      <SectionTitle>{t("weaning_avoid_title")}</SectionTitle>
       <Card>
-        {AVOID_FOODS.map((f,i)=>(
+        {avoidFoods.map((f,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0",fontSize:13.5}}><X size={14} color="#D98BA6"/> {f}</div>
         ))}
       </Card>
@@ -3575,13 +4131,16 @@ function WeaningLogSection({childId, defaultFood}) {
    kaydedebildiği ve yaşa göre öneri aldığı kalıcı günlük.
    ============================================================ */
 function FoodLogSection({childId}) {
+  const { t, lang } = useLang();
+  const AGE_GROUPS = [{key:"a1",label:t("age_group_1")},{key:"a2",label:t("age_group_2")},{key:"a3",label:t("age_group_3")}];
+  const combos = getFoodComboSuggestions(lang);
   const [loading, setLoading] = useState(true);
   const [entries, setEntries] = useState([]);
   const [food, setFood] = useState("");
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [ageFilter, setAgeFilter] = useState("6-8 Ay");
+  const [ageFilter, setAgeFilter] = useState("a1");
   const key = `foodlog:${childId||"default"}`;
 
   const load = async () => {
@@ -3589,7 +4148,7 @@ function FoodLogSection({childId}) {
     try {
       const saved = await storageGet(key, false);
       setEntries(saved || []);
-    } catch { setError("Yemek günlüğü yüklenemedi."); }
+    } catch { setError(t("foodlog_error")); }
     setLoading(false);
   };
   useEffect(()=>{ load(); }, [childId]);
@@ -3598,18 +4157,18 @@ function FoodLogSection({childId}) {
     const value = (text || food).trim();
     if (!value || saving) return;
     setSaving(true);
-    const entry = {food:value, note:note.trim(), date:new Date().toLocaleDateString("tr-TR"), time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
+    const entry = {food:value, note:note.trim(), date:new Date().toLocaleDateString(localeOf(lang)), time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
     const list = [entry, ...entries];
     const ok = await storageSet(key, list, false);
-    if (ok) { setEntries(list); setFood(""); setNote(""); showToast("Öğün kaydedildi ✓"); }
-    else showToast("Kaydedilemedi, tekrar deneyin", "error");
+    if (ok) { setEntries(list); setFood(""); setNote(""); showToast(t("toast_meal_saved")); }
+    else showToast(t("toast_save_failed"), "error");
     setSaving(false);
   };
   const remove = async (ts) => {
     const list = entries.filter(e=>e.ts!==ts);
     setEntries(list);
     await storageSet(key, list, false);
-    showToast("Kayıt silindi");
+    showToast(t("toast_entry_removed"));
   };
 
   return (
@@ -3617,21 +4176,21 @@ function FoodLogSection({childId}) {
       <Card>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <IconBadge icon={Utensils} color="green" size={36}/>
-          <div style={{fontWeight:700,fontSize:15}}>Bugün Ne Yedi?</div>
+          <div style={{fontWeight:700,fontSize:15}}>{t("foodlog_title")}</div>
         </div>
-        <input placeholder="Örn. Somon balığı ve patates püresi" value={food} onChange={e=>setFood(e.target.value)}
+        <input placeholder={t("foodlog_placeholder")} value={food} onChange={e=>setFood(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <input placeholder="Not ekle (opsiyonel, ör. az yedi / bayıldı)" value={note} onChange={e=>setNote(e.target.value)}
+        <input placeholder={t("foodlog_note_placeholder")} value={note} onChange={e=>setNote(e.target.value)}
           style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:10}}/>
-        <PrimaryButton onClick={()=>addEntry()} disabled={!food.trim()||saving} style={{padding:12,fontSize:14}}>{saving?"Kaydediliyor...":"Yemek Listesine Ekle"}</PrimaryButton>
+        <PrimaryButton onClick={()=>addEntry()} disabled={!food.trim()||saving} style={{padding:12,fontSize:14}}>{saving?t("calendar_saving"):t("foodlog_add_btn")}</PrimaryButton>
       </Card>
 
-      <SectionTitle>Geçmiş Öğünler</SectionTitle>
+      <SectionTitle>{t("foodlog_history_title")}</SectionTitle>
       {error && <ErrorBanner text={error} onRetry={load}/>}
       {loading ? (
         <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
       ) : entries.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok. İlk öğününü ekle!</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("foodlog_history_empty")}</Card>
       ) : entries.slice(0,10).map((e)=>(
         <Card key={e.ts} style={{marginBottom:8,display:"flex",gap:10,alignItems:"flex-start"}}>
           <div style={{flex:1}}>
@@ -3643,11 +4202,11 @@ function FoodLogSection({childId}) {
         </Card>
       ))}
 
-      <SectionTitle>Yaşa Göre Beslenme Önerileri</SectionTitle>
+      <SectionTitle>{t("foodlog_suggestions_title")}</SectionTitle>
       <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4,marginBottom:10}} className="abp-scrollbar">
-        {["6-8 Ay","9-11 Ay","12+ Ay"].map(a=> <Pill_ key={a} active={ageFilter===a} onClick={()=>setAgeFilter(a)}>{a}</Pill_>)}
+        {AGE_GROUPS.map(a=> <Pill_ key={a.key} active={ageFilter===a.key} onClick={()=>setAgeFilter(a.key)}>{a.label}</Pill_>)}
       </div>
-      {FOOD_COMBO_SUGGESTIONS.filter(f=>f.age===ageFilter).map((f,i)=>(
+      {combos.filter(f=>f.age===ageFilter).map((f,i)=>(
         <Card key={i} style={{marginBottom:8,display:"flex",gap:10,alignItems:"center"}}>
           <IconBadge icon={Sparkles} color="purple" size={34}/>
           <div style={{flex:1}}>
@@ -3665,6 +4224,8 @@ function FoodLogSection({childId}) {
    DİŞ ÇIKARMA TAKİBİ — huzursuzluk günlüğü + rahatlatıcı yöntemler
    ============================================================ */
 function TeethingSection({childId}) {
+  const { t, lang } = useLang();
+  const TEETHING_ITEMS_L = getTeethingReliefItems(lang);
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -3681,21 +4242,21 @@ function TeethingSection({childId}) {
   const logToday = async (restless) => {
     if (saving) return;
     setSaving(true);
-    const entry = {restless, date:new Date().toLocaleDateString("tr-TR"), time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
+    const entry = {restless, date:new Date().toLocaleDateString(localeOf(lang)), time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
     const list = [entry, ...logs];
     const ok = await storageSet(key, list, false);
-    if (ok) { setLogs(list); showToast(restless ? "Huzursuzluk kaydedildi, öneriler güncellendi ✓" : "Bugün sakin olarak kaydedildi ✓"); }
-    else showToast("Kaydedilemedi, tekrar deneyin", "error");
+    if (ok) { setLogs(list); showToast(restless ? t("toast_teething_restless") : t("toast_teething_calm")); }
+    else showToast(t("toast_save_failed"), "error");
     setSaving(false);
   };
 
   const latest = logs[0];
   const isRestless = latest ? latest.restless : null;
-  const orderedNames = isRestless === false ? TEETHING_CALM_TIP_ORDER : TEETHING_RESTLESS_TIP_ORDER;
-  const orderedItems = orderedNames
-    .map(n=>TEETHING_RELIEF_ITEMS.find(t=>t.name===n))
+  const orderedKeys = isRestless === false ? TEETHING_CALM_TIP_ORDER : TEETHING_RESTLESS_TIP_ORDER;
+  const orderedItems = orderedKeys
+    .map(k=>TEETHING_ITEMS_L.find(it=>it.key===k))
     .filter(Boolean)
-    .concat(TEETHING_RELIEF_ITEMS.filter(t=>!orderedNames.includes(t.name)));
+    .concat(TEETHING_ITEMS_L.filter(it=>!orderedKeys.includes(it.key)));
 
   return (
     <div style={{marginTop:16}}>
@@ -3703,16 +4264,16 @@ function TeethingSection({childId}) {
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
           <IconBadge icon={Smile} color="pink" size={36}/>
           <div>
-            <div style={{fontWeight:700,fontSize:15}}>Bugün Huzursuz mu?</div>
-            <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>Cevabına göre önerileri sıralayalım</div>
+            <div style={{fontWeight:700,fontSize:15}}>{t("teething_today_restless_title")}</div>
+            <div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{t("teething_today_restless_desc")}</div>
           </div>
         </div>
         <div style={{display:"flex",gap:8}}>
-          <div onClick={()=>logToday(true)} className="abp-tap" style={{flex:1,textAlign:"center",padding:"14px 0",borderRadius:14,background: isRestless===true?"var(--ink)":"var(--pink)",color: isRestless===true?"#fff":"var(--ink)",fontWeight:700,fontSize:13.5}}>Evet, Huzursuz</div>
-          <div onClick={()=>logToday(false)} className="abp-tap" style={{flex:1,textAlign:"center",padding:"14px 0",borderRadius:14,background: isRestless===false?"var(--ink)":"var(--green)",color: isRestless===false?"#fff":"var(--ink)",fontWeight:700,fontSize:13.5}}>Hayır, Sakin</div>
+          <div onClick={()=>logToday(true)} className="abp-tap" style={{flex:1,textAlign:"center",padding:"14px 0",borderRadius:14,background: isRestless===true?"var(--ink)":"var(--pink)",color: isRestless===true?"#fff":"var(--ink)",fontWeight:700,fontSize:13.5}}>{t("teething_yes_restless")}</div>
+          <div onClick={()=>logToday(false)} className="abp-tap" style={{flex:1,textAlign:"center",padding:"14px 0",borderRadius:14,background: isRestless===false?"var(--ink)":"var(--green)",color: isRestless===false?"#fff":"var(--ink)",fontWeight:700,fontSize:13.5}}>{t("teething_no_calm")}</div>
         </div>
         {latest && (
-          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginTop:10,textAlign:"center"}}>Son kayıt: {latest.date} · {latest.time} — {latest.restless?"Huzursuzdu":"Sakindi"}</div>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginTop:10,textAlign:"center"}}>{t("teething_last_log", latest.date, latest.time, latest.restless)}</div>
         )}
       </Card>
 
@@ -3720,15 +4281,13 @@ function TeethingSection({childId}) {
         <InfoBlock
           icon={isRestless?AlertCircle:Check}
           color={isRestless?"pink":"green"}
-          title={isRestless?"Bugün İçin Öncelikli Öneriler":"Bebeğiniz Sakin — Genel Bilgi"}
-          text={isRestless
-            ? "Bebeğiniz huzursuzsa önce soğuk ve doğal yöntemleri deneyin; ihtiyaç halinde eczacınıza danışarak jel desteğini değerlendirebilirsiniz."
-            : "Şu an belirgin bir huzursuzluk yok; yine de diş etlerini günlük kontrol etmek ve doğal yöntemleri hazır bulundurmak faydalı olur."}
+          title={isRestless?t("teething_priority_title"):t("teething_calm_title")}
+          text={isRestless ? t("teething_priority_text") : t("teething_calm_text")}
           highlight
         />
       )}
 
-      <SectionTitle>Rahatlatıcı Yöntemler</SectionTitle>
+      <SectionTitle>{t("teething_relief_methods_title")}</SectionTitle>
       {orderedItems.map((item,i)=>(
         <Card key={i} style={{marginBottom:10, border: item.warn ? "1.5px solid var(--pink-deep)" : undefined}}>
           <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
@@ -3744,7 +4303,7 @@ function TeethingSection({childId}) {
           </div>
         </Card>
       ))}
-      <div style={{fontSize:11.5,color:"var(--ink-faint)",margin:"10px 4px 0"}}>Ateş, aşırı ağlama, iştahsızlık veya ishal gibi belirtiler eşlik ediyorsa bunu diş çıkarmaya bağlamadan önce doktorunuza danışın.</div>
+      <div style={{fontSize:11.5,color:"var(--ink-faint)",margin:"10px 4px 0"}}>{t("teething_footer_note")}</div>
     </div>
   );
 }
@@ -3752,26 +4311,26 @@ function TeethingSection({childId}) {
 /* ============================================================
    KAKA TAKİBİ — kıvam takibi ve kabızlık önerileri
    ============================================================ */
-function stoolReason(typeKey, days) {
+function stoolReason(t, typeKey, days) {
   switch (typeKey) {
     case "sert":
       return days >= 2
-        ? {text:`${days} gündür sert/topak kaka görülüyor — bu kabızlık belirtisi olabilir. Bol sıvı, lifli meyve püreleri (erik, armut) ve karın masajı deneyebilirsiniz; 3 günü aşarsa doktorunuza danışın.`, severity:"warn"}
-        : {text:"Tek seferlik sertlik genelde geçicidir; su/sıvı alımını artırıp izlemeye devam edin.", severity:"info"};
+        ? {text:t("poop_reason_sert_warn", days), severity:"warn"}
+        : {text:t("poop_reason_sert_info"), severity:"info"};
     case "sulu":
       return days >= 2
-        ? {text:`${days} gündür sulu/cıvık kaka ishal belirtisi olabilir. Sıvı kaybına karşı bol sıvı verin; ${days>=3?"vakit kaybetmeden doktorunuza başvurun.":"devam ederse doktorunuza danışın."}`, severity: days>=3?"urgent":"warn"}
-        : {text:"Tek seferlik sulu kaka genelde zararsızdır, tekrarlarsa izlemeye devam edin.", severity:"info"};
+        ? {text:t("poop_reason_sulu_warn", days), severity: days>=3?"urgent":"warn"}
+        : {text:t("poop_reason_sulu_info"), severity:"info"};
     case "yesil":
       return days >= 3
-        ? {text:`${days} gündür yeşilimsi kaka görülüyor; genelde beslenmeyle ilgilidir ama uzun sürüyorsa doktorunuza danışabilirsiniz.`, severity:"info"}
-        : {text:"Yeşilimsi renk çoğunlukla zararsızdır ve beslenmeyle ilişkilidir.", severity:"info"};
+        ? {text:t("poop_reason_yesil_warn", days), severity:"info"}
+        : {text:t("poop_reason_yesil_info"), severity:"info"};
     case "mukuslu":
-      return {text:`${days>1?`${days} gündür `:""}Mukuslu kaka sindirim sisteminde hafif tahriş belirtisi olabilir; ${days>=2?"devam ederse doktorunuza danışın.":"izlemeye devam edin."}`, severity: days>=2?"warn":"info"};
+      return {text:t("poop_reason_mukuslu", days), severity: days>=2?"warn":"info"};
     case "kanli":
-      return {text:"Kakada kan görülmesi ciddi olabilir; vakit kaybetmeden doktorunuza başvurun.", severity:"urgent"};
+      return {text:t("poop_reason_kanli"), severity:"urgent"};
     default:
-      return {text:"Kıvam normal aralıkta görünüyor, takibe devam edin.", severity:"ok"};
+      return {text:t("poop_reason_default"), severity:"ok"};
   }
 }
 const STOOL_SEVERITY_STYLE = {
@@ -3782,6 +4341,9 @@ const STOOL_SEVERITY_STYLE = {
 };
 
 function PoopTrackerSection({childId}) {
+  const { t, lang } = useLang();
+  const STOOL_TYPES_L = getStoolTypes(lang);
+  const CONSTIPATION_TIPS_L = getConstipationTips(lang);
   const [loading, setLoading] = useState(true);
   const [logs, setLogs] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -3800,17 +4362,17 @@ function PoopTrackerSection({childId}) {
   const confirmLog = async () => {
     if (saving || !pendingType) return;
     setSaving(true);
-    const t = STOOL_TYPES.find(s=>s.key===pendingType);
-    const entry = {type:pendingType, days:pendingDays, date:new Date().toLocaleDateString("tr-TR"), time:new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
+    const st = STOOL_TYPES_L.find(s=>s.key===pendingType);
+    const entry = {type:pendingType, days:pendingDays, date:new Date().toLocaleDateString(localeOf(lang)), time:new Date().toLocaleTimeString(localeOf(lang),{hour:"2-digit",minute:"2-digit"}), ts:Date.now()};
     const list = [entry, ...logs];
     const ok = await storageSet(key, list, false);
-    if (ok) { setLogs(list); showToast(`${t.label} · ${pendingDays} gündür kaydedildi ✓`, t.urgent?"error":"success"); setPendingType(null); setPendingDays(1); }
-    else showToast("Kaydedilemedi, tekrar deneyin", "error");
+    if (ok) { setLogs(list); showToast(t("toast_poop_saved", st.label, pendingDays), st.urgent?"error":"success"); setPendingType(null); setPendingDays(1); }
+    else showToast(t("toast_save_failed"), "error");
     setSaving(false);
   };
 
   const latest = logs[0];
-  const latestReason = latest ? stoolReason(latest.type, latest.days||1) : null;
+  const latestReason = latest ? stoolReason(t, latest.type, latest.days||1) : null;
   const showConstipationTips = latest && latest.type === "sert";
 
   return (
@@ -3818,10 +4380,10 @@ function PoopTrackerSection({childId}) {
       <Card>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <IconBadge icon={Droplets} color="green" size={36}/>
-          <div style={{fontWeight:700,fontSize:15}}>Kaka Kıvamını Kaydet</div>
+          <div style={{fontWeight:700,fontSize:15}}>{t("poop_save_title")}</div>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-          {STOOL_TYPES.map(s=>(
+          {STOOL_TYPES_L.map(s=>(
             <div key={s.key} onClick={()=>{setPendingType(s.key); setPendingDays(1);}} className="abp-tap" style={{
               padding:"12px 8px",borderRadius:14,fontWeight:700,fontSize:12.5,textAlign:"center",
               background: pendingType===s.key ? "var(--ink)" : `var(--${s.color})`,
@@ -3832,7 +4394,7 @@ function PoopTrackerSection({childId}) {
 
         {pendingType && (
           <div style={{marginTop:14,paddingTop:14,borderTop:"1px solid rgba(150,130,180,0.15)"}}>
-            <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:8}}>Kaç gündür bu kıvamda? (Örn. 2 gündür yumuşak kaka yapıyor)</div>
+            <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:8}}>{t("poop_days_question")}</div>
             <div style={{display:"flex",gap:8,marginBottom:12}}>
               {[1,2,3,4,5].map(d=>(
                 <div key={d} onClick={()=>setPendingDays(d)} className="abp-tap" style={{
@@ -3842,7 +4404,7 @@ function PoopTrackerSection({childId}) {
                 }}>{d===5?"5+":d}</div>
               ))}
             </div>
-            <PrimaryButton onClick={confirmLog} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?"Kaydediliyor...":"Kaydet"}</PrimaryButton>
+            <PrimaryButton onClick={confirmLog} disabled={saving} style={{padding:12,fontSize:13.5}}>{saving?t("calendar_saving"):t("save")}</PrimaryButton>
           </div>
         )}
       </Card>
@@ -3851,7 +4413,7 @@ function PoopTrackerSection({childId}) {
         <InfoBlock
           icon={STOOL_SEVERITY_STYLE[latestReason.severity].icon}
           color={STOOL_SEVERITY_STYLE[latestReason.severity].color}
-          title="Bu Kayda Göre Olası Nedenler"
+          title={t("poop_reasons_title")}
           text={latestReason.text}
           highlight={latestReason.severity==="urgent"||latestReason.severity==="warn"}
         />
@@ -3859,30 +4421,30 @@ function PoopTrackerSection({childId}) {
 
       {showConstipationTips && (
         <>
-          <SectionTitle>Kabızlık İçin Genel Öneriler</SectionTitle>
+          <SectionTitle>{t("constipation_tips_title")}</SectionTitle>
           <Card>
-            {CONSTIPATION_TIPS.map((t,i)=>(
+            {CONSTIPATION_TIPS_L.map((ct,i)=>(
               <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,padding:"7px 0",fontSize:13, borderTop: i>0 ? "1px solid rgba(150,130,180,0.12)" : "none"}}>
-                <Info size={14} color="var(--ink-faint)" style={{marginTop:2,flexShrink:0}}/> {t}
+                <Info size={14} color="var(--ink-faint)" style={{marginTop:2,flexShrink:0}}/> {ct}
               </div>
             ))}
           </Card>
         </>
       )}
 
-      <SectionTitle>Geçmiş Kayıtlar</SectionTitle>
+      <SectionTitle>{t("history_title")}</SectionTitle>
       {loading ? (
         <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
       ) : logs.length === 0 ? (
-        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>Henüz kayıt yok. İlk kaydını ekle!</Card>
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("poop_history_empty")}</Card>
       ) : logs.slice(0,10).map((l)=>{
-        const t = STOOL_TYPES.find(s=>s.key===l.type) || {};
-        const r = stoolReason(l.type, l.days||1);
+        const st = STOOL_TYPES_L.find(s=>s.key===l.type) || {};
+        const r = stoolReason(t, l.type, l.days||1);
         return (
           <Card key={l.ts} style={{marginBottom:8,fontSize:13.5}}>
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <div><strong>{t.label}</strong> <span style={{color:"var(--ink-faint)",fontSize:12}}>· {l.days||1} gündür · {l.date} {l.time}</span></div>
-              {t.urgent && <span style={{fontSize:11,fontWeight:700,color:"#D98BA6"}}>Doktora danışın</span>}
+              <div><strong>{st.label}</strong> <span style={{color:"var(--ink-faint)",fontSize:12}}>· {t("poop_days_ago", l.days||1)} · {l.date} {l.time}</span></div>
+              {st.urgent && <span style={{fontSize:11,fontWeight:700,color:"#D98BA6"}}>{t("poop_consult_doctor")}</span>}
             </div>
             <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:4}}>{r.text}</div>
           </Card>
@@ -3897,6 +4459,8 @@ function PoopTrackerSection({childId}) {
    ekleyip işaretleyip silebildiği kalıcı liste (window.storage).
    ============================================================ */
 function ShoppingListSection() {
+  const { t, lang } = useLang();
+  const SHOPPING_L = getShoppingByAge(lang);
   const [loading, setLoading] = useState(true);
   const [checked, setChecked] = useState({}); // { itemName: true }
   const [customItems, setCustomItems] = useState([]); // [{id, text}]
@@ -3928,8 +4492,8 @@ function ShoppingListSection() {
     const item = {id: Date.now(), text};
     const list = [...customItems, item];
     const ok = await storageSet("shopping:custom", list, false);
-    if (ok) { setCustomItems(list); setInput(""); showToast("Liste eklendi ✓"); }
-    else showToast("Eklenemedi, tekrar deneyin", "error");
+    if (ok) { setCustomItems(list); setInput(""); showToast(t("toast_list_added")); }
+    else showToast(t("toast_add_failed"), "error");
     setSaving(false);
   };
 
@@ -3948,13 +4512,13 @@ function ShoppingListSection() {
   return (
     <div style={{marginTop:16}}>
       <Card>
-        <div style={{fontWeight:800,fontSize:15,marginBottom:10}}>Kendi Listeni Oluştur</div>
+        <div style={{fontWeight:800,fontSize:15,marginBottom:10}}>{t("shopping_own_list_title")}</div>
         <div style={{display:"flex",gap:8}}>
           <input
             value={input}
             onChange={e=>setInput(e.target.value)}
             onKeyDown={e=>e.key==="Enter" && addCustomItem()}
-            placeholder="Örn. Bebek maması"
+            placeholder={t("shopping_placeholder")}
             style={{flex:1,padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none"}}
           />
           <div onClick={addCustomItem} className="abp-tap" style={{width:44,height:44,borderRadius:14,background: input.trim()?"linear-gradient(135deg, #E8A9C4, #B79AEA)":"var(--ink-faint)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
@@ -3965,7 +4529,7 @@ function ShoppingListSection() {
 
       {customItems.length > 0 && (
         <>
-          <SectionTitle>Listem ({customItems.length})</SectionTitle>
+          <SectionTitle>{t("shopping_my_list", customItems.length)}</SectionTitle>
           {customItems.map(it=>{
             const isChecked = !!checked["custom:"+it.id];
             return (
@@ -3981,8 +4545,8 @@ function ShoppingListSection() {
         </>
       )}
 
-      <SectionTitle action={<div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{totalChecked} işaretli</div>}>Yaşa Göre Öneriler</SectionTitle>
-      {Object.entries(SHOPPING_BY_AGE).map(([age,items])=>(
+      <SectionTitle action={<div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{t("shopping_checked_count", totalChecked)}</div>}>{t("shopping_by_age_title")}</SectionTitle>
+      {Object.entries(SHOPPING_L).map(([age,items])=>(
         <div key={age} style={{marginBottom:16}}>
           <div style={{fontWeight:700,fontSize:14,margin:"8px 4px"}}>{age}</div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
@@ -4009,6 +4573,7 @@ function ShoppingListSection() {
    ACTIVITIES TAB
    ============================================================ */
 function PlaceCard({place, color, icon:Icon, active, onSelect}) {
+  const { t } = useLang();
   return (
     <Card
       style={{
@@ -4021,7 +4586,7 @@ function PlaceCard({place, color, icon:Icon, active, onSelect}) {
       <div style={{flex:1, minWidth:0}}>
         <div style={{fontWeight:700, fontSize:13.5, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>{place.name}</div>
         <div style={{fontSize:11.5, color:"var(--ink-soft)", marginTop:2, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap"}}>
-          {place.address || "Adres bilgisi yok"}
+          {place.address || t("place_no_address")}
         </div>
       </div>
       <div
@@ -4031,13 +4596,14 @@ function PlaceCard({place, color, icon:Icon, active, onSelect}) {
         <div style={{fontSize:12.5, fontWeight:800, color:"var(--ink)"}}>
           {place.distanceKm < 1 ? `${Math.round(place.distanceKm*1000)} m` : `${place.distanceKm.toFixed(1)} km`}
         </div>
-        <div style={{fontSize:10, color:"var(--ink-faint)"}}>Yol tarifi →</div>
+        <div style={{fontSize:10, color:"var(--ink-faint)"}}>{t("place_directions")}</div>
       </div>
     </Card>
   );
 }
 
 function NearbyTab() {
+  const { t, lang } = useLang();
   const [geoStatus, setGeoStatus] = useState("idle"); // idle|loading|ready|denied|error|unsupported
   const [coords, setCoords] = useState(null);
   const [mapView, setMapView] = useState("country"); // country|local
@@ -4096,7 +4662,7 @@ function NearbyTab() {
       },
       (err) => {
         setGeoStatus(err.code===1 ? "denied" : "error");
-        showToast(err.code===1 ? "Konum izni reddedildi" : "Konum alınamadı, tekrar deneyin", "error");
+        showToast(err.code===1 ? t("toast_location_denied") : t("toast_location_failed"), "error");
       },
       {enableHighAccuracy:true, timeout:12000, maximumAge:300000}
     );
@@ -4115,8 +4681,8 @@ function NearbyTab() {
 
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
-      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 4px"}}>Yakınımda</h2>
-      <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:14}}>Konumuna göre en yakın eczaneler ve bebek mağazaları.</div>
+      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 4px"}}>{t("nearby_title")}</h2>
+      <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:14}}>{t("nearby_subtitle")}</div>
 
       {geoStatus!=="ready" && (
         <Card style={{marginBottom:14, textAlign:"center", padding:"26px 18px"}}>
@@ -4124,18 +4690,18 @@ function NearbyTab() {
             <MapPin size={26} color="var(--ink)"/>
           </div>
           <div style={{fontWeight:700, fontSize:14.5, marginBottom:6}}>
-            {geoStatus==="denied" ? "Konum izni verilmedi" :
-             geoStatus==="unsupported" ? "Cihazın konumu desteklemiyor" :
-             geoStatus==="error" ? "Konum alınamadı" :
-             "Konumunu bul, en yakınları görelim"}
+            {geoStatus==="denied" ? t("nearby_denied") :
+             geoStatus==="unsupported" ? t("nearby_unsupported") :
+             geoStatus==="error" ? t("nearby_error") :
+             t("nearby_idle_title")}
           </div>
           <div style={{fontSize:12, color:"var(--ink-soft)", marginBottom:14, lineHeight:1.5}}>
             {geoStatus==="denied"
-              ? "Tarayıcı/telefon ayarlarından bu site için konum iznini açıp tekrar dene."
-              : "Konumunu paylaşman en yakın eczane ve bebek mağazalarını harita üzerinde göstermemizi sağlar."}
+              ? t("nearby_denied_desc")
+              : t("nearby_idle_desc")}
           </div>
           <PrimaryButton onClick={requestLocation} style={{maxWidth:220,margin:"0 auto"}}>
-            {geoStatus==="loading" ? "Konum alınıyor..." : "Konumumu Bul"}
+            {geoStatus==="loading" ? t("nearby_locating") : t("nearby_find_btn")}
           </PrimaryButton>
         </Card>
       )}
@@ -4143,17 +4709,17 @@ function NearbyTab() {
       {coords && (
         <div style={{display:"flex",gap:8,marginBottom:10}}>
           <Pill_ active={category==="pharmacy"} onClick={()=>{ setCategory("pharmacy"); setSelectedPlace(null); }}>
-            Eczaneler
+            {t("nearby_pharmacies")}
           </Pill_>
           <Pill_ active={category==="baby"} onClick={()=>{ setCategory("baby"); setSelectedPlace(null); }}>
-            Bebek Mağazaları
+            {t("nearby_baby_stores")}
           </Pill_>
         </div>
       )}
 
       <div style={{display:"flex",gap:8,marginBottom:10}}>
-        <Pill_ active={mapView==="country"} onClick={()=>{ setMapView("country"); setSelectedPlace(null); }}>Türkiye</Pill_>
-        {coords && <Pill_ active={mapView==="local"} onClick={()=>setMapView("local")}>Yakın Çevre</Pill_>}
+        <Pill_ active={mapView==="country"} onClick={()=>{ setMapView("country"); setSelectedPlace(null); }}>{t("nearby_country")}</Pill_>
+        {coords && <Pill_ active={mapView==="local"} onClick={()=>setMapView("local")}>{t("nearby_local_area")}</Pill_>}
       </div>
       <div style={{borderRadius:"var(--radius-lg)", overflow:"hidden", boxShadow:"var(--shadow-sm)", height:200}}>
         <NearbyMap
@@ -4170,7 +4736,7 @@ function NearbyTab() {
           <MapPin size={11}/>
           {selectedPlace
             ? selectedPlace.name
-            : `${district ? district+", " : ""}${province || "Konumun bulundu"}`}
+            : `${district ? district+", " : ""}${province || t("nearby_location_found")}`}
         </div>
       )}
 
@@ -4185,30 +4751,30 @@ function NearbyTab() {
                 <Pill size={20} color="#fff"/>
               </div>
               <div style={{flex:1,minWidth:0}}>
-                <div style={{fontWeight:800,fontSize:14.5,color:"#fff"}}>Bugün Nöbetçi Eczaneler</div>
+                <div style={{fontWeight:800,fontSize:14.5,color:"#fff"}}>{t("nearby_duty_pharmacy_title")}</div>
                 <div style={{fontSize:11.5,color:"rgba(255,255,255,0.9)",marginTop:2}}>
-                  {province ? `${province}${district?" · "+district:""} için güncel listeyi gör` : "İlin için güncel listeyi gör"}
+                  {province ? t("nearby_duty_pharmacy_desc", `${province}${district?" · "+district:""}`) : t("nearby_duty_pharmacy_desc_default")}
                 </div>
               </div>
               <ArrowRight size={18} color="#fff"/>
             </div>
           </Card>
 
-          <SectionTitle>En Yakın Eczaneler</SectionTitle>
+          <SectionTitle>{t("nearby_closest_pharmacies")}</SectionTitle>
           {pharmLoading && (
             <div style={{display:"flex",alignItems:"center",gap:8,color:"var(--ink-soft)",fontSize:12.5,marginBottom:8}}>
               <div className="abp-spin-slow" style={{width:14,height:14,borderRadius:"50%",border:"2px solid var(--ink-faint)",borderTopColor:"var(--ink)"}}/>
-              Yakındaki eczaneler aranıyor...
+              {t("nearby_searching_pharmacies")}
             </div>
           )}
           {!pharmLoading && pharmError && (
             <Card style={{textAlign:"center"}}>
-              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:10}}>Eczaneler yüklenirken bağlantı sorunu oluştu.</div>
-              <PrimaryButton style={{maxWidth:180,margin:"0 auto",padding:10,fontSize:12.5}} onClick={()=>loadNearby(coords.lat, coords.lon)}>Tekrar Dene</PrimaryButton>
+              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:10}}>{t("nearby_pharmacy_load_error")}</div>
+              <PrimaryButton style={{maxWidth:180,margin:"0 auto",padding:10,fontSize:12.5}} onClick={()=>loadNearby(coords.lat, coords.lon)}>{t("nearby_retry")}</PrimaryButton>
             </Card>
           )}
           {!pharmLoading && !pharmError && pharmacies.length===0 && (
-            <Card style={{textAlign:"center", color:"var(--ink-soft)", fontSize:12.5}}>Yakında kayıtlı eczane bulunamadı.</Card>
+            <Card style={{textAlign:"center", color:"var(--ink-soft)", fontSize:12.5}}>{t("nearby_no_pharmacies")}</Card>
           )}
           {pharmacies.map(p => (
             <PlaceCard
@@ -4222,17 +4788,17 @@ function NearbyTab() {
 
       {coords && category==="baby" && (
         <>
-          <SectionTitle>En Yakın Bebek Mağazaları</SectionTitle>
+          <SectionTitle>{t("nearby_closest_baby_stores")}</SectionTitle>
           {babyLoading && (
             <div style={{display:"flex",alignItems:"center",gap:8,color:"var(--ink-soft)",fontSize:12.5,marginBottom:8}}>
               <div className="abp-spin-slow" style={{width:14,height:14,borderRadius:"50%",border:"2px solid var(--ink-faint)",borderTopColor:"var(--ink)"}}/>
-              Yakındaki bebek mağazaları aranıyor...
+              {t("nearby_searching_baby_stores")}
             </div>
           )}
           {!babyLoading && babyError && (
             <Card style={{textAlign:"center"}}>
-              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:10}}>Bebek mağazaları yüklenirken bağlantı sorunu oluştu.</div>
-              <PrimaryButton style={{maxWidth:180,margin:"0 auto",padding:10,fontSize:12.5}} onClick={()=>loadNearby(coords.lat, coords.lon)}>Tekrar Dene</PrimaryButton>
+              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:10}}>{t("nearby_baby_store_load_error")}</div>
+              <PrimaryButton style={{maxWidth:180,margin:"0 auto",padding:10,fontSize:12.5}} onClick={()=>loadNearby(coords.lat, coords.lon)}>{t("nearby_retry")}</PrimaryButton>
             </Card>
           )}
           {!babyLoading && !babyError && babyStores.length===0 && (
@@ -4240,8 +4806,8 @@ function NearbyTab() {
               style={{textAlign:"center"}}
               onClick={()=>window.open(`https://www.google.com/maps/search/bebek+mağazası/@${coords.lat},${coords.lon},14z`, "_blank")}
             >
-              <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>Yakında kayıtlı bebek mağazası bulunamadı.</div>
-              <div style={{fontSize:12,fontWeight:700,color:"var(--ink)",marginTop:6}}>Google Haritalar'da ara →</div>
+              <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>{t("nearby_no_baby_stores")}</div>
+              <div style={{fontSize:12,fontWeight:700,color:"var(--ink)",marginTop:6}}>{t("nearby_search_google_maps")}</div>
             </Card>
           )}
           {babyStores.map(p => (
@@ -4258,6 +4824,7 @@ function NearbyTab() {
 }
 
 function ActivitiesTab() {
+  const { t, lang } = useLang();
   const [section, setSection] = useState("gunluk");
   const [playing, setPlaying] = useState(null);
   const [speakingStory, setSpeakingStory] = useState(null);
@@ -4271,6 +4838,7 @@ function ActivitiesTab() {
   const [ageFilter, setAgeFilter] = useState("Tümü");
   const [selectedCraft, setSelectedCraft] = useState(null);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const TIMER_OPTIONS = getTimerOptions(t);
 
   useEffect(()=> ()=>{ stopSpeaking(); stopSleepSound(); }, []); // sekmeden çıkarken sesi kapat
 
@@ -4319,21 +4887,21 @@ function ActivitiesTab() {
   const allLullabies = [...LULLABIES_POOL, ...cmsLullabies];
 
   const sections = [
-    {key:"gunluk", label:"Günlük Aktivite"},
-    {key:"elisi", label:"El İşi"},
-    {key:"hikaye", label:"Hikayeler"},
-    {key:"ninni", label:"Ninniler"},
-    {key:"uykusesi", label:"Uyku Sesleri"},
-    {key:"annediyeti", label:"Anne Diyeti"},
-    {key:"annesagligi", label:"Anne Sağlığı"},
-    {key:"alisveris", label:"Alışveriş Listesi"},
-    {key:"ani", label:"Anı Günlüğü"},
-    {key:"rozet", label:"Rozetler"}
+    {key:"gunluk", label:t("activities_section_daily")},
+    {key:"elisi", label:t("activities_section_craft")},
+    {key:"hikaye", label:t("activities_section_story")},
+    {key:"ninni", label:t("activities_section_lullaby")},
+    {key:"uykusesi", label:t("activities_section_sound")},
+    {key:"annediyeti", label:t("activities_section_diet")},
+    {key:"annesagligi", label:t("activities_section_health")},
+    {key:"alisveris", label:t("activities_section_shopping")},
+    {key:"ani", label:t("activities_section_memory")},
+    {key:"rozet", label:t("activities_section_badge")}
   ];
 
   return (
     <div style={{height:"100%",overflowY:"auto",background:"var(--bg)",padding:"20px 20px 110px"}} className="abp-scrollbar">
-      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>Etkinlikler</h2>
+      <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>{t("activities_title")}</h2>
       <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:4}} className="abp-scrollbar">
         {sections.map(s => <Pill_ key={s.key} active={section===s.key} onClick={()=>setSection(s.key)}>{s.label}</Pill_>)}
       </div>
@@ -4341,8 +4909,15 @@ function ActivitiesTab() {
       {section === "gunluk" && (
         <div style={{marginTop:16}}>
           <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:10}} className="abp-scrollbar">
-            {["Tümü","0-6 ay","6-12 ay","12-24 ay","2-3 yaş","3+ yaş"].map(a=>(
-              <Pill_ key={a} active={ageFilter===a} onClick={()=>setAgeFilter(a)}>{a}</Pill_>
+            {[
+              {value:"Tümü", label:t("age_all")},
+              {value:"0-6 ay", label:t("age_filter_0_6")},
+              {value:"6-12 ay", label:t("age_filter_6_12")},
+              {value:"12-24 ay", label:t("age_filter_12_24")},
+              {value:"2-3 yaş", label:t("age_filter_2_3y")},
+              {value:"3+ yaş", label:t("age_filter_3plus")}
+            ].map(a=>(
+              <Pill_ key={a.value} active={ageFilter===a.value} onClick={()=>setAgeFilter(a.value)}>{a.label}</Pill_>
             ))}
           </div>
           {cmsLoading && <SkeletonCard/>}
@@ -4352,7 +4927,7 @@ function ActivitiesTab() {
                 <div style={{fontWeight:700,fontSize:14.5}}>{a.title}</div>
                 {a.age && <span style={{fontSize:10.5,fontWeight:700,color:"var(--ink-soft)",background:"var(--bg)",padding:"3px 8px",borderRadius:99}}>{a.age}</span>}
               </div>
-              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginTop:4}}>Geliştirdiği beceri: {a.skill}</div>
+              <div style={{fontSize:12.5,color:"var(--ink-soft)",marginTop:4}}>{t("activities_skill_label", a.skill)}</div>
               <div style={{display:"flex",gap:14,marginTop:8,fontSize:12}}>
                 <span>⏱ {a.duration||"—"}</span><span>🧸 {a.materials||"—"}</span>
               </div>
@@ -4368,7 +4943,7 @@ function ActivitiesTab() {
               <IconBadge icon={Sparkles} color={["pink","blue","purple","green"][i%4]} size={36}/>
               <div style={{fontWeight:700,fontSize:13.5,marginTop:8}}>{c.title}</div>
               <div style={{fontSize:11.5,color:"var(--ink-soft)",marginTop:3}}>{c.cat} · {c.age} yaş</div>
-              <div style={{fontSize:11,color:"var(--ink-faint)",marginTop:6,display:"flex",alignItems:"center",gap:4}}><Info size={11}/> Nasıl yapılır?</div>
+              <div style={{fontSize:11,color:"var(--ink-faint)",marginTop:6,display:"flex",alignItems:"center",gap:4}}><Info size={11}/> {t("craft_how_to")}</div>
             </Card>
           ))}
         </div>
@@ -4377,8 +4952,8 @@ function ActivitiesTab() {
       {selectedCraft && (
         <Modal title={selectedCraft.title} onClose={()=>setSelectedCraft(null)}>
           <div style={{fontSize:12,fontWeight:700,color:"var(--ink-faint)",marginBottom:10}}>{selectedCraft.cat} · {selectedCraft.age} yaş</div>
-          <InfoBlock icon={ShoppingBag} color="blue" title="Gerekli Malzemeler" text={selectedCraft.materials}/>
-          <SectionTitle>Adım Adım Yapılışı</SectionTitle>
+          <InfoBlock icon={ShoppingBag} color="blue" title={t("craft_materials_title")} text={selectedCraft.materials}/>
+          <SectionTitle>{t("craft_steps_title")}</SectionTitle>
           <Card>
             {selectedCraft.steps.map((s,i)=>(
               <div key={i} style={{display:"flex",gap:10,padding:"8px 0",borderBottom: i<selectedCraft.steps.length-1?"1px solid rgba(150,130,180,0.12)":"none"}}>
@@ -4387,13 +4962,13 @@ function ActivitiesTab() {
               </div>
             ))}
           </Card>
-          {selectedCraft.tip && <InfoBlock icon={Sparkles} color="purple" title="Gelişim İpucu" text={selectedCraft.tip}/>}
+          {selectedCraft.tip && <InfoBlock icon={Sparkles} color="purple" title={t("craft_dev_tip_title")} text={selectedCraft.tip}/>}
         </Modal>
       )}
 
       {section === "hikaye" && (
         <div style={{marginTop:16}}>
-          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:10}}>Tarayıcının sesli okuma özelliğiyle gerçekten dinlenebilir.</div>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:10}}>{t("story_listen_note")}</div>
           {STORIES_POOL.map((s,i)=>{
             const isSpeaking = speakingStory === s.title;
             return (
@@ -4403,7 +4978,7 @@ function ActivitiesTab() {
                 </div>
                 <div style={{flex:1}} onClick={()=>setFavs(f=>f.includes(s.title)?f.filter(x=>x!==s.title):[...f,s.title])}>
                   <div style={{fontWeight:700,fontSize:14}}>{s.title}</div>
-                  <div style={{fontSize:12,color:"var(--ink-soft)"}}>{s.cat} · {s.dur}{isSpeaking?" · Okunuyor...":""}</div>
+                  <div style={{fontSize:12,color:"var(--ink-soft)"}}>{s.cat} · {s.dur}{isSpeaking?t("story_reading_now"):""}</div>
                 </div>
                 <Star size={18} fill={favs.includes(s.title)?"#F0A8C6":"none"} color="#F0A8C6" onClick={()=>setFavs(f=>f.includes(s.title)?f.filter(x=>x!==s.title):[...f,s.title])}/>
               </Card>
@@ -4414,7 +4989,7 @@ function ActivitiesTab() {
 
       {section === "ninni" && (
         <div style={{marginTop:16}}>
-          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:10}}>Sözlerini yumuşak bir sesle dinleyebilirsiniz.</div>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",marginBottom:10}}>{t("lullaby_listen_note")}</div>
           {allLullabies.map((l,i)=>{
             const isSpeaking = speakingLullaby === l.title;
             return (
@@ -4424,7 +4999,7 @@ function ActivitiesTab() {
                 </div>
                 <div style={{flex:1}}>
                   <div style={{fontWeight:700,fontSize:14}}>{l.title}</div>
-                  <div style={{fontSize:12,color:"var(--ink-soft)"}}>{l.cat}{isSpeaking?" · Dinleniyor...":""}</div>
+                  <div style={{fontSize:12,color:"var(--ink-soft)"}}>{l.cat}{isSpeaking?t("lullaby_playing_now"):""}</div>
                 </div>
               </Card>
             );
@@ -4452,10 +5027,10 @@ function ActivitiesTab() {
           </div>
           {playing && (
             <Card style={{marginTop:14,textAlign:"center"}}>
-              <div style={{fontWeight:700,marginBottom:10}}>{playing} çalıyor</div>
+              <div style={{fontWeight:700,marginBottom:10}}>{t("sound_now_playing", playing)}</div>
               <div style={{display:"flex",gap:8,justifyContent:"center"}}>
-                {["15 dk","30 dk","1 saat","Sonsuz"].map(t=>(
-                  <Pill_ key={t} active={timer===t} onClick={()=>{ setTimer(t); scheduleSleepSoundAutoStop(t, ()=>setPlaying(null)); }}>{t}</Pill_>
+                {TIMER_OPTIONS.map(opt=>(
+                  <Pill_ key={opt.key} active={timer===opt.ms} onClick={()=>{ setTimer(opt.ms); scheduleSleepSoundAutoStop(opt.ms, ()=>setPlaying(null)); }}>{opt.label}</Pill_>
                 ))}
               </div>
             </Card>
@@ -4646,14 +5221,26 @@ function MemoryJournal() {
 /* ============================================================
    AI ASSISTANT TAB — Claude API + kalıcı sohbet geçmişi
    ============================================================ */
-const ASSISTANT_SYSTEM_PROMPT = "Sen bir Anne & Bebek uygulamasındaki yardımcı asistansın. Türkçe konuşuyorsun. Hamilelik, bebek bakımı, uyku, beslenme ve çocuk gelişimi hakkında sıcak, kısa ve anlaşılır bilgi veriyorsun. KESİNLİKLE tanı koymuyorsun, ilaç veya doz önermiyorsun. Ateş, kanama, şiddetli ağrı, nefes darlığı gibi riskli/acil belirtilerde mutlaka ve açıkça bir sağlık profesyoneline veya acil servise başvurmasını söylüyorsun. Yanıtların 3-5 cümleyi geçmesin.";
-const ASSISTANT_SUGGESTIONS = ["Bebeğim 8 aylık, muz verebilir miyim?","Gece sürekli ağlıyor, ne yapabilirim?","Bu hafta nelere dikkat etmeliyim?"];
+const ASSISTANT_SYSTEM_PROMPT_TR = "Sen bir Anne & Bebek uygulamasındaki yardımcı asistansın. Türkçe konuşuyorsun. Hamilelik, bebek bakımı, uyku, beslenme ve çocuk gelişimi hakkında sıcak, kısa ve anlaşılır bilgi veriyorsun. KESİNLİKLE tanı koymuyorsun, ilaç veya doz önermiyorsun. Ateş, kanama, şiddetli ağrı, nefes darlığı gibi riskli/acil belirtilerde mutlaka ve açıkça bir sağlık profesyoneline veya acil servise başvurmasını söylüyorsun. Yanıtların 3-5 cümleyi geçmesin.";
+const ASSISTANT_SYSTEM_PROMPT_EN = "You are a helpful assistant in a Mom & Baby app. You speak English. You give warm, brief and clear information about pregnancy, baby care, sleep, nutrition and child development. You NEVER diagnose or recommend medication or dosages. For risky/urgent symptoms like fever, bleeding, severe pain, or shortness of breath, you always and clearly tell the person to consult a healthcare professional or emergency services. Keep your answers to 3-5 sentences.";
+const ASSISTANT_SYSTEM_PROMPT_DE = "Du bist ein hilfreicher Assistent in einer Mama-&-Baby-App. Du sprichst Deutsch. Du gibst warme, kurze und verständliche Informationen zu Schwangerschaft, Babypflege, Schlaf, Ernährung und kindlicher Entwicklung. Du stellst NIEMALS eine Diagnose und empfiehlst keine Medikamente oder Dosierungen. Bei riskanten/dringenden Symptomen wie Fieber, Blutungen, starken Schmerzen oder Atemnot sagst du immer und deutlich, dass die Person eine medizinische Fachkraft oder den Notdienst aufsuchen soll. Halte deine Antworten auf 3-5 Sätze.";
+const ASSISTANT_SYSTEM_PROMPT_BY_LANG = { tr: ASSISTANT_SYSTEM_PROMPT_TR, en: ASSISTANT_SYSTEM_PROMPT_EN, de: ASSISTANT_SYSTEM_PROMPT_DE };
+function getAssistantSystemPrompt(lang) { return ASSISTANT_SYSTEM_PROMPT_BY_LANG[lang] || ASSISTANT_SYSTEM_PROMPT_TR; }
+const ASSISTANT_SYSTEM_PROMPT = ASSISTANT_SYSTEM_PROMPT_TR;
 
-function newConversation() {
+const ASSISTANT_SUGGESTIONS_TR = ["Bebeğim 8 aylık, muz verebilir miyim?","Gece sürekli ağlıyor, ne yapabilirim?","Bu hafta nelere dikkat etmeliyim?"];
+const ASSISTANT_SUGGESTIONS_EN = ["My baby is 8 months old, can I give bananas?","She keeps crying at night, what can I do?","What should I watch out for this week?"];
+const ASSISTANT_SUGGESTIONS_DE = ["Mein Baby ist 8 Monate alt, darf ich Banane geben?","Es weint nachts ständig, was kann ich tun?","Worauf sollte ich diese Woche achten?"];
+const ASSISTANT_SUGGESTIONS_BY_LANG = { tr: ASSISTANT_SUGGESTIONS_TR, en: ASSISTANT_SUGGESTIONS_EN, de: ASSISTANT_SUGGESTIONS_DE };
+function getAssistantSuggestions(lang) { return ASSISTANT_SUGGESTIONS_BY_LANG[lang] || ASSISTANT_SUGGESTIONS_TR; }
+const ASSISTANT_SUGGESTIONS = ASSISTANT_SUGGESTIONS_TR;
+
+function newConversation(t) {
+  const tt = t || ((k)=>({new_chat:"Yeni Sohbet", greeting:"Merhaba! Ben Anne Asistanınız 🤍 Hamilelik, bebek bakımı veya gelişimle ilgili merak ettiklerinizi sorabilirsiniz. Acil durumlarda lütfen doktorunuza başvurun."}[k]));
   return {
     id: Math.random().toString(36).slice(2),
-    title: "Yeni Sohbet",
-    messages: [{role:"bot", text:"Merhaba! Ben Anne Asistanınız 🤍 Hamilelik, bebek bakımı veya gelişimle ilgili merak ettiklerinizi sorabilirsiniz. Acil durumlarda lütfen doktorunuza başvurun."}],
+    title: tt("new_chat"),
+    messages: [{role:"bot", text:tt("greeting")}],
     updatedAt: Date.now()
   };
 }
@@ -4665,6 +5252,7 @@ function newConversation() {
    Gönderdiğiniz mesajlar bu artifact'ı açan HERKES tarafından görülebilir.
    ============================================================ */
 function CommunityChat() {
+  const { t, lang } = useLang();
   const [nickname, setNickname] = useState(null);
   const [nickInput, setNickInput] = useState("");
   const [loadingNick, setLoadingNick] = useState(true);
@@ -4701,7 +5289,7 @@ function CommunityChat() {
     const val = {name: nickInput.trim().slice(0,24)};
     await storageSet("profile:nickname", val, false);
     setNickname(val.name);
-    showToast("Takma adınız kaydedildi ✓");
+    showToast(t("toast_nickname_saved"));
   };
 
   const send = async () => {
@@ -4712,14 +5300,14 @@ function CommunityChat() {
     const list = [...latest, msg].slice(-200);
     const ok = await storageSet("community:messages", list, true);
     if (ok) { setMessages(list); setInput(""); }
-    else showToast("Mesaj gönderilemedi, tekrar deneyin", "error");
+    else showToast(t("toast_message_send_failed"), "error");
     setSending(false);
   };
 
   if (loadingNick) {
     return (
       <div style={{height:"100%",background:"var(--bg)",padding:"20px"}}>
-        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>Anne Sohbeti</h2>
+        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>{t("community_title")}</h2>
         <SkeletonCard lines={1}/>
       </div>
     );
@@ -4728,13 +5316,13 @@ function CommunityChat() {
   if (!nickname) {
     return (
       <div style={{height:"100%",background:"var(--bg)",padding:"20px 20px 110px"}}>
-        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 6px"}}>Anne Sohbeti</h2>
-        <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:16,lineHeight:1.6}}>Diğer annelerle sohbet edebileceğiniz paylaşımlı bir alan. Burada yazdıklarınızı bu uygulamayı kullanan herkes görebilir — lütfen kişisel bilgilerinizi (telefon, adres vb.) paylaşmayın.</div>
+        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 6px"}}>{t("community_title")}</h2>
+        <div style={{fontSize:12.5,color:"var(--ink-soft)",marginBottom:16,lineHeight:1.6}}>{t("community_intro")}</div>
         <Card>
-          <div style={{fontWeight:700,fontSize:14,marginBottom:8}}>Önce bir takma ad seçin</div>
-          <input placeholder="Örn. Ayşe Anne" value={nickInput} onChange={e=>setNickInput(e.target.value)}
+          <div style={{fontWeight:700,fontSize:14,marginBottom:8}}>{t("community_pick_nickname")}</div>
+          <input placeholder={t("community_nickname_placeholder")} value={nickInput} onChange={e=>setNickInput(e.target.value)}
             style={{width:"100%",padding:"12px 14px",borderRadius:14,border:"1px solid rgba(150,130,180,0.18)",background:"var(--bg)",fontSize:13.5,outline:"none",marginBottom:12}}/>
-          <PrimaryButton onClick={saveNickname} disabled={!nickInput.trim()}>Sohbete Katıl</PrimaryButton>
+          <PrimaryButton onClick={saveNickname} disabled={!nickInput.trim()}>{t("community_join_btn")}</PrimaryButton>
         </Card>
       </div>
     );
@@ -4743,14 +5331,14 @@ function CommunityChat() {
   return (
     <div style={{height:"100%",display:"flex",flexDirection:"column",background:"var(--bg)"}}>
       <div style={{padding:"20px 20px 10px"}}>
-        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>Anne Sohbeti</h2>
-        <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:4}}>{nickname} olarak yazıyorsunuz · herkese açık paylaşımlı alan</div>
+        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>{t("community_title")}</h2>
+        <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:4}}>{t("community_writing_as", nickname)}</div>
       </div>
       <div ref={scrollRef} style={{flex:1,overflowY:"auto",padding:"6px 16px"}} className="abp-scrollbar">
         {loading ? (
           <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
         ) : messages.length === 0 ? (
-          <div style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13,marginTop:30}}>Henüz mesaj yok. İlk mesajı sen yaz!</div>
+          <div style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13,marginTop:30}}>{t("community_no_messages")}</div>
         ) : messages.map(m=>{
           const mine = m.name === nickname;
           return (
@@ -4768,7 +5356,7 @@ function CommunityChat() {
         })}
       </div>
       <div style={{position:"absolute",bottom:78,left:16,right:16,display:"flex",gap:8,alignItems:"center",background:"var(--card)",borderRadius:20,padding:"8px 8px 8px 16px",boxShadow:"var(--shadow)"}}>
-        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Bir mesaj yaz..." disabled={sending}
+        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={t("community_message_placeholder")} disabled={sending}
           style={{flex:1,border:"none",outline:"none",background:"transparent",fontSize:14,color:"var(--ink)"}}/>
         <div onClick={send} className="abp-tap" style={{width:38,height:38,borderRadius:19,background: sending?"var(--ink-faint)":"var(--ink)",display:"flex",alignItems:"center",justifyContent:"center"}}>
           <Send size={15} color="#fff"/>
@@ -4779,6 +5367,7 @@ function CommunityChat() {
 }
 
 function AssistantTab() {
+  const { t, lang } = useLang();
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
   const [activeId, setActiveId] = useState(null);
@@ -4795,7 +5384,7 @@ function AssistantTab() {
         setConversations(saved);
         setActiveId(saved[0].id);
       } else {
-        const c = newConversation();
+        const c = newConversation(t);
         setConversations([c]);
         setActiveId(c.id);
       }
@@ -4815,29 +5404,29 @@ function AssistantTab() {
     setError(null);
     const userMsg = {role:"user", text};
     const updatedMsgs = [...active.messages, userMsg];
-    const title = active.title === "Yeni Sohbet" ? text.slice(0,32) : active.title;
+    const title = active.title === t("new_chat") ? text.slice(0,32) : active.title;
     let list = conversations.map(c => c.id===activeId ? {...c, messages:updatedMsgs, title, updatedAt:Date.now()} : c);
     persist(list);
     setSending(true);
     try {
       const res = await callGemini(
-        ASSISTANT_SYSTEM_PROMPT,
+        getAssistantSystemPrompt(lang),
         updatedMsgs.map(m => ({role: m.role==="bot" ? "assistant" : "user", content: m.text}))
       );
       if (!res.ok) throw new Error(res.error || "gemini_failed");
-      const botText = res.text.trim() || "Şu anda yanıt üretemedim, tekrar dener misiniz?";
+      const botText = res.text.trim() || t("assistant_fallback_reply");
       list = list.map(c => c.id===activeId ? {...c, messages:[...updatedMsgs, {role:"bot", text:botText}], updatedAt:Date.now()} : c);
       persist(list);
     } catch (e) {
-      setError("Yanıt alınamadı. Bağlantınızı kontrol edip tekrar deneyin.");
-      showToast("Asistan yanıt veremedi", "error");
+      setError(t("assistant_error"));
+      showToast(t("toast_assistant_failed"), "error");
     } finally {
       setSending(false);
     }
   };
 
   const startNewChat = () => {
-    const c = newConversation();
+    const c = newConversation(t);
     const list = [c, ...conversations];
     persist(list);
     setActiveId(c.id);
@@ -4845,7 +5434,7 @@ function AssistantTab() {
   };
   const deleteConversation = (id) => {
     const list = conversations.filter(c=>c.id!==id);
-    const finalList = list.length ? list : [newConversation()];
+    const finalList = list.length ? list : [newConversation(t)];
     persist(finalList);
     if (id === activeId) setActiveId(finalList[0].id);
   };
@@ -4853,7 +5442,7 @@ function AssistantTab() {
   if (loading || !active) {
     return (
       <div style={{height:"100%",background:"var(--bg)",padding:"20px 20px 110px"}}>
-        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>Yapay Zeka Anne Asistanı</h2>
+        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:"0 0 14px"}}>{t("assistant_title")}</h2>
         <SkeletonCard lines={1}/><SkeletonCard lines={1}/><SkeletonCard lines={1}/>
       </div>
     );
@@ -4863,8 +5452,8 @@ function AssistantTab() {
     <div style={{height:"100%",display:"flex",flexDirection:"column",background:"var(--bg)"}}>
       <div style={{padding:"20px 20px 10px",display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
         <div>
-          <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>Yapay Zeka Anne Asistanı</h2>
-          <div style={{fontSize:12.5,color:"var(--ink-soft)",marginTop:4}}>Sadece bilgilendirme amaçlıdır, tanı koymaz.</div>
+          <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>{t("assistant_title")}</h2>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",marginTop:4}}>{t("assistant_disclaimer")}</div>
         </div>
         <div style={{display:"flex",gap:8}}>
           <div onClick={()=>setShowHistory(true)} className="abp-tap" style={{width:36,height:36,borderRadius:18,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"var(--shadow-sm)"}}><Clock size={16}/></div>
@@ -4891,12 +5480,12 @@ function AssistantTab() {
         {error && <ErrorBanner text={error} onRetry={()=>{setError(null); send();}}/>}
       </div>
       <div style={{display:"flex",gap:10,alignItems:"center",padding:"10px 16px 100px",flexWrap:"wrap"}}>
-        {ASSISTANT_SUGGESTIONS.map(q=>(
+        {getAssistantSuggestions(lang).map(q=>(
           <div key={q} onClick={()=>setInput(q)} className="abp-tap" style={{fontSize:11.5,padding:"7px 12px",borderRadius:99,background:"var(--card)",color:"var(--ink-soft)",boxShadow:"var(--shadow-sm)"}}>{q}</div>
         ))}
       </div>
       <div style={{position:"absolute",bottom:78,left:16,right:16,display:"flex",gap:8,alignItems:"center",background:"var(--card)",borderRadius:20,padding:"8px 8px 8px 16px",boxShadow:"var(--shadow)"}}>
-        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Bir şey sorun..." disabled={sending}
+        <input value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder={t("assistant_input_placeholder")} disabled={sending}
           style={{flex:1,border:"none",outline:"none",background:"transparent",fontSize:14,color:"var(--ink)"}}/>
         <div onClick={send} className="abp-tap" style={{width:38,height:38,borderRadius:19,background: sending?"var(--ink-faint)":"var(--ink)",display:"flex",alignItems:"center",justifyContent:"center"}}>
           <Send size={15} color="#fff"/>
@@ -4904,14 +5493,14 @@ function AssistantTab() {
       </div>
 
       {showHistory && (
-        <Modal title="Geçmiş Sohbetler" onClose={()=>setShowHistory(false)}>
+        <Modal title={t("assistant_history_title")} onClose={()=>setShowHistory(false)}>
           {conversations.length === 0 ? (
-            <div style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13,padding:20}}>Henüz sohbet yok.</div>
+            <div style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13,padding:20}}>{t("assistant_no_chats")}</div>
           ) : conversations.map(c=>(
             <div key={c.id} style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
               <div onClick={()=>{setActiveId(c.id); setShowHistory(false);}} className="abp-tap" style={{flex:1,background: c.id===activeId?"var(--pink)":"var(--card)",borderRadius:16,padding:14,boxShadow:"var(--shadow-sm)"}}>
                 <div style={{fontWeight:700,fontSize:14}}>{c.title}</div>
-                <div style={{fontSize:11.5,color:"var(--ink-soft)",marginTop:3}}>{new Date(c.updatedAt).toLocaleString("tr-TR")} · {c.messages.length} mesaj</div>
+                <div style={{fontSize:11.5,color:"var(--ink-soft)",marginTop:3}}>{new Date(c.updatedAt).toLocaleString(localeOf(lang))} · {t("assistant_message_count", c.messages.length)}</div>
               </div>
               <div onClick={()=>deleteConversation(c.id)} className="abp-tap" style={{width:34,height:34,borderRadius:17,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"var(--shadow-sm)"}}><X size={14}/></div>
             </div>
@@ -5622,10 +6211,41 @@ function MarketTab({onBack}) {
   );
 }
 
+
+/* ============================================================
+   UYGULAMA SİMGESİ (App Icon) — WordBabe logosu, favicon ve
+   ana ekrana eklendiğinde (apple-touch-icon) gösterilecek simge
+   olarak ayarlanır. Base64 olarak gömülüdür, ayrı dosya gerekmez.
+   ============================================================ */
+const APP_ICON_FAVICON_B64 = "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";
+const APP_ICON_TOUCH_B64 = "iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAD6pUlEQVR4nOz9d7wt2XXfB37X3lV14s335div+3VuoIFGbgQCIEiQIE1QpEVJtOyRaUmUTAVqyBlbljSWNdJoPOOxHGRxaCVaokhKtAIpUqSYkYjUaHQOr7tfTjffe+5JVbX3mj/2rjrn3vdeowE0NPrMZ/bnc94975w6Vbt2rfBbcYuqKv8OxvRlBJn+on7rDYCCEo+YOo743f7P9JY3t7l2+NUtR8i+/0ydvjp+/wzqc8r++Si3XmX6vZn6VOuvRPaux50eh8gbOOaWa1afm1s+23+kMv18Jv++/q8mi7XnXBrWR+IRouGgPfOT6fNrdRCqk89F7jSHN28k3/Ir3Gao+PiG+sZFBQkcgDIhWgRUHaCIyF7mEamfgdd9hCdT/69/Yib/0X0PXTSQr1Tf3Tr2PJD6/NXBt7LLHqav7rmeXzU12f+r21x575lVbn/M3p/ebq6vd9K9x9S3uu+ne5ivvocpiq9+pBqXxqEIqGCMrX8k+MmFFMDES/07kcf1kDdbA7yx0ynqdep/INbWcmovKUUCU8DHRfMevIKWcNtl2ydd9nz+elJlWorfTrJP/dXbSfzwUf3LW9aieviT8+w9Yprzqpuufir7F2b6lPEncofv9NZlqM8ltz/mawyp5lR/YMBUHCHhZarPbtVAip/QQFxLERPm8QYk/5ulHd4UBqhPcVucse8YVVRtWB8bP/IlfjTA9XfxgxF+MMQPBuhojB+NoRijZYl3Dle6mgHEF6AOAO81XEMgCNvJg53c4hTjiSBGptZ7IqG1+kxB/eTz6UX33t32PgWpj5vWMFprieqP1r8wUXqq6j6oeHs4Na1LZM/7imlkr3bT/Yw2OeNkFux9fn7yTG9PbJP7RASsrQk/SRKstUhiIWshrSa0mph2B9PpYLsdkpl5TKeD2CSuj+5dFl6fyP/9ZIC9n8ZHEaSl94qxBhFBC4cb9BnduI5bWcFtbOC2N/GjIVqWmHFO4hyp9xgPiAsPyCtWDAYiIfv6WjAl2NQjug9yUAkanTp+WvrtPz5K6ylB79Xvk8K33req7qOq6u1ENexfrwqh6H4Yp1oLw+q7ah2mkPLkxqc1wJ5zTd3bPi2ie9au0lC3UzV7j98Pt8LaRhasBWI4qxehEKGwFk1TNEkwM3PI7DzJ8jL2yBEaR4+RLsxBYybM2MdnLnu1RzUz2aO9vvHxDTHAfikV/jcBMKoerw4VjyUJ2K90uJ0ddi9dYnj5VYqVdbLdAWlRkKKkIhibgAgGAVx9t1I/fI2SqcKXlbR3KGBqEeKpiXy/5J3SBnsp1E/9f+q7PTS5D5bcbsjk2oEZqnlM2R97ht93ianVrA2hfZeVaUacOqevuWXfNG8/Z1Vfr+0Ei1fXuO1P3tiQaag5jQ4idFTFe0+uivNCKQmjbhuOLJKduo/uffeTHj4ASQvvHepAjEGNQVEMHpHwDoKGm1z665v4N80A4SSgRlEUcYAPJGitBS0ZXr/O7ssvU7zyGllvl0QhEyEzBhXw8UeiduqcE4gxrcBF/RRRSRSUrsaNRj2Cv4OkAvEVcdzyxR1uds+N3+GL6fNMvtuzTnfknb1fTKNJudOjucNcdZoBqkNf5+lqFBRyu9v6phngax0TL6YCZfhoqCWF94y7M8iZszQffguds/ci7TauLCMcsyAGo1Fj7bvBf+cMICqoaLDq1eG9IiZFvDC6coXe889RXjyPHQ7o2BTrg99DjODUoXgMilHdp+7cPkdOjRNqeCOYqAmmj/U1Fq4hkd9PiLqPmHnzGOAOQ293zcmEbvvxN8oAqrqHfu/oNJqGg7dojW9i3IkIp+/HBKRQQSfBIM7XMG6Q5+xmTTh5hvY73kH3oYeg2UKdQ8SipoKosscr9qYywNfijUBcHsXVhqMxQrmyydZTT5Gff4XmqKRjLV4Ur4pxYLziDTg8RsCqYnSiwSUSdfW+uqU9mgCdoA3xU2q/+nCKCGqNsfeept+baZw8vYh7mGcPR97+8zsulu4xcicP6s6waq9k/jqpc/p4f/vf7mWA1/n9GyGqN3L8nphPEFriBZUAD8VH6BQfuqowKhz91FCeuofZxz9I+74zqFi8mokNJ3pbwn8jzPBNMYCP0lh8GW7alWw+/wKDrz5Pc3eXRhIdA94HfB7huaJ4UVTAerBR2u3xb09BIHM7TRAmH6G7nzISK4i097jJ+9vfn3AHDXAH4tlDtG+QAfZfc3KeN4cBdAoR7Deab3/8rdeehDe+tQxQmiD0jAfFRi0g4EsigMYbqW38ceHoZS3s2x5l9gMfJFk6RFE6ELDR5th/2W8pA/hojHrvSW1CvrrC2ue+gF69Sjs1iPFIWWLVADY+HI/1Ho/i48NKXSQM9hKhqquFrNk3DblFbfspgeyjVpom7imBfUei8rf/3N/hweodjr8jeJ5AuFu8PW+EAfac6vZfTGtQ3iADqOgt1wkI61usAUT2Ojcqq9471IAXg42BUSQgBkQYjD07hw4x+7GP0X3wrZQ+2IGmgkRT1/6GGEDvIC1dxBvhjwn4DcUaT//VV1n93BN0d4c0EvBShknV/vigrEyF3etrRH++BulVEfpkQSqiicdSacd9GBedOmfFFFNMst+Iro7c406cZr69zHPbcSfhcEesPzmvqu6FQHp77fN6BuzXmsdeA3zimfqGr/MNzuN1f8L+9a3wbnjCMvW5kxApTowhLwrW0wbp4+9n+QPfhrNN8B5jLV48iGKi1y24n2Wf/THFJG+UARQfnI0qGBc8LaLKxpNfZfurX6VbWjLAJYEYTX0OX0vgmkinjDTVCdbfC3X2E2Q8j1YstV916x5DeXrm1XUVredTnXfaeL7tGnCH8f8DDPCmEP7XmMfXPe4gtVWE4Bx24TlrwlqhuAcf4MD3fgLpLiAKTjQYyVHDTAcm6zHFALfPkrrtDIJqrIxeyUfc+PRn2fnCkyxqSmqEUqL09UKd1BQNHK1vQvZ46kVCcEzMneKeU1NVmcR6dK8e2Pv+9qOOF00do8ItGQT///Hv4wiexvAMFfVjljOl8fxTXP6nP4vbugbGId4FAesrF/l+yLl3vK4GmA6oOPVQOox4xDtu/N5nKV9+lVaSArYOUAQ/fIwCT2FSIxMSnUge3QOHqs9FqZPHAk+FeYSobHSZ7purqZLqYJIzRGA31cm5pmHVNGxSX05+80bceHf6vNIAlVvstofv01B74gC3mx9fNw5/QxDodc7/TXmg3qyxP2M0SNFIW3GNrdAf52wfO86BP/gHSZYO451gTFoLNpG9WmBa4L2+Bogc5NVjXOBA40uufuZzjF8+TzdtxAxNMMSk28qTJVMSWkAx9f8nE5CpmO1UuvC0rVn9tpLUKvjbJldV2kX2LNye5yh7Joiv5yj1Iv27SMF9Q0OgTir7Vs3pW33+N3NEta0S0kOc2EAXpaNjDUtXrrL+87+A31gN3OuKN3Ta12UAJaoQHwL2VoRrX/gy5asX6LRTxoYQkBAH4nFWKK1FJUGoUl/3UfMdrvO6nymg+3NC9hLt/qTiO517/xTq///7SAzf4jn9e8f0rzsM3gjeOFSCq1SNR4xFjaXREGavXeXGv/hXmGEfjMV7X0Og6df0EL8newvEaY3RA+F5fJmTJrD+zHNsffFpZtMMhwtBLYhBq4iwFawGA0Qrw3Ui+2v4ssdgja9JIgR7jNVqfjJ5S4UJ6+/2GND7YNIUBNjvK58Y1VPH+Kl0i6no9F4Hga/PF6Bc9fOJEaw1YUk8Xid3Xp1L9kGdyZ0yiWUDVd5OvczR0SsSaimm4d2+odP3P/2sY9bV/nsL93fbM70ODLz9x3f0IuxxKd/hx3uOAS8aPX7ViSvaCfcliWUnVwZveZTDf+AHcJKBCUFOlRBrMBqeSyUwqxqsyUsC4eI0pB/7gjSx7Fy4wPozzzOftWLxSli+MHcbT2VqzO4rd1b1VyOZ3RqtmLp27S/a8776o1MfEeHLfqM23M9+59rrSzitj6muZ2rjHO70SsJ9i8EhOJGgpNTsWQupcpMk3J9W85YQAVUMzkQ4JoLWRTtC5SoIdxniKaiJvyVEUNWEnCj/Ovc4Pe3X/fKNvP6/NULgTHR6HnHNrIBJwSmziUGffoq13/sdrC/RogySPyZXVgVP1Uj2StWYm6geg+C0REQpt3dY+fJzdHKJDBLIxcV53BlHTS1Y5eyXvcQq7DUWJxJa8FOG7Z2X/vbfeDG1xAxHWKazRIHafoHb2IOV7/iOks3VjFfVMuHZm17ANGNN5ipCVf8JEo3/6sbl1uJErQz5OmPVIkiMxfhwTauR+W5djzulDr+pbtBvBW9MOTPuBAOl0t0xi1jUcShLufm532dw6Cjt+x/Bu6raT1DxU3oPkmnfdHgT1L/3HlxJaoQLTzxFozeiaS0lMQXCTChZmVpME7WAhoiv+DBBU+OO6sGF6duYxxHsjYoI2Ed4Mvk3fjchrmpMCEe8UrHpXmepCf+PH+z3xuzNh59a9BoO1ewSk5glTtfGRdhbiFLDFogVbI5Ke3sk5EYJGJXJ1WVC9oihrswxUQtEqKO+Ym6ZigDfXlRM19neQki658+tX+z7bI/w2iffvq7xRjxLb8g28RHuRohgDWIcS6Vn/Xd/l8bhY8jcHKYUysTHTPLJtZMwl4ijKhemdzjnyNKUrZdeIb90jYUkpcDjJGD8KphVlfcF2g0TDg/EROleYTRDDZRVavDi9xEl9Tdac2p9jal1mTIFpv+E9yJxUbSGG6YONt1+UavASVxSJgDrdkPi8VK749QI3pV4L5RAocEyUmMDPGqkqE3AGLyVUA6XREeBBjvAuCB0tHSIKzBaQlkgzpGqJxWDFcVKibVJ/VuNDKh3zGid6Og9RHvH+3u9sV9V3u6QN1O1vP7wQsw3q6RigOVZktC9cZ2tz3+Gpe/8OOo81iR4k9aUJCIkoqB+Uo7mo2FhBdz2LutPv0RHDF58JeT21GPcIqyrURsakZAqLq1/Sf3LSlLXftsJovgamnVa4k3giqivzzlZKDPFBLebrpmwnuq+31dqZ6IRxCmlVwoMhU0YJinaaeJaXeh0kU4H35nBtdq4RhPfaOOTBMSg1iDWhohkZCTUI84hvgwpv65ExkNkOMAMd0l2e0i/hx/0SQa7mNGQRl6QlTmZFlgDJknqOe4x2GtL73arWenivTBtb+Hl3nW6/RdTZ5zmkTsmE75ZwwQ4qR41FSQy4KGbwOpTTzK6736aZ07jXBE8lFP3kNTPtXIZeQ9lSSKW1RdewewMkCzBTeExVQMSDbvqRm/D9V6i5pYKJmmMD4XKHqncUhESVD0hgjaJ15gCMXGaVBHB6Uqg6RHSawPDGp3oDh+9ABOEo1RsJprgjAccxin4aMiLYERQ7ylLZSxCmWQMugswN49fXCKfm8fPLGDaXUbNNmWSgbE4sRMDmehcgBqeaRQKhlpXMbWiGAwWIZGgAfAO60qawz7l7g7bW+u0elsk6+uwuUFzuI0tCxJVGkmCFUE8eBPIW8SFsk4UU6cem7jeUZNFLb0f0kTAt+/D2xxEkKz7vUp70z9u/U09vk5bwkwRocQ5Ge+ChhZldthn6/Of4dCJo8Eu9CViYh0yhkQjTKkjpk6xJmG8ucP2hSs0kxQfrLsamzoRBBty6CsiryS4TkvOkPZsIvD1VbFK5EAVan9rJYfq5hgmMMHEAzKp/42zRaCGSbfIt2jD+hqaVVfw4aFX/7PRo+WZpGQbMBL8yENVxsaQd2bxcwcoDh6hXFxG5pcomw3GzYyhsTg14MBVM401y9WcTAiHT01w4hrWqU8muXuCU6WQCSBEDJIk2JkWzB0gOXEXY+9oDnPS4YhysIqsr2Nu3sRurJD2t2lJSUMFY+2ec+uUA6CWLF7RmJAltWHB1PymNIBSC6/6y1gzHYTTlNLf/2z2PadvCInVQyeQIdKhiXNRFZpJAudfZffcK3QfeBhfOHwCxgRIntTBAe/xPhSTi8LqufO4/giTZbg9yWFRUhAetqUGOVNVwVKT6F6caVD8nsUQkT2L6Kd/s8cGvdXWqO+5ej8NodTEGU5mHs5gIqMqgpn0IrIuxCG8JXfKrrWMZzqUi4fwR45QHD7CuDNHnrQosZQ+dLxxZXAImHi3Uq3DLe7e2z28O4xpopFK9k60gyqoU4pSyRV6WRPTaJEuzNE4fg9tV9Da3cGv3WDnxnWyleuY7W1a3pBZFzSfJxprGtJOjAW11EDQ+BphClKv2QTITrRySFXxYc0reqro0ke8PBWEqgqTvk5h/3UOqfliLvf0nniC7um7IUnjGsY5lnmhQiB+LR3WOYrdARd/5wu0BuOgNuMp6wzPqYchEtKcVcGoTnl76n8AsBr9sEoNdeq8/koLTSOAaemp0wrYRbgVDfFKCO3Pr9HKrgkF1OGY6GcXh1GP9YTeNYArxgywjJozjJcOUZ66i+LgIcruPCNjGYqhcCEPytjAbHUEWgLuDCndt8KHsE76hpjgzolbEyO+Dt6Jj59HTUyC+hBJaIjQNELiheZwE7t6HXPpAsnKNdLBFk11JCa6U3GID5rRYwOMqIr195gGchvDN8Ja9XUAMVR6xb4/EVpXNQkVDK4zguvnN32dN2eoEgScUTbE0PyBH6J9330U3iM2wYip4gCKeK3dctuXr6O7AzAWrWp+p3Kqp92FWklt0TrII/GupjneiwkGtE5ceNV3xHB8+HxqJSpoZUzNLOqjN0m0NsbDKSYcjzKpLhNTY9vq+iKeJKrvoff0xTJeOIw7forR8dOMFg8yyjLGXvGEB2i8kgRsRCmhlDM4uGIlkkwI9Gs/mK9H51eCZrLmoj5qzvCdre0nE0rsKPFAH8Ebwcx0ac7eS+vkGbLNdfKrF+hdu0Rre52Oy8kwkx6BEjRjtCgn155uelUPmcAekQijAoxW59AoMIgII2iE+H7yRCsl96YOBVR8Pd1WOWTw4nO0z9wVbETjUJlyg1Z5E64o6F2+SmZimZqaCHO0NpYmEVIQHKp7bicywV5PzFQFwB7YuOe+janPoMokNhSvVM3hFndRPFndj1IrIDJFlNHgMOLxYhgg9EyDwdIBuOsMw6MnydsdBmpwHspxDpmAJiCKahnnEWpRq4i3mshccYZCFQl+M8a0SqzAhsYMcx/hlsNGrSoyCnpTYj1GJSgwjErIRTAHlmkuzdG89yyjleuMrlwkWbnBTDEgsxKxsan1c038FSXVdkz8TCtnRhkJXsF5cBZxHikKxGlkDB9c7cYgU4VQ3wo4JFEzBgeAoZEk9F57GbexhRw8iPoQQAw2gAt9fBJjGKxvkff6dJIkGK2evaRbCZ49FlTw55t9+H6yUFo/RxXZ0/whnGqvRJzOgVEJSN5MXWv63LXBRZV+oVijk2o0CdrNxDZ0Y6dspynF0WMUJ+8iP3GSnazByBlwgUEQwZgkhLojF1a3oJWm03h1H4jEUGk69s3xmx3xngPOCAkRU5qn0gRhbm7Cgl4DzCMKLAs4RdQwFk/e7iCn76Jz4gRm5QY7Vy5i11do52MyK2Aq7C8EHysgErO+IgHEew1TS4Ly8R7NC3AOzaO94TzqYlBSJWgBExGFn9zirRLxm1w5jfOPjdKyXo/B+VfpHDhA6SEawcFvoXiMF0YrG6Eu09rAQ4mQxCh8JcvVTCdfTYqRRU0NPaoHESTjXrNJpYoNRMKNUoSoYcJhk9+oCi7WC1Qd1qp0CZGJxoAo98WgJiZgq2IlYazQsw2GS8u4s2cZHztJP2kyiALLApg6qSHOdQqSyaRvhPHVPdZLPV1PVn+zJwd97w/u/NCkvnJYXYWq1YvRKrKdk1S2gAhGPAlgfMg7ssZhTUmijkQdlQNWxeDVUkasn6thIAZ/5CStg0dJt9YYXb2MW18l82OSNEHxaGIoE3CJRZoNSBMkCZBWXQmlh1FBPs6xhcMWCVIUkDnILb4okMJRAX4N3ubQBsVMocc3M4CmlafLEEKTStMbdi+8Quetb4WkjUFIJtmY4Mc5O+vrmMRWpL0nx/92qmqaab3Uh+55iBUjaP13Amqo3smE8CcxhX14c5/091J5JYKNYH1gOy8RgEkJYlhXy87CInrmHsrjp9luNRhqQuKqajTlTmWJb2it9xngX4vS33j6cTiXEFMmooa1YknVBZexCFZymjqiRU6CI3UFqTiM5CAuSkFB1FJiyLGUJmEsKYVv4ryyYxPGywdpzi8gOxu4lavIsE+WKtJJsTMdsmYTSQ1YQZNIyT4KL+coxyPK/hC/PYCtPsmoRJsZMs5hmAdbrijRskTUhXiS9xO0+iZqz1BYX0FiUDVkNsHdWMVtb2MPtHGlI1HvQEPbkvHugGGvT8umMW+sIkrqxLQqTbq2iabKFGuYwF5GAK1TDSZ2asCQEtsaClXwam/qgu5hncq5qnFOIe8o1KOBs1FSeiHFMPaWjUaD/N6zFGfuo9+ZZegdUoYAE+IRcViv6LegU/ze9uiy5/OvxQSVu1mqxmEEOGMimrGAsY6EIW0d0nYjMhmRqCeFQGA25typDXEOShpAU4PQLr2hlAZDUkrXwEvKwAr50jyz823s9ipJ6ki6SfTwgFoQW9l2Blw0cq3HpinJbAMOLuC3h+Rrm+hWn8QajDGIyakyBNRpEP0uYNzaS/YmKQGpIKIGJ4qqxxhLYzhkfPUKneVDeO9JVD3qPIkx9Hu7SOExSTqBFVL3Y4gGVWW4MMnJ2ZNsNXlbMbUjujJFpu4xckv0DlV++cm3UsMkZCpfqA5qBTwbUmSVUhzGWJIyeG7WjdJfPoHe/wi9g4fY9SZgTzE4iaBFNeBWgT05mG9SgcidznMnxtj7XSX5K+L3MQ9IMVqQiNLSEW2/Q9eMSLUEEz1dKG48xm8PQ3dtr0iaIs0U02him02sQupyvORkJiE3KSUNcmlivceQ05xrYv0A8EiaxjylIcX2CD8cRQgTtEHSzbCtVsD+Dsxcm+ZMh3KrR3l9g2RnFIJoEtK/JZbYqlb36mskUq3DN/QcphIWjZ+sZEgshHQ8pli5CUWBigQj2HlHgjDa7t2CwypLfQ8W2uN+3At5pt/X52CSJbkf3NTxUAkYN3xXyXnZ828VG1CqgJNDJUSmbcyVH0rBZqNDfvZBxqfvZrcxz9gpQokx4CWZsl8Crg9G/R26QrxJzPCNDImOluBXCsRvjSdlRNfnzPghLQYYlyPWouMxw5urFNdWoNfDj8egDmMI6SfG4LMMMzdD88AS2cFlkkYTcSMMHi9K5j1WHamOEfFIBn48Jr9ynWJlBe1tUQ6GSF4E6OOj1m40sAcXSY8dpn3wAKQWzT3J0hy21SK/cD1UUBgLVhDvY8oEULqYNxMF4JvsFarsRRVPIp7B2iqoQ0wSGEAQtCjpb/dIxFYgI0pGmCB5H/5O1QTsJehbyb/G/ZXLrP524l3ZN91bzlGdReufVSziokcm5LxsoAwOHIIH3kpv8TB9opEGeAnZRjVDU7nhJuG4O43JPU7usnbJTmZ2x9/tP/3U3ezTnrWbIYgaqUqNFCueRJSEgrYOmfVDGgzBFwiG0YUr5C++hPZ2aWJoGBsISgAvMayVo+OcYmuL8tIF8vkFsnvuJjt2hEQ8aEmiPjCLFawVhleuMXr1PMnWDg3vw/cqwd3p4/wFtJcz7l2nf2mV0fIi3fvvIT16AF86TKdBdvcxxhdvoKu7JF4hD0QvPsaFLMGmmHYxflNGcSBercJGEbunxqA7O5T9HszMk1T+WBk7isEYK2HJq/KzMA+tibXC6CLB+BElNDqFOuenAj91ElrF0REzVf6U6aBxlQVUxQ+oE+4qYq+S2xIEwUmOIcWooVDPmrWMz9xLefYhttM2Y/UYkVpDSV1w6aeYbmKx3CnLsUqz1Wh3GK3usHLMThLIwlpNmfZT9QDeCBiJLlND3ZOoShcXCN3wPGJCynniDNYqlkB4DclpMGBOB7R9iZoQ/d36ylfR115j1nts1qDwnr4HnyT4xOISC2WBLTxJmdO00BCDX99gZ6dPvjtm5t6zeKsYF/ZxQAu2n34Oc/4Cs85hxaLOMyrHlBgkbQRPWxlakRgxZGlG06S41R79ta8wvvc4Mw/ch6eAhiE7dYwivxYaLJQu9AUtPT4Bq0WgORNsRR95obaL37DfYIpppoOjUfIasST9AfS2MHOLJKFQQynzHF+WJNOZfMIeCT1pNlSdMUAXib7y6Wqu/SCoJpCpr7RydVbQT+I/dZJVFRgLdQiJtxhvcMbHeIIwKpXNdovRg48yOHqa3ZivbW7r1LnTKt6avTj1TQz+QQisQGUNSpyruFjgEl0OIiHZSqLgqESRL4Mt5Inq3xIxa1gHo9QEIBK8WAECCYl4GlrS1ZK2LxEL+IStL30F+8p5ulmo1+jlDre0QHb0ENnBg9hOFxGHuoJyd5dyfZ2d6zdJtvu0JGXepOy8/ArbozFzb3sLmmZQDtl8+gnSyzeZMQbnS3b8GL+4gD10F435eUyzEaCoK3GjMeP1bYarm2RbA9o2YaYs2X3qRTY3eiy877EAcbKE7PQB8nJM6l0IkJUlqEddTBF37psT/Hca0zTtHGWvT6o+QiCFIi/wLoSc9oAPmfbByBSUqTw7FUFMx3wrj00ssJkyXvci+eqcEYToxDukuFqjKFLn2PiY/5Io7DrD5uIy/pG3sD2/zKgU1NgIH+7k1vzaomSaGXxMA1HvMWIQ0SAz4hZJSWpppCmptaHJb1FQjEYUoxznyspqIkkbZM02pBaykGmT52PGhaNwkCDYGF/xJuDVsDOOwYiS4GjrmK4O8aZESNl+5lm4fJmZzizj4YBep037vrtpnTqO77Qp1YYApZY49SQL8zSPHkbvuZvBletsn7vI3KhgtpkyuHiFvk1pP3gfO088RfP6Ddq2QTHO2W21yM6eoXvyGJJmOCwuZgtZo2TW0jjp8aMh/VcvsPniq3TznJmsQe/SNbbSJvPvfFvovTSTYo7OU44LstJDnqNOol0g4f2UsKwR0dejBb7GMGVBudsnUR80gAD5OHgLNBKAIBXc32MI1iqJCSyov9MJwxgNhlel5gWtmaXqIqEx92ivmRyZTSZBtSpj04si3mNNypZ4ekfvwj3wCBvtJkUJGSGF2Femc2VkxaG1JI/X2eeavO2I3ggVwr5gHhppwlw7wzjHYHODjcuXuHLuHDcuXmR3bYVhr8dwOAwFGM5jrSFNGrRmOswcOMDyiRMcuusujp4+zeKhQ9jZWcZFQa+/CxisJgE+mZBzlGhBkxFththyiDZTBq9dwrx2idksIy9h98BB5t79VtKZGUoP48LgTBKq0iQLULAoSTBkzZT2A3M0Dh1n9yvP0djdpJNmDC9fYXdznWSnR1th1B8wOjDP7DseReYXKBw4J6HOQSxGBOc8vvSkKJo0mHnwXoqFeba+8BSz/TEzWYvt167SW1pk5v5TaFGQLM4y2ujh8hKTWiiD5KcMUfg9GcLxGXxDxL/vmVZxrNR73GCAqCOpJHY5zoOv19oaGdeOHyrDMxpvVSpAzZVBrk+nKlddh6vPdAqM1cakxBqBKPnrNJPK/8rE3+wBjAeTsCYZxZm7Ke5+kG2bUuY51iaUQkiAukNtbHX927+/AwOIofAOYzyzzZQZDL2bN3nxya9w7smvcvnllxisriGjIVoWqLq4ZatiTSim8arkYthFWLcJrxmDpimtuRlmDx/hxMMP8ch73sPh++5DWy1645wijztgWk+iBS0dk/pRgJobu4yeeoH50uPE0u92mX/fe/EzbYauJDcJBZaCBKeCF0tIoyjJjOLwFLmjudhh5t0tel/8MnZzncw40rUhicLAO3aXZjjw7scoO7PkpaEkxUlCbiylCZUYqfMkOBIxNJzDFAXJwYMsfODdbH3mS8hwxKxN2HjhHOWRBZJ2G5KEdGkOvz3CZilSFuAsFC4Sf0iXqSoVb5dd+w2NCLmtd5SjEbZ0UQOIUORFtManVBD7yahyC8UglUzn+08nn93q7twD/qeLMfb3qYA9jFSdLQS0LetJinvgEYqjZ9lUQD02SQKbeEDM63YI+XqGopRlwWynSRvPjWee5Xf/7W9w/omvMFq7GTb2MJ4Wnm63QbfVodlu0um2abea2CTBGoN3JeO8ZKc/ot8fsNsfkOcl47VVtjdWWX3hWZ78pV9m+e67eeTbvo2HP/gB5pYWGIz7UBZkJqehY0QLMEr/wiUaOyNMI2MTofv2R/ELs4zzkrGmFCZjTEKhCYrFa4CQBofznjLGFIpiTKfdofvQQ2x/7tMsjMZYY3BDR7/bYvFd7yLvzDFyCbnJKNSipAEC+VDbkaNgHIkRmuJoqJC5MY3lBTrvfITdzz7BYuFo7eyy+/IF5t/+MFqWJJ02eStD+2NMkiDWEcPdlUeA2t8mbyITROnuRiMoHYmPedu+DDnSKibCgSqnMwwRjU2FpmU4eCxVU6nQkjr+VqeInJjdWf1OQncDiQZ0faz4gH1j4CF8WqLWoc6ynczgHnqE3SMn2PUeY/cWEVa13/U1AKMu5AYRosu3W0clXNL4MtgyYilcSbNhWGpYrj/3NL/8i/+ci1/5Mtl4QMMIMwnMzXQ4ceIwJ04c5sCBeRbmZ2hUOTIRRkrlzzQhyzQvCobDnJ2tHteuXef8letcW91i2N9h7emn+KWnvspv/7Of50Of+ATv/w8+QTbTRHY3MZKHyO5wjFtdY6bRZOQceuoQyeElBmNHLg0KSRlrxhAoxaKSAkqiITfKi8MTSywRtMyZXT5A6/772PjSl5j1jg1R5t7+CDq3SL9IKaXFCIMzllJTHCakMVDldDlKn4KWKOPQmSEf0zp6An9sg/LcazQtDC5fxz1wFpMlkKW4+TaytUsqJjQLMBLSJVxwzEza6wdKu6OWfj1ir99XnshQ++PHA9S7qi2K4Jzbh4MnZYdTH4Xa3Sm9VBuutV88aIk9vvHKlbnH20PFTfVklZC7b5S6IMMZxZeWrWaX4oFH6B08Sr90oZBBq7Yhe+9X6r9av24XWqlbwlD1Gw1zz13J0lyH/Oplfvnnfpav/vbv0B4OmDMl7bbh1F3HeeTBuzl57BjtTgvU4V2JKwvUJ8EGUQX8BIaKIDahkaa0Gg0OHVjknrMneHfhWF3f5PnnXua5F19D1nbIr13jX/+d/5XP//pv8IN/8o/y/g88ivZ3EUK6iuRgGk1yVzBz6gROAbWUEfYUJKEWmVAAFGqTA04XJKTki6EkJryWI2bO3IMZ56xevsrs3adJTp5my6WMaOFNi0KI9c0WR4qXOgEFgyHFUSBY9RTiseJIVcjOnGB46QIzpcds9hlevk733tPgHGmriVob9hg2ErJORRGJmx5WBFM5Yt5EKKRlAd5PEmBcGRjg1vDWhEh06n39b33IlOaIhTFTRaiwx9sz9d5X7yW4FgVCfpDHG4NXw0ajQ/Hgw/SPnKRXgBjFiQvF6lXRzR7rNswS77DGh/iKiR6sqTGddpCowbkgvY+2Gzz7b36VX/l7P0158ybzqWG2AQ/fd4Z3PPYgBw8vAGPKYkA+GGGweA/D4YjeYMRgnDMaDcnzHB9z4I3JsDYjayS0WhntTpNGM6PdaHBktsOx976D9zz0MC++epHPPvEEq9t9+pcv8//+r/4vXPvB7+aHfuQ/RNKE0fZVWkkTbxTpzmIPLjHyAR6OSRiTUqilMBKruwyqgheDo8Soohr22DIYnIZn5RAajzzK7MMPYiRh2yWMaeKkRaEppUIpkT40CcnvUqISrlMGf9We1I3ElyQLbYrZDv7mFt0CBjc24L67gsZtNvCNFDWjUCNQB22iJ3Aqf+xNQrU1eWjpUO8nNcHOBQMkeDxCCQzTDKG+rrC1AtOBpali4MkfP7mcRr93jemomCAUR0zYO/SY9tZjHDhN2UgzigceZnDwKL3cYyUlyKK0Zrj9Q1XAFRxsw4nFFjd2RlzbLSHJavflngmjlM7RTBJmfMG//lt/iyd++ZeZSw3dLOfeu07y4fe/m6MHF3BuSDHcxVjLaFCwubHD5maP7e1dxrlDTbU9U5UmXnkRAiFW1WnGCDZJaKcZC+0mC/NzzMzO8M5H7+OhB07y+Sef4bNfepE8F37tn/xzLrz6Gn/2r/wEjWQOTXoUKObAEr7ZJi8tJQmFJOEvCV4rIRSJ0hhcaYAEaxQSg/GCemHkDSoJQ5djbANxoD6lNAkkGYm3sXWjj2GjKKkRPEn0uBU4FQoSrKSkOEpXkqQp6cIs+ZVVMrWwO4SiDKk5qcU1EtRKoAMk2gESEuSYeBX3ORy//lHn7IeTGa/BBoAQqVXCIk39YopIpv3/Fcqvam4nXn+V4MsNQbEJYYoGg6k6bxUbEDUxRSEQrYiLO3yEnJ3tpM3o3vvoHz7GaOywVlDKmDNUuaFuP4xAO4WZBPqZQbS4hVUqrVGWjm4jw2yv8Pf/xn/DtSe+yFKjxUwr49s/8gHe+sADMM5xwyEms6xtD7l2bYX1tS1G4xyMxZiUJG1gjSKxncutzDntnRJ8qWyNBqxvbyM3btJqphxaXOD4oYN81+Pv46F77ucXf+VX8evK819+kb/543+Vv/Cn/zNm5+YZDfvY2Vm8WLwkFGIJPo2QO0ptqwXN7ZwjFWVOSxo767C7Fjx5rRZ2bp5x0iZ3LRI1qHE0MpjPx5QbK/j+mI6x+JlZxjMH2THCWDXUyUzZVRrrDFwNYEPuT9ruICZBvOLyMb70mDRsdeqtCft71Usj3ySlf+0hYjAevNdJTfDtsu+mu6XFZxaIX6lvMKCX6NacsgNEtHbf1p9VaQHCHoM6wKYAfUpRMjVsI4zOnGR05Dh9B2liQr8XExPYqg00bnODoVQx4dpuwW4xZlgq3qRQ1dJOjdI5Zlot7NoNfvq/+kn6r73MfJZx6ugyf+ATH2ZpxjDsb5KkTTb7u7z23GVW1jdBDY1Gk6SV4tRjbELuCshDZZ21dl9BzF4jLnSgVEgEIxkAo8Jz4cpNLl9b5cjyDR689zR/+o/9EX72n/8az756javnr/J3/oe/w1/48T+O0A7Zl5HgnVRtE8M16656AuoMHSmY6a9SvvxVzMolstEOVpRRkqJLR2jf9QjJkbsYFYY567HXLlI8/wxsXCV1OYghb7TIjt7NofvfyUZribE3GEJdxjSdVCUmqIa1SRqhP6cxuHGOLx3SSEIJhg1JesTIfo0UphDDmznqPKvY+jPBV/0SDaVJgxaY3sxOCOm0TE+oSl0muq1ubYGiGCTuHj/Z/C7+jRgpLJwh1ZCtiQ0ctqOW/onTDI/fRb8U0vhsnUkQFKtxpygT9hgWnTRIDR6ooI3GZNwcOoxJapsqLKzBmFCjOptlNLZW+Yd/5Scorlymay1ve/gs3/Md70OLbcoyo1TLM8+d4+rNVaxYGlmL3JeMxsMQKMxSlDEznS6njx9jbW2FjY1tiJn8k5Kg6D6O9cmCxL6gcV2MQbMQh7m0us7NjTXuuedu/ugf+X5+8V/+Ck89c46rV1f4V7/0W/yHf+QHyEkwYjEKqSojKspzwajXUNHVMMJ8f4Xyid9ifv0abRMzmcQxUyrDaxfpra7QeOwDdE6cRV99huKp32d+7EmMB6uoKXB5zvC1rzLY3ubAe76TazNLeBfsMJUUQ4yDoJQiFEZp+NBD3/sqcTFQQoDQLjY8MPFv/KxWAqGUsbbpvt4xLeumIJBHUc0xvqyK4olemOqxVBBDJtmT0zlAlX277xohjeHWDM8g8SeQquoCJ7GVSGmCQUbpGall68gRyrvPsultVI++MkkwxkeXpUVcaHES2MFEg3raMaRYW/WqifNVEFMgLrTG7pS7/P2//lfpXb1Cmnje++63890feZxidwOTtrh0ZY0XX36NsVOyrIm6kjwfsjDXZXH+EFmacfn6dTa3trnr/gc4c+Y0aZqwurqOTbLQZJiK+ybzup2q1/igBMgaTdSXPPfii2xsb/HJ/+ATFMWv8MIr5/nMF7/IvY8+zNu/4/0MSo+aEPCqHmSIupsIUpWOGzJ+/km666t0EgvqUW9CfMAJLXEk+Q7bT36eTm+L3kvPMpPnJBL6j3q14IQEw0yWwfpNtp76MnPv/TDb0qQkdF8QX12fmlYMQjEcBhjmPTbNEJsEegrh9XjzMlmDb+mQYI9FwVR3hahf8SFATFWtXVCyB8dXXFkJVZm6iUmap9T/rT09RBWJiZIanAhoyth6et0DcPdDbEszuDnVoLhgmHsD3qAmRB9cZAwjoVGPyqQLXUVcQR1PwzgFDam4y90G/+Rv/F/ZeO5pWqnhrY8+xMc//iGK/g7GpjzzzItcuLZKlqVkRilGQw4sz3Hy2BEWul2yJCFpNtkd7LKzs8uFixfZ7e9y8+bN4Fr1xKiwr4kRgkdK9lN/Nb1piGaEdrvL6uo6n/r0Z3j/Bx5ndWOTja1N/uW/+Jc8/NH3kzba7AyH+CTBlNRaOBSYCA1raKxdJ7l8jnlf4mIHPFEDzsQNURwpynxvm+IrX2RBIiqIwamQihKkt5YlM2LIr5yjuHaG9NhZyrpZrIYGBFJVrQXYUw4GWBe6h5g0waahFFK9Ii5mI2ttVSLTEvZNHqJgvQn3r3UiM6ErXKzYUQ2BIx9z7YkqiupF5V2Pe3cRunVO3sfWVxJgSXCVVR0Tqgre0LNGVbFq8D5lJ5uhvO9+tpozOCCVUKjvvZDimZWc+WKHheEW88Uu8zqmawSjNniUxBM6Jb9+eeO4hLmZGT71Cz/HC7/1G3RSuO+uo3zfd3wYN+xRuIIvPvFVrt9Ypdtph1pcN+bBs6d464NnObA0i00TtvoDnn7+JW6ubZK22mzvDjn36nkGwxGIwene/qnVUD8ROPvHtGu2EuqtZpt+f5eXX36Oe8/eRdtmbNxc55/+45+nHDmWZ5eRMu7eaatioSAMMq/IyjXaRR/vxqgDcQZxYMvYw0cNzhuMKo1oq6loaB1SeqIPFPWxIYBztEY9dOUqKT4i5pCBZQ2hcAdCGkjhGG1skfhw39JuQRL6K1E6TOFqhFMBbO/9tBp/A1Qtk9cbGM54vCmxaWyOe8tDqKxxKh99xNUVOBLYW7g+iQ9UEmi6xXiALMF15kWxEqK8jtCdzEjKVmLRu+5jMDfP2PnQ9YAS1YIZSuZuXqNx8xJm8zpmlKOpxc0tYg+fIT90F5vNDkNVvOZYa2+5p3hnlM7RbbS4/NUn+ZW///c4lFjmZ5t878c/SFKOGPRHfOnJJxn2xzSaDQoXUhDe8vD9HFxewnnHTm+Xq9fXWF3foIxlloLBJoYktXWVFNXKyO3axbyBIUGwlM6RJQmjUZ80bdLpdGGU8Nlf/i2e/tIzfNcf/EHe853fzpZ6tsoSE4NU3gRJLKM8NMM1FlPENG1iawaIhcNm8pxjdw8TDdmqq2tUC+GRO3DDEdZItBE1Ml4s4lFPliS4lR1kfZc0MWw7R3ZwoSYZHeaxLkDBKz4Khjerq9KdhjGGzBdsPPfUJBJcjaoMpnp8WrnSxMVPqPP/6zFBRHsr8alS2cLDqPcPMDYEZKyC8+yWOeXpk4wOHGLkSlKx4BOg5GCxS/u1r5C+8iKJjjFLc2TzbUpf4DfO4669gjl4hoMPvIO1xcP06uKUyT1NYIXHWKVVjvjHf+dv08iH+Mzz3R/9AHNt2Nxa5ytPPs94lJOmCU5KFM8DD97HiZMn6G3vcPHyNa5cX8E5jyQWsTEHibiV+FT4fj/qr+Zyi+Sf+v90W5TqjRGD94r3JZo4lg8ss/PqRTpJi/6VNX7mb/4PfPlTv88f+ck/z9yBZXYGI9SkOEJBOGmCG4EkSTyxQaWMvX8sRg0qPjxjVYyLVXYRtoUEQ412WHBuiE8wtg3GIrZqWUOM4scqNoT++Ws0d3M0EYpuk+7xQ7GQXiiHw1AX7H1spehrevpWDlFDMiooL18hEQL3ad03c9rfo1NPIiS7TaqYqu5ok5foZPuZIPkCIU67WAVCBBGDUSE3Cf3FZfzxs/RtgGCoRa2yNNqi8+ynSC+/RueuYyy8/W3Y5UNIEuSM6w/on3uR7aeehs+vsPyuj6IH7yEvFTREkoMG84hYnBMOz87wlX/2C2y+9CydxPGutz/APSePsrHV44mvPsvu7pBGo0nhQjg+EaHV7HDl6k1eeeVVBsMRaZqh1tSEXLUfDzculdcg4PCKIWOlXVEUpGk6eRpaNQwIdQ4BItoIRRVVT0lYP2MMZV4wO5tx5t6jeC+sr2yztrrFa7//Vf7nv/CX+VN/868ye/QgG4MRmJRcLa3OPIXa0JKEJMAbIxifULccEwMSaimCgvCTFiDRhStqgx3olcJm2Ll5HCb0jTIlVj0ZJYkfkeHQ4YjR+ddYTCyFeuzRIySLSzgdorbFKO2QFOtkpYKLuT9eqdLBQtGTuSWNPazbNAKZ+nKP63lfAkwtF4OmyySC9doOqJ5dRcA1rp/+/1SGjVShlmjUxV7z+0et1KqbIrZqUqGXNuDMGXYarejfD+foMKLzytPYy68x9+gjHPiu7yC56xQilou/8TvsXr2OXVpk9p2PsfzhD5KUQ/wTn2F2Zx3nlbLKw4mSSbzSsJZyc4NP/dIvM5tZjizP86H3vJMiz3nm+XNsb/dJsgZl7bIzqBeefupZnnn2BYbjgiRNQ4/96UawTHk/qjJMqaR9MNLVKzs7O6FSbM/TjL8VMNEPbk2CNZE4hbhaSrVJnnclnVaDQ8vz/NEf/n4ee/ReUsnZvHSZ//bHf5Lh9Ru0GinqS0rn4OBRBnML5FWBjq/4TZnu5yklxD2w6u/DrQrqDOoUXzpcoezaJhw6yNgXNFRpeE9DCxJKEnE0sozes6+QrG9gxNATQ+fBe9EkQUgYaEK5eJRxc46iiJ3k1FP1Gq0dMjWBv55akNu/bvcTJZaeBtdsDbemCbdihOohYmSvMTelwVUk7BVcBzHi7/cetn8OiCh9Y9Cjp9htzzFyBYbQw96Kp9tbxVx8nplTJ1h4/P14k4VdK7e32X3qBXRlFXxOmY9p3X0fi+9+O8nGBey5p8nEM4bQ1t1rIBrvWWplfPHX/g27K9fJjOejH3g/y3OLvPraa6zeXCHLGqHoBan7ZGkVzLEWMRJxasC4RhVLfGl4GXEgDjGCtSnWpPR2hqytrZNlCUli8D7sc1tJVjWVs8CSpC36w4LBMMdYGx9CcEwEj2qCkuJKYWtjgzLf5vu+54N88H2PIIwZXrnKT/2Vv0Y2zkkFnC/Ybc8hpx9ioA2CADeRwP1kGs7XL3EajeMQLdV4jPrQiHc3Vzh9P8O5JcpyjEpOhqOhOYnmNLIMd32d8umXmLUp47xETx6lceIIvsxxPmUgGTvpPPnhM+ySQelRLSMTxOf2rRpTnkFTRYGRUNMacj2qjMGJtA/SPW7Raar3BjUy+bx6WFMeIY2Ns7xKyE9RELWMnTCcXyQ/dIyRT7CkoTu1FzoYGjdvYGTM3GNvh0YH40x0dypda0klaJZEDb4c07znDO2FGeT6K2TjnWC3+GoXRTBWyDdXefI3fp2O5pw6eoC33H8PK9dvcOHiFZrNVs2yVSRTVWNbKkvhNNCHCi6ukVTowO9d3DRNQWE4HLK6uk6/P2RhfpFutxMw9hTMrHKpFEOStOj1hrz22sUonLWeS1A4htGo5KnnX+bC5WtB2/uCYW+Djz3+Dj787rfRsZ6bzz/P//63f4oDnTYJngJD+sCjjA7fzUjCNk346FYOYRS01MnLEZ9V8LBZnyDOYsQyLDzbB44hb3s7u0BCINyEglTHZKYgG+ds/d4Xme3nWG/YSQ1zb30o3ETp6UuTobbZLS2DA8cZHDjJoCzDfutVSn0Vg9JJ6exe6R7h8hv1Fk0easUB4VlQPb/oqnS19JY9z5V4TEXsVbbeJIBRZVtG71FlC9Ruo3heBfVC37bJD59gK0lrgqqqhVPvSbe3aM4tki4eCm642JQ/7AwuSGpChiceUYdtzdA6dBKzu0022CGNG8d5VUrnmWk2ePZzn6F35Twt63nn2x/GSMHLr55DbBahiUVk4kHSyLTOE/8Gl6xXE94TPCuYWHiCoSiVrc0eGxubrK6uISIcOXqYVqsZjL2YcFi/TJDuadpkc6vHyy+/ytzCHM12gzKmqMeoPdakXL+xyvpWn8FgiKrw5FefYzQoKEZjvv397+K+e0/SMcqXfulXOfe5L3JoZhZLydZMl/QDH2J9fhlvmqApuIoBtGaEQAQRkzuJLlODmoShWtZmFul++7ezPTeLqiOhpO0LGuWIRjmmbYStT32B7PINMmvZGo/J3nIv2ckl1OUUpAy0SeGbeGPYkoTyngdZ68zjNKnhQ2VU7yXvO0Cdr3NUvxCtArQVvKnwv0wOreDQfmxfe6unoRG3PxZiwl3EdT2U/MBhxnNLjJ0HdcHLoUppPKo5Ot7BNrpIM0WNxycWbzLUWEpf0jv3KrqxhjQyQl2ACZvS5SXJaBw9VYJXjzpFhgVf/s3fwOYjFua63Hf3KV579RxrW5tgQsSz2hxbpJIwUSMSziVmEvdwGMYl7A5ztnsD1jZ7rKxusra+Ta83YDwumZub48jRw9gEnM+ZGJRh0w5in6UkaXFzZZMXX3qFdrfLocMHyYtxODpqY7GWwXDM2voWmW0yNzuHTTI2t8d85otPs7k7QnF8x0c/xHy3TccafvUf/zxpWdJIIxQ6dIjsvY+zmmTBfavR1+/8RDrG9uam9JArFAFClurZSDLaH/k4/aMncHlJC8ikpMGAps/pNFr0vvA87kvPMWcNu8MdBscOMPf2B6Ec4qWkJ5ZdtYwVxniGvmRnbgE98wC7Dqp941T9beMkX3PskfR3Omby1lQpu8EbmgQJWEObGLCigkQElaMTQt9jFBM8SROPgo2/V4y3OIWxOPqtNuWRQwwJeSyuSrVWCZHeSIR5UYQYaqU9vGLmFpl/33vZuHCZ8z/3i2y/+HJIqLIFvuwFN6xNoWY4Q5KmrLx6jpVXztEwyv13n8QonD9/FWszCA5DqoQ1I4bEJKQ2xZiUsoTBsGB7Z8DGZo+VlXVurm6wuhYIfnNnl+EoZ1w4vPMkYlhcmOfA0iLqCkJ3NjNJx4i2VZpmqCZcunSNCxcuMD8/y+m7TqLq4lx81AAhn+bSteuMSyVpZHS6M3g1JI0uI2/4wlPPsj3scWh5gfe/7zFamXD1hRd45nd/l8VOG3Gefl4yPH6K5gc/zErWZDTOI94naFkX7B31GoNfJfiScZ6zkrVpffTjjO86yyAvaNiSVIY0/IiGz2k1DbsvvsToU1/ggAjjfp+tVoPlDzyKNJQyL+lLm57MMNImpQfnk5D16yG/5wH6h44ziqkjgq0dIk5uUw12J0KfCoqJTkvvyecxOhJiHfFX0UMUXHXRo0sVDd4LaYILbdr9OQ176iBalJTV7lnB3jL0VZCDx8lbHUofiE3jpnUhX97hJIGZJdzWBuXmTvAruxLjHZIalj/0fk7+R38Is3CQlXMXwWSIt7jVTSRpUTa6lPGOSqc0GwkXn30Sv7NFYoV7Tp/g8uUrbG0PELWVKMBYS5pmiAij4ZDNjU3W1zfY2Nxka2ubXm+X0Wgc26IAYkjSBGNsTCmHRjNlcXmeZitjXIxwvgztUTRsPWuMkCQNbNJic3vI+fOXWF9fZ3FxgTNn7gIcXkOxj9OwdZWxGVdvrLK6sY3YDOcLVtbWwQa7ySYJY+d44dw5vC9426MPsTDfpWHgU7/yK2TFkMzmJFLSV9g+eZrORz/OanuO8bAM6RDOIz502KtsDsQwHBfcbM/S+Nj30Dt7H9tlEXatlDFNkzPrHbONJvm5iwx+7bMslwKlYzMVlj7yLrLlLuQ5uW2x67vkvoXXUFesmoBY1Fs2shn0wUfZTduBbpIgSH2ktdvCiq819vDGFDyvc3cmpSx7OOgWuFO7RitGqBjEQGXk3saL5E3MESH0k3deKbvLFAcPseskQI/YXiOJs1E8Q4TB0mF0mDN85mmQkF2IF7w6fJHTPHac0//hD3L3Rz+G2CbjaxsUN3uYAycZduYoI6YzIiSu4LWnv0rqPcsLSywuLXP+0iUkSShjKoBgcaVnfW2L69dvsrW5zXA4wjuHFalLGRtpSmIMSRL2uTaiJAbarQbLS/MsLMzjUYqyoHSO0nlK73G+xFqDNRmDQcmFC9c4f+EK4/GY40cPcvaeu0ItQTTMfOmR0pIlbW6sbHPp6jogNG1J5nO2Nze5evUGrVYDI55Wq8n62ibXrt9keXGZ++6+B4PnlRdf5vKLL7LQEBIdYDVn1xesHz9M53u/j7WjJ+nlBSauvThBNEDB7XHO2pETdD75A/ROnWInH5EyJNExTXU0fUknSxi9cJ7+v/kCy0WKMQ1WROh+7D207jmKz3MK02KoHQa+Qe4NDk8pElO4g5AceMPg6BmKU2cZqaKE+g3rIXH7iXk/ob8B2HOHEeIAdTRYo2duSpJXXu5KE1TXqrkpMEKlLSpPj0bG8TZIeIwhtw38weMM0hYqaS1tJjcBaNjOZ7BwnHL5NDtPfZX83MukjSykV/gEKRUdDVHnMN0u2tui9/nPMpYEOfsWxklGamJuijX011ZZu3SJROHYkUOMRyPWNjbAJJRqyUvP2voWV6/eZKe3C2IwiSXNUqy1e3z3VUDKGIOxhjRNaXdatNutCNvKGgoiCWJTRFLyUlhdH/Da+eucO3eejfV15mfb3H33CQ4dWqbIR5TlGBEoi9g3k4SLV1a4cGWVsvDMNpSf+JN/hEfuPoHLx6xvbrC5uUWr1QpzsxmvXbxMMS64/54zNBJhvNPj+S8/w4zNyPyIlo5ompK+FqwdPEz2fZ9k65GHWXNVKoNBvbLqxgweeZjWH/hB1g8dYOTGJHYc2rGXQzId0cxg55kX2PnVz7AwCp071kxJ42PvovPIvfjSUaZtdmnT0y5D7ZCT4hC8JtTV2jZI/M00I3/gYXqtmZiOUUWY7Bv39ryhUTlu6q3RJpxT76s7Xbcb39cF9KJx58Zwrqod4sSQFmIhbshHEWHsldHcPMXCMqWXmIQUXtV+s6JVgp1nJ+nQeuBdJLsbrP7mbzI/HtC+9yEkaYBkYUFMSb5yjZ3f/X1Gl27gHnqM3WMnKJ0jNQHZJ1lGf32NvLdDw1iOHjrEzZs34u8ThoOcjY011CtpmpJlMUorVabrPj9ExQBWsNaSJAFPBngZ238DqFKMCnZ3+wwGA4bD0OvHiNBuZRw9eoDlxRkUz3g8jPEfiR3oQvn6a9evs7axjStL5lPhT/2hT3K4o3z/Jz7ClZs3WB/kXLmxysLCPMYLNsnY2OqxtrrCoeUFWo2UZHvEq888R1J+Dx3JKaLnTm1C7j1rnTYHvvN78AePcO2zv082GtGfadN617eRPfYYKwhey2Ds+hEtxjTxtFXY/vRTFJ/5KgfJAM+q5jQ+/Bizb7uPclyA7TCwbXZ9i75mFCaJ9mQsD40C1MUS/sIrvUNHkTP303/uK3TrZzDpNvJmj9umTe5P9dFInGGnda0VBYBVP3W8TPb/0rApQciaKBiZBA4eZpxlIRBkAvdXzU/qXdwlmKMjdawunCR558dwz3ya/N98ls5TL5OcPESrO0NROIbr1xlfuEKeZ/DIexmefYytwoZ9vrwN7b6zjBsrN9DRLt1uk/mZWa5cPYdNU3r9ATdXNklEaDdb2GSS3lD5nY2ZLEQV5TWG4Cv3nmrnH+8drnSMnGOY54xGY4rchW4bHrJGwsxsm7mZLnNzHawVBqMcQ+XxEAwJiU0Z9AdcuX6TnbLE5SOOznX443/o+zi83GHsxizOdfi+T3yUv/fz/5rdUcmVa6vcfXSZkcsZFyUXLlzk7W9/OweXFrlxc5fVi5fpnb/A7JF5+jhUclBIRChQ1rHMves92ANH2Dj3MgsPPkB+8hSrZUHiSxoypsGIthvRsZ7ElWz81hcxX3yBQ0mCMyNWE2h/x7uZfdvduLyP2AZDabDt2gxokUsSHA0K3tuYMyagFmeCK1slYVsymvfcT+/Vl+j2t4PgpaKNN5X2AcJuoWGYKucvPm0mzakE6iCR7C2TnGSIxgKHYLEQbaiw/ao3FLPz+IVFch8wdVVSWSMg6nopNErZAZbrS6dYeGeLxrmXKK5eQC49jfU53iqu0yE5eBx/5iE2D52l79s4KfA4khhbaAr0NlagHNOZm8P5grz0jMeO9dUNsiSl3ewAIXpbdXULgDDYB5WpFJ6Bos6xsrJBWbpQsEMFQX3Y78YYjBiajQxrW3Q6bTqtJo0sdGgry4KiBO9CXUPYQcVSFJ7rN66ztb1L4Qpcscs7HryfP/z930PbFJQtQ+fIcXbOX+St99/DWx88yxPPX+TG6jqH5rtIJqgkrK5vos5xeGmRZ7jAqN9n5+INktGY1snDJE3DIB9SGlAcDsuOK0nuOknz7rvY8iVlMSAVT8M6mq5PpgPaqcFu9Vn59d+n8fIVFmyTUTFgs5sw+x3vo/PwKdx4iEqDIW22aDOQNrmmdZsWrzZA4kgBHo270qcoIWYzWjpCcvwU/RefpB2fw/T+Dd/UkCmiQ2NnOCVCj1D9X7djiZX/dVUYkwIYYqDCS8gjr87rtWpyBR6PMYaxz3CLhxjZJHYok8kev5WnSqcqzrSqF3MMxTBoH6LzyBKdux+h0d9Fx/3QFKs7R9GdZ5i2GJaCmBLFxUTsIG2swu7WFhah3WgwKsYUpdDbGZKahGYjw4iPLnBXw7hqSyBfNa1AQlYmAJ75xXm8i16aaBNA6KlvE8Eai7FTeT/eU+RluE9rakjrEPKxp9fbZac3oMjHjF1Ot2P5Ax/9Dh5/57sYDQaU3TbNo4tgIDtwENnq8dH3PsazL5xnXDoura5y/NhhRBJ6gyE7vR7zMzOIFXwxRryQ7ObsvPAK3bOnmJ+dYzsvaauhwFOacC8Dn6DiaFHSiBHeREbMWIu/tsbNX/8cM1e2mMk6jMZDNudnmPv4u2mfPYIb9/FJi5w5etplIBk5GU4UH1u3aNW5zyteDd64UKAuKSa6fndsg8Y9D7Bz/kW6o7BDzaSp1NcYe4qfbqMyajpWkLgxVvUTL5POdDCBQXsUARVBTC5Y9fCv1FSVQg0JJZ5hp0E5O0se0wB0371UUb+qlNsIIT239jgpuyZl0JnHdBcRMVgSnJY475AylDeGpvJBG4VSH6HAM9zZpRE9QqPRmJ2dHVQ1NLVCgt8bEC+BaI2NSZw+dK2QQPS+quMVIckMRtI9xrHEdUADQ/syppCH/I9wjA3GX+GU4WBMbzBkdzhmPC7QsqSdKe9/x8N8x4fey/LcDDu7O5jFGRpHlgk5tNCcn6e3ucldxw9z7+mjPHnuIutbcPjAMqJKnucMhkNm5mZJbWiQO/COtN2mubrLzhMv0LnnLuaOHmaY54wRxsaiGFIpQZWEkoY6Gi6n0UoZvXyB3X/zWZZ2c7Jmxs5oyO6RWZa/+3GyIzP4cgTZDANts6MNBpKQa7AXnY/OEeq8UgLpCdYlgUFUQut7gUGh5AePkh46wej8C6FIBwPmjXDA1zdqBggR6Gq/30jb+22B+K9IaHOiMDGGmdSgCiERzXihtCl+fom82cJH43damcnUu7o3vgbC8ZiwOFG9KCGpLSRAeJAydJ8gNGsNLdQDrjQYrPdoUeCGQwSPF9jZ6TEcjmi1WojY6GcXvANswjAvGI7HoV2kUyQR0kTodpqkxoOWwT/tYvKy7LsTNYgxWGPqyLKRYD+N8pJ8lDMY5AxHOcNxQVGMKPMB3VbCww+c5sPvfQdnTx2hHA3pDzZpHV0mXZijVB/aB/qQ15QudPGru7znbQ/y1ZdfYTRyDAYjlhZmGJYDRkVOq9UmMYZChDy1OPU0xJAVws5XXsBt7tC95wSphcTnOLHE/UAw3tG0Qltg+7NP0f/80xz0GUmaslEOyR88xuGPvgPmGpRFQW6ajKTDjnYYaMD8BaBqQ/MtDXDHR8IKJYnBUZJYG1zFUgY45C1btk169330Lp8j8y4EQd8Egt8/kurZaSV6pSqDhFpVMJHYVcG8icErr6EOtKoYNtX3JvjtR0kTPzPP2BP7gPo6MEc8vs6LQUksoQuEKoWGRC7RMkKlqELxqDqs2tpR6+N2SUYFnKV0ihhPs5mF39oGhTNsbm5jbRKYWIN0VwUxGZs7O2yPBgxHY/LYLNjahHazxaA/ZHF+hm67gaEMtQZInd4hUEt4CAKgLEuKosCVJcPcMS49ZV4wHo0oirCF68GlLm+7717e9dB9nDy8iPoRvd51ZGaW1uFD2E4bdUVIBHRad9LLZjoM13c4deooBxbm2Op5RqMxWbbI2BpGeY5NG6FAxQvJwSXk0CK91eu0vWNJE3aeOsfGlWssvP1Bkrkm43KMWINXJWtkmO0+67/3FeTlyxwhRbBsqIN33s+hxx+BJPSUzdM2O75DzzcZaQeVEKArRVC1teSv00oIytrimS93sDdvUjZThjNHGPgMxTNQGB49QWPhIHM3r5ImIZJ+2z3bvm4XabTwdHpv0Mp+ncY5UOWx3YK/pnwjTJdIVqkRiXjGooxnZilancD1QkjrlUkFEZVbUYTUeBomMAAIuQq5F8rShsi8hhQNIRRPhL0ULCb2p3TRm9Jtp2RSUGxssfH8OYrtFRAYjsY0rSfNGnEho8YyKevbA7b7fXaHO8wvdHn00bcyNzvDpYtXee7plxi6Nuu+j8pMSHnWqogoplx4j1fFe49zHueCB8iVjqIsKYox3pU0UsuBuRnuueseHnn4Ac4cPchs0+IHPQb9TVwzpXH8OOn8bNisvCzjLvcVeJAQtU0sZq7NfCbcffokTzz5KsU4RwSSxDIuChLNCd2zU1qNJubgPM2zx9l5+mU6g5xZLLsXV1hZWWPusQfonD6CcwWm0WB04Tqbv/sks+tDWmmHshyxlpa0Hn+UuUfP4F2OcQk5TXquwS4z5JJSSth6utAErxZHkDCujlMFgnISulW0zj9BY+MqQ6fIibdTHnuIgSqlGvrtZTqn7mdw8zrz0Wf4Zo+k2iSuyuasa2gmlu9U2GDCafu9Ul4MVTl8tQ3QWCzMLZKbFHxA0M5EkVubvGEr0MwaWmlCM/HMNlLGxZjdAnAmwpE6ahc8NSpInSOSUuRjZtqWVjniwuc+w3Of/V1Wz71IsbVKU8d0mil5MUZMkySxqLpI/JbhsGB3MGLshjz4yBl+5Ef+I5bm2+ALwPLlzz/Nz/zMP2dcWq7f3AglgdXmHxHzO+/wLqQx1MUEorRaDQ4cXODYwWXOnDrGPWdOcfTQEkkrwe9uMd7tMRh5TDsjObRAa34ulC6iwVCMz0fUTdk3YQnTmQ5WHCdPHOXJr7yMVx/SLqzBqTIaDHGlp9ls0p2bwY+GNJZnsW+/j90vvYS/vk2HhHRrzNZvf5n8rfcwc/9pdr78EsMnz7FYGLIkY2fcZ3holtkPv432yYP48QAvlqFkbGubHRoUZHi1oYY5CisXmxW4Ki4UYSwoLXXMrV8gWXuZUw+fZefaGi9efYnk6H0oFhFlqIbi1Fl6L3yVueFGTXXBeRId1d+wWRBgWTLRHjEfhyroILXlXVVqVfuDhTz0yAjRnyuEh4VzGFVKBNdo41tzIedHA0AqCE2cwvmDFLbqaFhoiKdtlYOzGaOxpdwa1bUHZXRPOnHRx5MQ5KKHMudoO+PVJz/D5/7pz7H23PNYn2Ml5K2YRovSe6xNUBtKAokeH2MTdvp9iiJn8eAsf/LP/DHm2hnl9iYGjzrHO973VlY31vn5//03WGwvkeclJUPSuAEGKM3M0kgbtFopS7NdFheXOHrqNN3ZGfq7fcrRmCIfce7V17h8/SoHDy5z6uQx0vlFSDxJq1F7n7wGeGTEhA6stett+vEZbGaQrmPuwByaBjji4n5lxqRsbO+QO+XA4hJZp0PfDUjLgnSuyey7H6T39Ktsv3SVmSTlYGHofeEcvWcvITt9DkiCTQzrbkD50HGWHn87SbeBG+eUkjGSFj3t0LcdxlgKHxMnNWjrAHeCW9hJ6L7gfUKWpNitG8xsvkpr6wWWThzFm4ytlXVax9/BprGIelIEh2e8tEx26Djj85s0rEVj76e6E3/05nx9I9qx/jaBsNvFG+rTR5gUNqK4zZfhW7xALh7X6ZAnVYFMeFkFpsLc9XkFZlqGIzMNMnFkjYRkvsOVXk5eBGb0sQTRaJC+zkOWCAtZwe/8w/+VL/2rf0lXC7oMObDU4cSJM5y+6zTnL1zliadepN2ylEUZeuhE26PIS/KyYORGfPJj38fc0gHGr73C9oWLaJGzeOYEJh3wwQ+9n89+8VluXl7n6NIBfuA7v53Mhn6qjcTSyDKyLKXdCBHidGaRF165wj/4Rz/HTm/MuCwpNWSdponQ7rS55+xZfvhH/wgHD89RDod1HpDEHq1+sjwhaU8nNhhY1HjoNJhbXsIkCYVzYcsip4zygqvXbzAS6B48Tp7NMRgULEkX7/okLcP8u++jtzTDxlfOMb/tmTVN/G6JMU3GRc5mZsje81aWHruH0hW4Iic3TfrapE+LgWmQq6VUiYZuFd8JHqXgXAl9OFVDQc3g5nXSK+c47C4y31E6B5aQtElpM2R2kUIsVi0WKEzJyDRYOH6S4cUXaUh0zSt1Q4tvJEduetwmEhx7PQJ7tjaquwQQnYFa+/up3JrRuvWiDI2lmJkht5VnIYS9E0/0IAWvr5XK2yQ4l+PKkHvjvFJq1RrPhMQ6V3U8A6WkmShdP+Sf/nd/k2u//3kWjZI1hfc/9g7e/tA9zMzNkTTbqApf/uoLIQzvFPUxnUMs43GBc46ZbptHHrgf7W3TX12l2NyG0YirvR2OvP1ROodP8NBD93Lpwm/RaBkeuOsIRvPghvU+RnMLCi0ZeaGlTTbHGzQXmtz16IMsHzjE4uIi43zM1WvXefWVc3zuy1/gfa+8g4On3oX3nsSYW9xugaSCwVR1f6uayYoIpA0a7Q4ew9A7xmVJYhN2tne5cX2FAsPhex+gp036vkUqRRAwZhR2nXzgCM2ZjMHvv4i9tkMmlt1yRHG4y9zjj9I8eYSycJTWkNuUkW8z1DZ9MsYYSkIL+9DZJBYJxarA4OYURJPwxLVg/doqizPHuFh2WR9eY/HFdZY7SlsMG1ubZAeE3EVnDI6BNxRHT1F0l6C/hRoXwwLRtcwbCw/ckQE0qtdawxoBb+KyK7aGRDrp9WOUejsWauuGyiAuUcpmC9eepayqwaa6JYRIYMBgzitOFWeU3sDhywGnDswxLjw3doYMnZBrYBkroVNcKY5EHPNuzM/93/8GV774OeYSx8mjy3zfd32YI0sLuKJgZeUGV2+ucfXGBklicc5R+NisyimSCkXpKIqC5flZFhdmYTyg0+2wePZu+jdusnXjJttXrnHw+ClOnDjC2A9IZ1M4dYhy0KsQaS25k8QiaYIkKe87fZz3fddHoNkI+ROxJSAqbK6ssrm5yelTx2GnH1rBTAdxqpJLExoNO5RkbiGcw3gYjClHI5JYyVd6j/FK6SHNMq5eu0lvdwTtNscffoBe4ShMkw0smQhdGlj6UAxJD88z9/F3sP3Uq9y8tEbr+DEOPHQG023jXEFhmwxI2NWMIW1U0oDxfXRNx3iPhgrb6BwIcEEkZPDaNGP7+jpbuwW+3aI9v8Rg7hg7u5usbV9kzhX4wZBGOaaQVugfBagXhvNLNJYOUfZ2sInDiURHiYakQSG2oLyDlwj2FNdIlWRXZSHvOTDQcQ1P6kzRyhU0FSULxllUAhL61+DDTo2m1cI02sEejEGpUO0zMbgl8o4TpfCeRFL6Dq7slLjSM3AJ4zLk9KtTrCduW1pyMEv49b/9t7nxpS8xbwwP3neSH/oPPkZWDNnc3OTF166wunYjSqWMVrNBXnjGeYH3TVDBOx8YsCwxVmJEuKT0JQ2b0FlcYLS6zmBzC0Z97jlzkqOHl/jId3+Y9MAy5Y4NjaE0xCYqm0njOvp8COrRvBflReiKakzKwmyThcVTMBqBDxViddq5EDVsFB4mRWybT/3m53np3HlOnjnKux57JwtLi6jLWdvaYjQe0ul0sCqoU26urDEoHUt3n2LxrtPs5AWpTRiKJZckGOwkNExG24/J0pzZd91P51FH0mzh8eTOMJSMXVr0yRhpg1IboD6sqyT1lqmutiGrNQj04bwjSw1r16/Ru36DR99ykrWtPhsbG2SdLiwcx80dZefmBYreDRbyIabdwMdaEVBGNqM8cpTdSy8zp0piLHg3Cb2o3pHwp4n+dqPqlFR7gqogVZDRVevrKcgv9T97P0NwPoTRvLFIq0vhDFYltggMKtHVXdJipZdXvHrK0pCL4MaewueUPoTPCx/v1VeRRM9yt8O53/4tnvuNX2OpZThx7BB/6Ps/gSmGXF7Z4MnnX6FUw2BQ0B/scuLk3cx0Wqyt7+CKkI6AhkCXd0HX9XZ36A/6zGSeJLW4wYiy10N9iRXwwxHLC/P89b/2V2kvzqLDXg1Fgis09kzyIaeokn7S6kLagOh1wnncYIhzY5SQhz+tRcXEyEaVdYeCSRmPPP/gf/1ZVm5skWWGXzr6a3zfD3yC7/iD38vlK9fIi5LMpjSSBts72+z0+gxLz/vf/35otckHQ0DxlrCPgFhGKrTVUoqlnRgyHWOaQu5LSmkwSJrs+JShtCLWT/E+QWP3aZWUEsX7HCQJKcw62SnIA9iEfFiyff0GH33PfZxanmGtgNdubnPz+irb1y9D2sFohppZFtIWoiVh150A9woFf/gwo3aTmf6YBL/HBlWYysm6PSC605a4SUhLCg1qnRiSKkgQaDo+jErV6FR6RNVDsiqD1FDKpw6XdSna82F7TjxWbAxkVZl9GiVEeNgiKbkXfOlIMSRqKdVTqOLVUapiSQL+A7LdPl/4Vz/PrPF0mwnf+70fJGk6bq5v8dRzryBk7O5ss7K2wrETh8kacHB5jq3NbZwrcaUjNSZWU4WSyY3NHa5dvcn9D5wgnWlBWbLb7zMqRrTnj0CaIFlCO03QcoBaR9x9NGo0Cz64dCEwvGl0eeGpczz/wssMBiO6nS4PPnSW+x66F1/28W4U7CASvAk9UyXGOky90UWBdyNarS5/+b/+CZ78yousXL/Jlz/7BD/13/9ddjZ2OX/uMi3botVs4dOUm6ubFGPoLh/koW/7EFvjHI+ljM4LIbT/cSboJKcJuTRpyBijOd5YxjTo+4SBZDiySNjRItEMhwFX0E0dzUzYGo/ITQuKUGFXisPjaZgG167f4P5Thziw2OGV9W1I2hjb5MTddzE+mHPt3BVWtjY4/cA9aNbGl0XIuiVEi3OE3twhss4i0tsMG4WrmbIDzMTzLFOxgtdJoBOCkL9DF1mpWGAChWK253SNQHCPTnXfMkLpgKwBSRo8AlNqatqWsF5rL4eqUKK40uNUMJRgDU5Cc6qQYBcCQAuzXV78nV9j/ZVXWDCO97znPRxcXmZne51nn3+RJM1YW9tifX2Nu+46zeLyPMPRiLm5WdJmg1FR0BsOmOt28M7TajZopBm9vvDFLz7FA299AJf2SJbmycYjem7M7MkTmEaGGkX9qLaBarMpbvOkxoMLBuHYWf7B3/kZfv/TT+JyRaXAJEKz2eSxd7yFH/nRH8YkBimL0Olij1utgpehYsiKwRdDztx9lDP3nwG1PPvB9/JT/+Pf4Rd/4eeYm1mikTZYmmmzvbFKf7vHztjz/u/+HjpHjrPSH5LYBC/g4qJLrAvwYvEadpY0NFEpgZSSsO9yiQnSPhq4HouTBO+V1DuOH+iw0Mp4ZbXP9d0cE8s0jQRBRj5gvLPCmbe+lRvrm9zcGdJoCaUmjMclpmk59tBdrI12ydMsdvOLLvIoqb1XyixDF5YZXX+NjrGh51NMxPxmrODblEQyVexe9zCgqviK5t6eYyppLhhKEXyzhSbpnnlVLbAllsAFkg5Zfl587IFjKTDkGMYOCi+UGh5ASH8AKcY8/anfoek9SwszPPLQvRR5wblzrzIaFwxGI1bX1jl8+BBz87MMh0Mg5PqkSUKpSm80otBgtFoRMmPoNLt84QtPcvH8VZL5g5SNBt27jnPyPe/ELs7hjUOkJHSgjpi/8hmLxE7uhjJJkOYsW+t9fuc3P0WaZpy6+xSPPvYWjh07ipEGn/7dL/Pz/+hfkDZmgcq9GQVEXH8ftS5q8CVo4cl3tyh2bjLcvsLDj93D//kv/Tin7zqFd55mu40kwpWLVxjmMHPmHt71yR9gfddhnA1d33xoKRm2VbKUkjIioe8tuz5lVzP62qJPk5GGfYGdF0pvKMlwPkOdwXvBAWNVtkcF2yPH7tihXmJjsdBLtJVmbK+vcnSxRTszJDblxMEl5lKlYwra1pEywJgcnySM407x1ahEJii5TXAHD5GbRvAGQrCvvnHaB2ISZXW10Ahq0udyOhmueh98u0RCDhAoxIJCGxFnLa7ZwtWR0jBshBwepakFM8PtkD5nQvrAKOuS22bY+UUImDo0LELEUWpJliRsXL3ElZdfoOUdp08fZ3amyc2VFW7eWMfaBjdWrtBotVhcXKQsQysSVcPGxgbWWDKbUOaO0WjMXKeLuoKF+S556RgWJf/g7/4T/txP/hgLR0/AYDv0kHIloWsZhPK82HPI+5DarCGijCiGFI/hyOnj/ORf/DM0Gg0eePAsSWIYjuHn/sEv8hv/9nf43d/9DJ/8/u9ibr6JluPQIp5wHls5P1UpXUnaaECWYRHIx2jZZ7i9xomzd3Hq5GmuX/wKC/NNrq6ukTvLpip/+E/8Z8jSHOnYM5+0MOrDNq5lAb4E71ArJFmDNMswSYK3hqErGA4LxIf8fTGh07+PPZECxYVmXj5pcHnbc32rzwhCf6UgbkJxkS/YvLnGh99xL74ouXL+Nd72yP20uh1GLiIIY7h0YxtGYxbn5iiKPNCbTrWPV6Xwlnz+IHmzDf2tQH9GbwkQ3nFMHSc66TV6GwgUNqSIh+7x/ujU+8l5I1jSwCWaJPhGk2ISqotIHyyGhjiWVs4x99JTtJIU1YL+sM/ozKOsnX4rw2gco2ErpHApg3dCq93g1ReeY7B2k05mOXH8AOpzrl69ivfCYDCkP8o5duQINjGMilBYXZRCvz+klWW4wjN2OYPdITPtNmliaKSW5aUum1vK+rUN/p9/7W/x8e/7OPfdfxqLp9XJaLaTmD4RMxlFQ/aqU9xgTLHbx5clYjJsK0NaKe/60DtC1td4l7JwtBsdfuRP/TC7g3Xm5mboLMzhyt3g7nMeSVO2XrtEb22T4297EKdK2prl2qUVXnj+RZxX7r//Xk7efQxNHevXVnjhuZeYnV1gMOyTirBVOP7gn/8zfPC7vp0XX3yZ1dcu8OL5V9havcnW+jr5YIj1JUZD899mq01rdp724iJLp05y4t6zzB4+QWNumaF3bI/G5F6p2+RHJ4h4AZPhJBa1SJUKGZgjSSzbNzeYywwL3SaDfo93vPVhEh1DGfYstgKYNpdeu8LM3AyNZsbIjWNa+QTZiAiFF8Yz85SdLn6wFdNiplJ3vta4g3F8qxtUmLSnm0wBapgTqL0KXlUoAGL426aQNnBMGqxoNQGBTITG2hWO9a+RlYpQUpQF568tYE88HDZLpoIE1e8NaEqiwvprr5K5km67ycHleQa7PTbW1rEmY3N7g8QmdLtdnCvwPiSClXkIdjXSlIXODJtuh9J7BrsDlhdnKIshs50MdR22t0f0Nob8o5/+WdqzTfLBLm952wP86F/4z/D57pRNE6R/uTtgdH2Npg9le94P0W1HnoBfWSWZWyDtdBCTRgZx/Pn/8k+D97h8gNRt5xXGOTsvXcT3R7j7z2Lm5/n1f/17/Oz/9i/Y3R1jrKHZSvjBH/oEn/xPf5gXPvubjPpjuu0OWMfuYMg7v+2DHD96iJ/+L/4iN146x2B9lbzfi67a0AjKiCDWYJGQZWqixynLaMx26Swtc+S++7n/3e/j0P0PU7S6bPZHFOpJTVLXbnsFERf6pHqDmsqTFXZgWbt6g8fOHqbTSHj2+Yuk6WkOzHVDa3ktQDw3V9c5v7LJ6bc8Rmkk5H7dhlCdF8bNNm5+jvHKZVpVv9oplPL69D8VB5j6N6kCVF4sLhI10eAN76u63mCUKFXqsg8qTKuGT8E5VjZaFDZFnAu1uUSDK3J1IYIsHmF09UXaMsJ4pe8z3IGjjK2N5wyax8VphtwYEC3pb29hBNKmodvqsLOxw2hQIFnGYDjGpgnGCs45EkmwanD5mMQKYhVrlWYzZTTKGQ1G9BsJM902Li+YnemSZCnbOz2SvEU+VsaFZWerHzqkURmripCAE8bbPTLvSURQ40gkdHBO1FMMxpTDVZLjKabbptoPyw/HEe4HD5hSBpuvN0L6fbrdNkmzRb/n+cf/2y/Q74+4576zjMeO7fUB//IXfpO3vPu9XLpwEfXRLskd7Sxl6/IF/uFf+6/J+8MgrRPDwtHDLCwtM7+8zNzCHK1Oh0arSekdvZ0e26vrbN64wfbaGqONDUarK6y//ALP/cZvMnvqDI9+x3dx7/seZ9zpsDMKu6uLkVh6GpihMEoaneipadJf3yZxJQcOLPDKhUvcf9+9zHWbeDfGuhIfje3nX11DGvO0Wk3yPI+2r9YStUo3V+/Jbcpw7gCFEVo2RJ4RqekskvrU24mJK/uOqOzaZO/Pog966hfiQ5cG2M9te7VEQEAG0jR4bWrVIEzzXOEMvYP3s3Z6DT3/FIkq14/fy+aJ+xnXudd7DSGJC6A+VDt578mSlMQm9Hq7eBGK8ZjSlTRbTaw1YSugyKxVT87AwCWtVoOidJRFyeZ2H5NktLOMPA+djReXFmInuD6j8ZhGmkJeImlY8IACYitFY0P5pADi43yDczkzIfdpuLpKp3UcbIj2igkR4fCcXazEM/gyFPBgAzNlrYT/+D/5AUyS8J7H30vphL/7P/99PvOpL/F7v/pvWb15A5tllCipSTEiXHjlAjZLOfHA/Tz4nsd44N2PcfyusywtHkCaU/sS7Bv5bo+bl6/w4lef4fmvfJkXn3yS4Y0t3Paz/JvnX+ILv/pLvPf7v5+7P/ARdoqCvHRBG4jDi0YBWRGCsra2zqFDSyzNZGytjBlsrLDcOYrzIzwlxiT0+p6L1zc5dNd9lC7Ha9hvvqLhvT59pUTRzgzepkABRDvzG6oHCCNUhMne77SCQBqxn4b+bnXTrLolSqU9YhUYBpJGhXYix0Sm0smlNzWlvOcd7LZnkVHJ6Pi9bDVnmI5vTA+jIcU2tLLX2p4QEXq7PdR7ypJQwBLTLCQSalWCGcyZsGuJonS7bbZ2+pTqubG6zoH5OdIsIR+PMcbSajTpyzC0KfHg8yJs7iyR0SXAlmyuy3inR+IV6ysJUUaHQoiOJ6XHjcbYmW6tBcJyhrWtGMpraEUuXkAdxvf52Pd9FLxSDnp0ul3+kz/+Qxw4eYKjB5b5yhefoNlsY7HsDoYME8Oj3/4RPvrJ7+Et73s3TG/EUXrKwSiklCQWm2V71jjtdDnxwAOceOABPvaH/yArVy7ypV//bX7vX/wSNy9dYvvlp/ml/+557v7sZ/j2/+RH6B4/zebuiCQJMSCjxJYKwdGRNDJ2hgPUKffecwrKIZpvhk3g1WE049yFDcqkzczCDE7HqASHSL3Jyr70hQLQ7ixl2sAVBTEznNtTzRsbSRXFnd7MrlLydRmmVJI4Svva6qXWFuIFZwyaNqKK8ZOgxJTVjSoYYUO6DE+8HaPKGA07xBu5LfdLFbYQQ9Jo4FUoS4fznrwsgBAJNHV97rTdIVPnlbr43dqEZjNje7ePV1hZ32Jhvkt3poNzJeocIiGzs9vuIKXDq0VskPiG4PJLOi300CKj66s01FT98kKrbxurmIzBJAnVphogsfA5uNXEG0iDK5XUkuc5FIppWNzODhL7D+moz9JCm//4z/9Jfvnv/mPG/Zz5uVmub2xy5pFH+KH/45/lwcceBeD6q6/x0pPPcPmFl7lx9RI726G/kABZljEzM8fSiSOcfugBHnrb21g+dRIgrGvpOXj8FJ/4kT/GR3/gk/zG//7P+NWf/SfI2iY3PvN7/KMXXuLjf+rHuOfbvo21/iBK7UgPAqUrOHjkIBdfOscv/faTPHD3EU4d7tJOE/A5psgZSZuXLm8we+hEyEcodLLHRC1f90pmFaFozzBqNNGiH4Udd6b/140Kh7XfZwQHnOvF1RLcEwpPJgZv9FVPZYc6YlanSfA2wRFyM/bkdk1pDQUSryGH3Ejc8LrysugtNx+a1YVdJduzs3hj2O0PGQyHwVbwHmOy0GzWh2J0qTWPkiZBErqqikuEsizJMstMt8Pu7hCnnrWtbZx65mZmSNKExAwQhIWZOcRDOc5JsthL1Ed5p550bhYjhnxrGxmWpGUo1PFicM2U5MAyZOnkgUwlDyIGsRY8ZJ0uWbdLORxRjnLSRgdrFM0L8sEgwDBj0V7BM1/8ElnSZGM04pP/+Z/gB370jwPw6X/9S/zev/pVLjz/MqOtHayHrCEY4ynGZcg4jVpUreFTYmnOz3HqoYf4tu/5bt71kY+QNFPKUYmXcG/f+yN/gse/8+P87P/yUzzxb3+DzmCLf/H/+L/xoRtX+MAP/TA3egPU2EnhuwZfxun77uPGjTU+/eJNnn7lGncfWeDuo3MsdDs8d26drUK55+ACZemCwPV3NmgFDz6hyDoU7Rn87tqUh+UbH7dAIK0gUBW5jW6vyjCe+DwjE1T7gKGosahJ4ue+LoGTyDDEkJmamOKrMfFCo1lyByznNRTblCIcOnEcEstgPGJre5us0UCModFs0Gw2KMc5eZ7TbCbRbhCSWGGlaig0GE1ig13RamRYk9AbjnDlmO2dHuU4p9vp4l0QBPOzs6BQjkbYbrPy+Ea3V8gDsrNdWrNt3KhAcodzoVVFozOL2DRUikURUjURQwSs4Isc1FDmJVnWoBiNKFxBmgiuP2Rw/SYyGJMWDps2uLJzhdUbN7k5KPiPf/LH+d4/9p/y+X/7O/zK3/9pLr74Mn5ckFjLwtwsrTSjyDeZnW3x6CNvpZU1KPIx2xubXL+5yerGNjs7Wzzzqd/jic98hrMPPMQf+tM/ysMfeh+uLClLT4lj8fhJ/szf+Bt86vHH+cf//f+LxVHBZ//hP2C0PeDjf/xHuTYY1DCOgPIB5cjJIywdOsDazRW+dHGFpy/sMNtssrq9xfLdZxDr8EXIEJba7XH7Ic6HzoDtdnDUS4ScdyoK2GP53sENqpRAgjdKaSyJmNilSyI+9fV7FV/nq2A0ahGDQTDq0axJETtGeGNj/rrH+hLKErE2FI07YjKVYrVKTVUConPBmNTAiOEUAVqUhTJ/5n7Szhxud4srN7c5uNDFsEJqHJ1WxtpwxGA0JG20Q02BV0ySYo2lcGUsNommqjGoljQblkbWYDj0jEaOUV4wyLewSehV0+5aKPok4wEy00SaDdSF+w8bLCTxIVhsuwHtkBOkAhQedXl0JMQeTDZsTCFicaMRF37/y3THEpqIDYZop0k6N4tmLfKba6GhlQ0SVpotXvjSy2xv9Dlz9iEef/zD/C//5V/mK7/2bzFlTquVcfSR+3nPd307N194hc/8y1/n+NEuP/p/+AMsz7YoSoc1ghY5/X7OtZtbPP/qJZ45d4kba9tcf/4Z/vs/9+N8x3/0w/zQn//T2DTFORcSB73jg5/4BCfvuYf/8b/4S3SurvGlf/4LiMn59h/5Ma72xogkhGY0DrwyGo4QMRw6eoTlQ4fY3tphNBhy7NghWp02ZVESWyNQbTISALiLCMOAWoJtUZJbcM1OTfRq7J5GbftH7bjZg0aoEzxrk7tO1983qk2vK5aqUiCqqq5YAxOj9lUT01i36zyUQ44sKA+dbtA0Q1QNsdAvTkZr74FKGTwKWCBFJYluV0iMpchLDp24i8VjJzE24cLFK5BkoQNBWZA1Mqy1bG3tMB4Hxi6dx1hDp9NCfRmT1eLdSJVF6LCizHY7zM/O0my2sGlCoaG57ny3CcMB9IYUG1tQlBiNNkflQ48754QILkE7lEGnS2R0I0nIWy8dwVAeYyzMLC1Q4MmNUh6a5/C734bttkNbltLQkBSMxRnLsIAvP/MCkmQcPniAn/6rf53P//KvUvqCQw+e5T/9a3+Jv/L3/ie+8wc+wcsvPE1ZDPnEtz3OctMy2NmiLAt2tzfJextk5YB7Ds7wPY+/hR/7w9/DJz7wNg7NN2lk8K9/5mf4b//sX6C/tRn3Xdaw63sx5vR99/EX/6f/ge6JI7Ss4bO/+It8+p/+Exa6jdAc2Cc4NaHJWsTpRZGj6lhYmuXYycO0u128r4ReoK3Q4CAIj+DECOawiEZ/i+KNQbIW9U5FrwOBptPL7zQm1F1xFExOPsUEPkKhPZG3qd94CakmEquBJNYBWyd0EsvhxWbYubDuHzR1mljoXiVbaSnYIictRhgXdx8PdXU0u3M8+J73UFi4ubLKjdVNslaXolSSJCNJE/KiZGNtp3a4OFcwO9smSUITrOA9kPolEY742AZlbm6WRqNJ6UqSzDLfbqPDIbZwyMYufmcI0dtEZAK1giYVQ0TbxhqwlmIw4ol//mtc+fKz2KwZRJAL0Mlb4eCjD3HkI+/m0Efew7EPv5t0eQGKEGBKul3yJMMhpN0Fnn3lCpdWNphdWuT8yy9y8flnSRLDx/7oD/KX/97/xLs//G6KlUtc+vTnuHbuNbrzbQ4sdRiNx+xqk7/787/Mp3//SZrZDKUfk7sd3HCLdrnLd777Lfznf/STvP3eEyx3m7z4+c/y3/6ffpLe9gZiQ/Tb2ISyGLN8/Cg/8bf+JnZ+hhmE3/6Zn+b8Fz7NbDtj7BRPwvT24NX+yGVRkucFZRkjx1q9JJaEhsyvEKSrWuZEkU3IupVmI6TaSEAY38wwVdFF4ECJrs5gnKk1EWdJLe0VCVma8fBqb+ECDQXsBFjgUbwVTNLkyg3PF57fYWsYJhx9NXtnooo6A97QtjmPnsx46GhK0xQIoX+PtYbdwnH/+z4EC4uM1PL8S+cpXdibyzlHu9XEYBkOc9bXN4PRq2CsYWFxLjhgTGU9hdcU64cmt86Tj8cURc78wgyznTYUOW44YOfiNWRrFx0XYCTsLTN1K9NGXJUNqx7ym+tc+93Ps/rEc4jNQucHb5ECfH8ERgLcyEvUhZ1hJNoWcmiZvNMlb3T5nS98FdvoBC1aOkap40f+6x/nh3/ix7Cb1+g/8yXS9VVmRGlkDSjDZni5yfiZf/bLvHz+Om9/7F0U1XZErsR5yL3S6+/QaAs/9Ae+i2//0DuZ61gufeVJ/se/9FfwZR6CUmJI0ozSjTl44iQ/8Tf/G4ampOWG/NpP/S/o5s0Q7igJyXEanV0KQd6GhmFmykNILH1NROMRDqs5iRYBFMUmY0Rg5NIUJwHATBIyb33tGVWGqUR6jwLeBBS0F+ZMyCEwQsUgk32EZaIVqL4LEm/SVgVUHN54hjZhs7CUJov4vsI8e6dpCF2C25nn8FzG0aUmzSQkboUDlMG4pHPiLA98+LtZH5asb/W5dnMNk6SUztFohuJ0ESjynLW1NYbDAc455ufmWFxYiOuxx0Kqk69C17ewOd14POLkqeM0Z1uhhXlZsnXtBv2rK8hoHBgrCXBOfG0W1YyQeNDCkc10ePBjH8Amliu/9TnO/9qn2b2xiZEE02hi2g1sYoPEB0zcOd2XDkSxszO0HnqYz7/0KucvXKfTnkEx9MqCH/vrf5nHP/ld7L74JHrjEh1Toq7P3HKXYyePcnN9g9eur7HZy3nh+Zf52Ice59iRJcY6xM/OoUuHkSOHSe8+QffBu5l/8D7SI/N89GPv5WMfei8LrYTXPvt5/tnf/ikSm0TIKiQmoSiG3P22R/nhP/dj9Iuc/MolPvNP/hEHMkHLHPFaP+ZpB5iv6hIkwJtElEQc1ngyK7SNZz7NOdAuaDLAVNsmqYQ6hiTFGcstQvQbGPvcoJH4ZdIBOgRnJd64AZlSbGoIpRUS/F4yYR7jo+aIKCutziFK3XnuFq+Px2DZGhievzFCvTIuUhJTuVaV/w9r/x1n2VHe+ePvqjrn5s7d05Nz0CjniBISQiBMssEkm2gMNg54bYy967V3vb+vA84YjAMORBNMMIiMhFDO0ijNSJNTT+fum0+oqu8fVefc2yPJu/7t9+h1Nd237z2h6qmnnvB5Po8VATMtw2W3/CT7f3Q78dIcUzPzlENFtVpE65SBwRrNeouMhLHZbBNFMUHQoVgsUwhDkiTJF0H/MhQCkiRFa41AsGvXDiiFaKsplosMVavMHzpKYc0qCsUCVIt53YUFD/l2vzlcvMDohKGdm9gkr+fYXQ/R3HeYzvFp1OQwQ6tGUaUCcbvL7PGTDGxdx7ZLLsCmBmSAThNUpcbMiWm+/JVvUixXURbm2y3e+Mvv56KX3ULj2fspdNoEpRArIU26FKqCl7/qpTz22NPc+sN7uOryywhEkaFaBas0anyQ6uqNiKDgFXPg5suAqho6dp4brrqcznyL2+5/nG9+5vNcfNXVbL/4AtI0QUnHaK3TiFe8+c08es+97L/zPvb98Hucd+1Lqe4+j06sV8xxVrebJSWFyF4ujC6FpYClpjQbJwqUQ8GJxZRjizGpLGFx1McUQodSNf935g9kXFM4U8YI98q7vfRtL8InlITfpDIZNlnyzARY6Siuc0/BKnIvOYPGWV9Yb7MQoi+5tAJhlS+6KXJoxnB4PiUhRBtfGGNcYimOE6LKGDe+473MpIaEIkdOztCOYgIhKEnF0OCAK8hGIGTguPs7Ecv1OhbXxNpYB/G1JothG6RUpKmLQo2MDbDrrG1QKiFLNURYorpqAhunzD65Fz2/iI1jX1hqHLu0Ndn+n+dMMqKq8TPP4Mw3vpqhS84hrZRonZxn6r6nOfb9+zl55yO0j01TMAqrtYMF2BhQYMr880c/RXu5S1gq0WpHbDrnXG7+mbegZ/ZTxVKsVLDSmV0qLJK0u1xy+UX8zM+8lqmZBf7tmz+kkxrufXwPcblKcdUqbCCdI2oEVmtsmiKMBm2pjI6jRcLNV1/E6pEKpt3iUx/7ODbWDh5jBFKEIBRIyTt+6dcIhwYoph0evPUr1EixxtLvM2a5GaxAYRDCUJCSkpCEEkoSFJoCUJEBSkeUC4oA14fCxVcsOiiReLI1t4uInjKzvd28/8hNdtF3L9b2Y4H6meH6UJ/+b1JkJZA+jIRECIOrAs68+ec7uP1RpixCRBb67Lu2u6rMrykCbw1a46JC2ULyvsBSJ2HNZddw3Vvew48/9Q+sGww4NjXF5tVrGC4XkTphbGiQeqtJrF1/LrKifZ1pot71XFhUuYZ3xhKnCedecAZjm9Zgl5egXEM3W5RGhhhstGnOLXDq0aeYvOhMmBjGhgUwPqMtnEnkghQeuiEDdLdLYbDKxhuuZHK5Tmd2kfbiElanFIsFBiZGKY4P+86ShjQ1hIMTfPoTn2bvE88xODRKmiS0ki7vfOtrIV5g6uF7KKea2vgEheEyWI3UDm+k4xavedOr2H3mOdxz530cPnqQkdWjqNoAUkRugUrhI1V9kuB7IIdDVagv87IrL+LYN27nmYcfZs/d93Pe9VcSJYZQOo4mnWrWnrGVq1/9Ku74whc58vijzD67j9rO82jFKcrH64U1uJJnl5wUQhMYQ1EGGGEJhKGiQGnDdDOlUCgx3YwxquQ62OMsCyNCjMxobU9fYM+XvRc6/G28sAn0QoddcbGslYUEofuWlw9w4Ox5fNPpnHwxvx/R2xqzoCyQ4T+tjxi4o49+pe+fYhAw00658NVvIG4u88i/f57V1ZCTM3OYVaMMVksUhGRYVmlFMY1uB2NSApk9stvRsh1IoVCBotHqkKJJRcxlV17i7i1U2FJI2pYUhWRo1RjJcoP2yRlORBHrLjmHYM04ViqXac0DC/SFeI3rLJPEoFOKlQLFbWsZluvdZ7SGNEHr2CXwrCQcGueL//SvfPc7P6RWGyPudtFaM755Hedffg5LTz/E/KF9VG1AFMWsHTrDmZ6u0hdISVqL7Dx3LTvP/2noxiAlWse4qVf5zK6Mk8eQJoSVEh0B52zfxNbVozxy8AS33fp1zrvuClcii0QIjZDOrH3ZG17D/d/5Ds25Fo/+4IfcdNb5NLsaK11trxCWQBqkFCidUAtTKmVLqjVGBoTGUDx6mGRpkeWdu2gEVRJRJhKgHbLKzVwWyBBwOiPEyuL3/0ia+6RLrJgvsfLVZyfnZZBS5kGj3AsXPYr1DAjmRd3FwREeJ2OcvYdBeMdHCY2U2v1LijCJWzQ+guMyusY3reh5moEKmUstV73zvVzx1vcykxRpasnU7AInpuZodmJUochAbZDRoTGq5SqAL790ZFYCgZSuP3KrHdFsR7TjFmvWj3P2Bbsx3Q5WCeRAlRiLTVNUKBhdN0FoITk2w4k7HyY6eNI7r44tm6zngIdwuDHzO6nPEZg4wUQRttPCRBEmTbEagqBAWB3iX/72s3zvG7chVJnx9etZs2kTM/PzXHjtVc5htAlnXXI+Wy67kFU7t2CM60mMNWQ850GhgI7apK0lLBFp0vb6JkQI1ROYzFO1mfmqMdYgqkWqIVx69hkMBpL9jz1EffoUpcCjYDFImWKJmdy8lbMuuhAZdzn82MM0pk+4ZoVW+10QAgQFLNUgZe2AYPuYYq1ZpHryAKujFoV9eyg89RjBwhJSljCJ9BR5PTkTvrUu4oW0/n/ueH5NsBfbPkuejNIko6J1YdGs1U22QIR3il10PevyAi4sqryjEwgoSENRWUrKUg4spcBSkppyYCgpTVEZCsprC1+kmRtNPoOHBSU0gVLMduGSN72TV/2X3yYeWcNMw7BQNxw6OsPBo1NMTc/SbsUEQZlqdZBqZYAwLCFESJJYWq0uswtLzC3W0QKa7To33XQdhbLCpDFYR0duAuV2JmMIayXGN6ymUirAfJ3Ddz/E4lPPueRfGKCVE3yTmb3G1cmiszBIX1hESoelEQWCwdUsdRQf+cO/5vvfvpPYFNh41rn8zC/+IlOzsxQGq1xw2XnohTlKgUKVylCUQAQmBpvgAhMgcLUJUhRRqghIVKAQgUII5RqDvKCa9DgvCapSIdYxZ2xez+jAAK3FBoeefdZ/LqF5cj/zex9Ed5uA5JLrr6NQDmjPTjG17ykGKwUgdZ1zhEQJS1FaCtJSKBQhTek+eD/i+7di7vkBA3PHKcUdbBSR2phUOGZpV2kMWXE+WVhVqBe4///z4wWpEV/IdsoqwE6LmeT2c8/QoddMr+9cQvoBwIW9lBKOVEpol/yQzjl2Rdhu8SVCkFrrYLB9BljmTAk8LaEImGq0WHPplfzM1p3c/42vsOfuHxIvzVLptqgEAUo1UVJRDJVvxOE8lziOSdMUqySqWKberLNr1y6uuPJy9PK8g26kHmxXraJbC4TCoG1KeWyQVUoxPzUDcczsA3tozTVZddE5FCZHsVKjoxipXYTD0i/4wluPrhhJlWsQ1Hjsnkf53D9+huWlJqXiEGt3n8Hv/O3f8N3PfoGTR4+z7bxdbNu5HeanmFtoUatUqA7VMJ1FZ2J5+IjjG8qUk+pdN2P1KLjFQRq7wpO+ee15gQJZKtG0llXj46yenGDqwAmefWIv511zLQJNe+44yfwU1VUbCUpD7Dz3LIZWj1I/Os3UM3s5+6U3U6eTJ7QCYQiEoaBgth7RJqUzv8SaTh2xdx5JwOzYeqLBUbqJJjHCs1L4YaMX+XEoAftC4uqPF9HveckvBD3aE7eyZC+MDzbjAfW/CHIUqPedQCiy2nyZVenbzNs2jhVaOly+spogUK75mhQOwqxcdGep0WW8GlAjIg4ldVtApKEDzvkd3eUdvEOFcbuQV2KSgPlGQrEyyuU/817OuOFGnr3/bg49fD/140dIm20KpEiTOr4ZqUhMyuDQIKoYYFNDmiQomfCWt7wGSYxOLT2/xBJWi0QmIRQKKVyj12B0iInhQRZPTBPVW3SPnODwwhIDZ53B2I6tFMbGodPBxnUMSS+cjHDVa4UaFGqcPHqSW7/0GR68+1FqpSFCU2XrBWfya3/5x3TjNt/70r9RkIoLrrwCRI2P/tEnePTh+6kODvDTb3od115/KWm3ieozZ3NyXR+0sMJiSFAi4PgTe7EiZd22TUiVadFsp5ceiqAQxSKiXCJQAeNjQwT7jjB3+LCTCBsyvHE36fg6SrVR4nadgfEB1p6xnZljs8wfeJa03UWpIsJqFyk3CavHSlRLIYdPNYlsSGXLGZw8fISJdkJdWjrrN9Moj9JNBFa5RJkzh10izpiMh6QXVu1bFX3Hi5hH3ua3QIAvfXRhT5lHLaztjaTNBzFbBJkp5AbWSC+FvrGcr5pBWIGUIIUmECml0FIqFgmlRdqUShgyoCxRJ+XUwgKdY0sMntrL8GiN6jmXcioYxErp0JVWkliwwuONrPGawUdyjEWKArG2nGwbgvGtnPPaHZxz809RP3WMxvGjNKdPoaMOSRwRhIJNaydpn5rigR/eRhhAc/Ekb3/XT7J5xxri5hKFoIQr79BYNEGtRFQpknYcAa3xdakiUIxv3UxjYRFmZokTyw+/+l32zi9w4XVXcd45Z7BxzTDhQA1U6MYnhU6zxdG9B3ng/j089ODDRPWIkYEREm2RQzV+7vf+K2Gtyl9/6PepT59iYM0or3r72/iXv/kE//61b3DpRRdwYvoU//C3/8KmzRvZuGkCG0UI370mq+0QmN6cCAeHLijL9LMHEI0G6887y+dxepQ3zowVoCQidBVupXIBpQTz0zPY1GGtgoF1hEPrnFx1ZqCo2LRrJ3u+fw+LU8doz81QmFxPmrYBQRAGDFQLmCglNpZ2IrAbdlO8tsCh/c8ixydJd59HwyoQEoOjil9RiWiMV0w2z1P15H/lTvYiKyAbmBcjxiJfIf0nyQa0vxhS9f0MvYCONCCli9MGShAGmjCUzM4sMFkL2DAIYvowwfQxzMI8G4JhioWQ8c4pzLPLdAarjOy6mLkIv58r0lR6bSCxKA9zyCJS2aq0FITEJIZ6AkaUKKzdxYZNZ6GwKGmYqIYUkyYPfuffufvHdxGmCQuNGV7z+pdzzc3XkDRmHI8tqad/AVILYUhxcpz4+CwEromD9IKijaY2PkJ5aIDZxTZH7nuYxUaHb37pm9z2re+zevUqVq+eZHhoiFQb5heXmJo+xczJOeKuASkYHBjEYJhrLvAT73kHoxvW8q1PfYbHvnsbKjC86RfezvDqcXZsm+Bdv/hW3vDmt/HFf/o8n/yHv+e5Zw+yeft6TKeDCJRLwlk3D1ZoDBqbOrs+tV1W7dxErVjkwNPPsKrdpTA06Cdc0PPevOIzQCAphgUsgkajQRonBKUAa1y835F7AUnK5s2bCYpF2q0GcyePsnb1BrqpQQSe+3U+IokS6jFYWWCOAuVt5xFsOYdISOpGY4VxAEITuL4TQjsjRIBMU2TWzCzPM/WWwH/mWNEl0v2caYDcjiG7sjO3rG+lmpVB9r6fN5m2kKVHlXAtQYeEodZsMzW1wGwQMb60j6GlkxRFxICAqm3QlgqrEtLBMjrpMlKAjoW2cXIfC+sHHOhzwvsTH84/0Cjhwm6ODc2w2IioFBU1FfPo9+/nvq9+kbkDzzBULmCV5vVvuJlXvf6V6PYCSmVaJQsRZnrUEo4N0623iDsRJRF4reASYEkUU6gNMTO1yMxym3JlmLKUNDotDh2Y5cjBeYRwGVFjspaphupohauvu4HZqRn23P8YlZERXvbGNzA7dZKv/+O/ENqUy2+4ihuvuZzGfbdz7aXnwOVnQRRx7XWXs+eJR9i1ewcogSiFfSWpDplqtEYGFjkw5JzGuEncjaisn2Tn2CBBuZqHpVdaEAKbuAQZATlZrVTK7xi4jKz0wonFRl1WrVlDUCqSNjssTZ9knbGuZBWLFiHHFtpAgFElJ9dGsGwEyriabeHRAo4cLBv5PjLmOEbZ3v72osf/wboIcsH1o5ZBTHvFLv5M+ag6gVN+h3Alf7jkifGdIwGExEpDiKakDMPLp9AP3s/WgTUkQzXKC9OMmohIpjQxmLImHB0lWH8GldVrGR8eZzE2lFJIlXSUiR5aUKqGtCNNovu2Oz+BrpONcZMkAuIkpqAMY4MhJ556kDu+/WWOPvwYpXabwQCMNoyvneRVr7mFpL2MytsfZeV2Pmfhn5OgQGXDOlqHj6Kz9qz+mZW12Njw4CN70CgKQhHrlJe+9tVMLSyxdGqabqeJwlIthqyanGD7ro2cfeFuhobX8N9//XdodDpcc/MrGJ5czWf/7K/ozi2yZusaXvfG19J67FFUp83yNJRXDxEUy2zYMM5H/uIPIO6wdOAQleFBCgM1rE4R1pd/FkKiBO793gMsL7c59/xdbNk6SdptU6wNeJNWuKCKxYdQhSviTw0qdb93kxgLDAwNEoShXzNeCIXrk2aTlKHBGsVqCb2wTH1uDq0NqXFjaiwIWXEZf+NzMTKznCXK9NC5LkxtHAJACIT/XSYxoenJY790vyg9ev9n+hZD4E6RwU77vpwpvtNWTrbm8vWX+QmZIGRryQqH+hcpFWlJTxxk1fwBJppzLE0JhGkwPzQAqzdT3LKJyroNhIODEJaBEJu0KZou5UCQKEtirF9oxtFjW4G1WdFE341gQQWuKVuimaiVMQvH+PEXvsCTt32PsNPAximTO7exanKSxx98kEMHjvK5T3+Rt7zzjcSNaQqFMB+pzBVyZp4CbVDVCpV1k3SPTaOMC/Na6xrXLTdbHDlxCisLpKmh0VqmOFjmV//bh0mXpuksLxItLTBQCimWQkgiCEJ+/K3bOXbwMLIywA2vfx1Js8tjt92F0SmX3fASBpUlbSxTLgbE7QSz3ECuKWGIMd2YqUcfo73YIhwfZsvF55F3r1SKejPhTz/yCR584BkkAcPDZd73wXfzkusvw9QXXfYbF2FRtm8nB9J2x3X1MZrlxUWEEKyeXI3wTH9Z0MTiCtqt1oSFkGKljEkT6otLGCvQVqJslj8SYFNXSO8JF6SXZ20Dx0iHRljX2lZ7n8QxullEqlF5WOg/2AX66FJWyPaKBSAsQno72lpyYgN/8lzAerEgbw712d7ZxzMAHa7zhrKuuEECpVKFtrAUSikDExOUNp5JYfNGCsNjEFaxQZVuapmZbhBHC2xcVaNUkBS7mjAQSKMJU0VsLMv1NqkNsML1ERa49qgu1yQwaUKoNJODIc/d/W3u/NJn0NPHqekUOzDM9a98BT/5nndSq1X47fe8n+NPPMUPv3sn27Zu5rKXuvCnLPiQm3AYpUwkhBXoVBMM1ChOJkQnZykaH6QNQ06cnGah2WB07SZKhRKNI0t888tf5yU338j4+klqw1VEZwHiOnGUECeW6vAa9jz+DNKGbNx9BrsuOY+Djz/J3NQUhcEK555/Nq25WYI0xgSQJBFKuq4wNpDErTqd1jJbL78YXSxgTIoUAm1SZKnMyYNTPPbUU1z/smvZuHoD3/rWd/jcp7/KOReew2C5hI1Tl6yyWRmrC2aYWJM06wTW0OrEzMwvgVIMrFnl5tkYT2SWYYkStElRhRKFUgmbJkSdrit39FB5YS05EgXXQE9ai7SaVHgNKjIgoWPvV6IXCRIWRBq56KIQuYL6Tx19yjKwRnvTxSVuXHF7b6Vk7ZDc5Pfe7zXT660Px6HpHkB670AISWwMdt0GysMvZ2DDGOHwmCsS1ykIQZpanjx4jJPzbZRUrB0uICk7srLAECaCQIYoJZDGYcGFNhgfCXKUHE74kyRmsABDdPnuJ/+Wfbd9lwGHJeXsa6/mtT//82zcsc1RrFjDB//X7/Hb73gvQVPw6U9/hXXbtrF+wzhxZx5ZkARGYY1z9V1TJ+M0mdaEIwNYLO2Ts6jYUC4WWe500XGHTWsHufyqq/nTv/gkndkG93znDl797reQGscmLZMEQkupXGJ+ZpZjh44iVYFLXnoNKMHs9DGibpORNWNMTK6isiRJGg26IkFODBKOTSLDASgWKZcHWH+xwJYLFEsldLeLRTha+k7Czq0b+cTffoTxVasIh1ex/8he7rzzAaanTjF0xiZM7OLiwliv2LSPvkXY5XkCG3Lk1CJzi210ELD53LMzdeDzMwqbdpAmRkgHcgsKAcqCSFLXQdMYVySEB0BSwBATaE2AIvHhV+lxYtpaTxMP0rjmiBAgjEHFLSQp4CNFWW4De1p5ZL/W75dVx8NqLMhSoUC1UEJ6iu5enZT0st7LCJs+FKi7nP+MzVqXajDZIvCF8cIVjbRHhimfey7h+GpMhuPodmmfmEJaQzlQnLFlDVdfupMd2zfSTVzTnVLBNTFQygtOtuN5gJWyGuWbb8dxTCWAdOYon/r932Xvt79HKbao4RHe9T/+O7/8J3/Mxh3bSJMOWNfWdGLTet7/33+TujAYIfnkx/6OdicmKA+6YhKrMsMYR8aUAK7/rtWawmCVyua1mNEBTEFRG6xhhWF8fJSzzj2bDevWIHTKA/feg4ljpFSogiPmMqkmKJXY99TT1BeXqY6OcPHVVwE4BgckhTCEUhFVLVHesJryxjUU1kyiBkd48N7H+KP/+kfsuX8v5bXbCEcmHKJTWLROXVG/cLvnmlUTSKuxcZNbXn8zP/FTr2DtxtXouIsQPUICh8Ny8x/X28h2jCpVeHrvPuqNNoMT4+w+8yzvE0k/LhoTtxAmRQrp5klKpHLlJhlHUy453kx2fZ4tKQ4fFBhHm680CKtISbDW1RYL63JJoUkQ3Q5S9oq0/m+OoP7sU7S1wibjBGrY36F3KL3zm8WUJThYsli50vKieWNc8Yos9jXacwOljaDV0ZQHFEbHLD/5OGrmFCdPnmDXT/00W9aMcbwR89DTR1lamGf9iOKcHetQUroFYCwyj89lO5Ij7jJCkiYJY9WA5X0P89U//0OC+iI6Tdl57VW887d+g7F1kyRpBLaDMRqBRoVl0iTmwuuv5S2/8kt84S8/ipxZ4uN/+Ql+5Td/lSCU6LjlHGOb+JCrUxNGiHxvlAMVqpUythOx9ewK7/+Fn2Ny7SSirLj4kgs4dPg4J44c5dSJKdZu30CilPt+kmLilKcef5IkTtl87lbWbt8GQLVapRAWUTiIuA4DRCohLJABD3/0g7t44sFneW7vSbafuYWrbryUc87awfDgALLsciW220bIAKsjRJoSLS9x3o5NnH/RBZB2XBun7JC+u4tSoFPiZgdVHubYdJvHnj5KJzFcetGF1MbHMVpD4JgcrE1IWksEaeKiTNkiUCEqDAmCgEDpPGvrlk3qmxVKRjuLFKaPEqoi1ibE2tKZ3MhyqZa3WRVIR66cRISdJrK/bNf2/SP6ROT/ZAG0H3uABVEi2HIVhYExYk8F0lsIfiBx2VDoBYREFprKrmo16BQbZE0wXEmcka59UqwNWgYgQ5b3H4b9zzJ61jZEucTcfJ1nnjvJ+MQqzj9zOyNVgTUtAjSBDHFUEk4zWf+kSvp6BGOZGCgy/8T9fOXP/ye1bp12GvPKt7+Nt/3aLzsEZNpGpTHojocMaJCKIAzROuaWt76VU0eOcceXv8yBZ4/y0T/5GB/44AcoqBidtBzqEc+IgetaqaxnM7CuGk7WqlTLcP74RWidgE3YtG0DxWJAq9Hg+NETrD1zG6pYIlUKmWrq80sc3n+IVGu2n3cOyrO51UZHCSpluq0OiwtLVCfKaNMh494nkBSLRQYHRihVa+x99Gkevud+JiZHWLNhLePjY1x06flcfMXZkCToZpNkagaVGDrmJDYICUaHKa4ac/NqcZE7a1BBgbTRJpRFPvalL/LInsOMj28Apbjw8iu8uauRyrE3JN06tJedPRC4RJtODUopCqUSedOWXhmim0cjKNNl5OBexg49SqHg8gpdY5hOLqG77RK6mQ+A06Zht0U57hJIHwa32e7cM3hsdinTb/as3Coy31bWFNSk67RhPH4nR4Bm4yL6vPcVp8joLLIdw2BN6np+GbBGYbX0L0WUCNJOTBCU2PyKV1K96WbGr70RVMjISJFrLt/Nlg0T1Jtd7nl0H8dnm0jpAFQZ8nBFWb4FtGW0FGCOP8s3P/YRBtIOy7rDG3/1fbzt1z+IFgadNCBZRqTLSOsdPp1gu00wBikd9cc7P/QbnH3ttXQiw97Hn+Mv/+iv6LQ1qlByrGq2N31ZqM45yc5xMlZihIHAoAoCTML4qlHKtQJpkrCwsAiy4LrfGEsxLHHq+EmW5xYhCNl1/rn56K7ZvInBsTG6zQ57n34GWa2QJhplJNYqkIoNm9fRTZrIuM6F6yb5qUsu4byxNcRHl3jw9sf41D9+mU4EolimvVBHpZaCFZQtlNMEM7tANONyE8J35BFCYeMI3W4hhODsi87l2pddhVUxQSj54r98lu5S3XW38RQ28fIygfW12zj+pG67DVJRrpT7JiuXY1fg4udTpzFlkTJimozYji+mSb2JrRA2i/pZ6LYoxL7pSV+IZuUV/s/TYdIkGqutC1V57GUOg85CYkJkofDe4sjCpLnwu9AnOkXYvvNZZ/7EVhKlknYKxiZQLTFx7m4WDx4jXm6gCgWe3HuCex58iuPHp5gcqTFccXz+SBxVoRWucsu7/gJJIYBSZ55bP/anlDvLdHTKW3/lV3ntu3+ONOkidIxN2wjdRoiEjJ9HAcIm6G4DjBduBb/6//t9dl9yCVGUcnDfIT7yB3/BiROLhAMTGC09HsXBuzPWa8iyp47c1FjXbRIJhXIBGSqUlIRhEQhBuoZyBAUO7T9Mt91lcHyMTdu3A6BTTW1slE1n7iSJYx69835MZAkKRTfOiYVuhwsvu4BmtMzO9ZO84+U38IarL+Pn3/A6fv5Nb6QWCM44YyeVoWFMFBGGgScWTl1jCSkoWYmttyDRGKzHZimSpUVEGlMoBrz85dfx3l/+Wd717jcwMFBk3549/Pi730OqAJNobNzFLi+gF+ax7RYCiLpdonYbISWFcq2vFr0Xu89iiF2pSDbtYG5gnGaS0IoMc5VV6HVbHKsMCo2r3sMaRKeDStPTxLgvFJpZLc97vcgCwLpkkLGG2CEv0Ma1D7W+Gj9rlZo/iJC+AMzxtDjnVKBkAEmK8vF51zFeEKeWRKckFuqRJDEapOXU/Xez94v/SjJ7ilDApokK152/mZddtInzt44zXHFlih2T0k0DdBqQGIkxILRGW8tYWfLjL32SzvEDJEnKjT/9Rl77znegdYoSMTZZRNoIKQpgSwgfNbIYrNQIWph4DqliBJpCuciv/8Wfct5NN7AcxZw8ucyf/OHfcO9dTyCrY4hihdRaR9+CJwyQFitTrEiQnsvG1Y5L6s0WcQzl8iATa9YCEsIa4GpwT5ycJkkFY2vXMjox4YxK4fhOr3rlDZQqRQ4//hz33P4Q4cAoWneRgca2Fti0dQ2vfN0t/PixR/jmfQ9w1zMH+eZd9/D3X/oXKmtC3vD212A6bUzapThSQQ1UiNKUOEog1WiTOLChxBP5CpJ6HdPpUggUzVOnOPzjuzl+932cf+6ZnH3GNkrCcuipp3NZM61F0pOHWHzsceaeeQahE5qNBt1GCxOGFEcmfc5II2wKZI0VXRBDG8Hi4CSLZ13NofFdHJzYwdLuK5grTdCVIfhmeBpLwWrCRp1A+5Coj6daKXNZdV63exn/vpW+fiCrWrTW87baXiY4zwbTq8gS+YrCO70+jNXHaoywfuPzO4MxTqOqEGssWlsSLImwRNLSEZqonVAUISNbd7DrtSXKayYgarN2TIKOsBri2BJrSbNrWIoVKSUSDSY1GG1IjWZ4oMjRxx7kidvvYEAINl1wLj/7qx9A6wSJRqcRPRqW5x953sIm6O4yqljDEiKLil/7yB/xmT//K773qc8Bgk//0+d48umneO3rb2Fi3VroNjBx1zV7kPg4tUWbCGkh0VAcGWTPYz9CR4by4DBrt2zO9ZUKBYlOmZ6ZBSHYuGWzqyMwKUoqrIk5/8or2Hrebp584CG+8C+fYefmVawaqWG6LddarF3n7e94A6vGx/nRD37Mg9MnKYSS3Zefz2ve/JMMD1ccQlQJJCHlNRMkpQJps+2UXhgQjA2BVK5TZatFOj9LKSiwcHiK6WcPUK5ViNNl7HKDkVoViSSOul5/J3TqywSVKmp8xOV0VMCp4yfoNjsIVaI2Mkoca8fqLcnDoFkQ1QpoUKI7spHC+cMgIFFVuhRcIqwvR6WSLmFz2TvRjrbfij68shC8GEucs15cmqH/6NUEe9PCgOtF5YU9M3B6Ka6em229LSxxhR/ODHICKkLnAGMsCYJISEINxJp611AuGYpjYxQnJzFpCqkhsgnaCqIYWrGllQa0kxJdHbqO8dpVc6XGYqQg6Cxx++c+RTXRmGqBd//Wr0GoXHRDR2A1QijnnPvF+kKHFBZru6SxQRUHsBTQxvC2X/8g2885i0//+V8Rz87zxD1Psv/pA1x+7VVcc80ljE2Ou9xAp+UyuibFCo2QBYpDq9j/2LPc9f270Vaw5axdjK9b5/AwnRZKQbMd0Wp2kKFi0rMzW4ft9kkmePP738Xv732apdl5Pv4nH+NDH/olKtWCez5hIWrxyp98OS9/zQ202zGVIETVytBpkrbahAEY7TSoLCrC1WOEZgSrjQMZBgFYg24sk8wtUpYhth1RPzHN4NAAa3ZtR8gCaTfi2JGjBGHI4KpRALqtZUScUl21iuroIFYGUCwyffwUUbNLMDFCZWSUdhQ7CIRL1oD1i8FHE5U1WBsSFYZJRYokQBmLEKn7klUoC8W4RbG52EfFnmeocnnsl9ZMYvuPFYleIMDjvrHWcWUaBwAW3ul1kIteajz7oT+ya3DF0Q526yJB+LJI40uiYqPopBZrC8zGmmLHMqwkOjLERtDVhtgUXEFMKuhaS0crOiYgTQNSbUk1aCuIDQyWS+y7/dvUDz5LoGNuecfbWb9tG7FuE5gIY6LcKeulwU+PBPT/7Oz2JGoShoMEQQmtNZe//CZ2XXA+//rRv+GR799Gshjzna/9gHtvv4szz97N2WftYtPGtQzVygSFEiZNmVtq8tC3v8kPv/UjdKxomJRb3vrTbgfWEfHyAgPVAQ49d5xGvU2hUmJ8zaRfjK4wCClJ4zYbz9zOm97xFj79sX/i+KFpPv6nn+Dnfv5NDI1VXfxcgW4sIJVloFgAnWCW6gihCFCeg9S6KJbNstv0kitJgllcIFlYJk0Ez87Ms33TJjbvPgOrU2xYRAyM8/3v/pAjM3OYcsil110JRKT1ZWoqcFC1oEiaWooGjh86SmqhODREcXCYKDUeSiKRnlrHoOkFd4zfDTKMmcYGvqrQAFYSCkultUgparosdzZvVuQxIOdj+OSc7S/0X3n0ykB9PUD/0Yut+hXlnd9ebY0l/47o/W48PEJhMTp1FCEuC4K2isRYlOeC1FGRNEkYUCkycI5yKgTWujac2rjm2JERRFqQakFq3GJKfRG0atd5/PbvE5iI6sQIr3jD67FWE+iuC3WuWPuCrMuNeMHMiQAbOAvRaKxuYgsGFZbQqWFk1Sre//u/y1OvvoVb/+VzPPfI48zNNrjjh/dx1x0PUKmVqFZLlMolRAqz84ssNZoEImQ5innnb/4a515xBZaYuDFHUcD01AKf/ccvYIxEFQI2bd6cT471GXQlJZ3lOlddfw3f+tKtRAst9u07wV/9+Sf52be9nk071mNEilQBCOVJeK0LxRvH16SF8Nu+Qku3sNAGaSym2aZ7ahZZ71IeXcO//+AHfOE7P+T6667hpqsupVYusDTd5N5b7+XhZ55juhVz+atuZvdFl9OcPUSYxm5NC4VGYpUhaXY5sf8wgQwZXruGoFajEWnC0DVQkgasslikI0b2pFdGOrNGGEVmrVtrsARoIQjQlOrLFG3qUK/C+wGo0/SazeXY4il36O0Ep89+8MJGQR8f0IrT9uz+/g+4vIzHnwsBxpUqGh8ANgi0ESTatTnSJgBVJE0TTGJcCaWjTcZo4WAKWBIriY3yIVXrwow6pVoOmd7zAMvHDoJJufLlNzC4ahVJt45M2wip3URb8bwHfsHDus7s+EQXNkHHLbS0SFl2DfewnHXJxZx1ycU8dd+D3P2tb/HkQ48wNz3D0kyDwDR8V0uJVhJZKjG0dhXv+YWf56pbXoVJO2jbQTeWWDg+xV/+4Z/TnGuTmJQ3vvlNrJqc8FSK3p7F8XAGUhEM1ti0fQuP//hRBofHOTbf4BN//yVeeeMVXHzpWZRHB0il8oKRaUIDwnhO1RA8SpZUkza7JEsNVLNNVUjiwiDf/v6d3PbQUwyv2sKP7nuKBx/fy+BQmUarQzuGVqTZceH5vPe3PkzSXEQ0moTSUdcLAoTRFAsl5qZmmZuZw6iQVZu2IItlB6nIE6oOtyJRPb8yg87noWTHi+qGwoHoimhUs+5g0NJzOOE4RVdSMPSk1U/tC1i+vSUR5ARXWQG3x8RmvQCMj8a6FWXImudZn5BxdQHaZWOFp5pNY0QSkRYKCCMcc5DVjtXLLW3a1hBJR5WeA+psxkOkPFbHc0sav80pjTCWAQWP77mPQtxADlS48uaXgU0w0RJSJUjfoyAfBNu3lPtXRK4WLD2SVbfrKVJMt4FRMSoso2TJ+TZSctbll3DW5ZfQWqjz3FNPcmz/QWZPThG1mwgpGV0zyfazdnP2xRdQqA5i0ghMF5bmaE0v8/E/+jhLp5bpoHnTz7yBl958Be1oiSoTLsnojGUsIUqUEYWEHeft5NE770UVRxmqjTK/MMMXv/EDHnr0Sa64+ALO2LGd4Yma6zegY6xJMFYjhHH05lYgDYhUUhABiDJdGfD0gcPccd8DPHt0isQGRFGHgdEJFpeXmD2+hCqGVFeNc9MNN/L2X3ofBWlYPnGIkkicg+r7hBEA5QrPHThIu9UmKI+zeueFaB2i6ILVrngI4dgzRIIldXxJNgCbIo1GWkGkPO7AOk0foKl0lim0lwiUJRECjMLa0C/2Pn7XfnSoF36TRS8zMfPwa2ESgv7qn5z0yi8bC17Ye/rfigzM5GPx1q5IkFnvM1idIDMzCrdjGO2dbRE4BYWrIfDeUQ9ajcjhvCB82aPr0B4WFCZqc/LZ5wgQrNu6ha1n7sYkLZTRWeP1//vDuhixSbuYNEaEEUKVwIYYt19THR3k/Kuv5Pyrr3zBUxgsxsQIYUiW66RLbf7mTz/KieOn6KQx7/iNX+aVr7mJuf17KBWrWAxGR8zsfZTqwCiDm3ZhA4VJIy684nK+9bmv0263eO1b38Rzzz3HnocfYO+Rkxw5epKR4UG2bl7Hts0bWD0+wlClSFkJCoFCqcBFbzQ0uhHT80vsP3SEA4eOcWp6jm6iaWrByIa1vOcX3s+288/n2LMHWJibZXR0iE07tzG8fgO2NUvnxCFGBqpgi47mw2jSTpu4ayiULM889iQgqEyOs3rrVpI0QSnfBNwKAoFn+049YNIQC9elIvVVX/QVOBkhCLEE9UXKXdexxwjpEczGOfdZegGBlZaMafr0xNiLRoEya6Zn3veSW1Y4e60/vOQc+b6scY5JdcLuIMkpMqvkEY7IVFsDBowPPrmCB4UVbju0+fW9HSd7W7q0oI2lVFAsHDlGPDeLQnLO5ZciggLx8iyBTpEF5Qv3/785pAd76TjGihYyKCNVCaNcSydHVWQRHrrrR8gzMzhUbGdxmlKq+eTHP8n+J/cSW8nrfu6dvPKdP0fz1D5XSNJpIWwXSNBxx9GxYLHFkG4nZnLjBs68+AJu/9r3OHjgGD/1rnex+syd7H3wYWYPHmKm1WH60We575G9FEPFQKVErVygXCoRCmdGtrpd6q029VabKEmINchKjVVn7OSVr3wFN7zm1ZQGagCMrp3sG4UurYVD2KV5lmem+N7XHqWx1GFgcIDN2zezY/c2amMTtOcbPPPIU1gbMLZpM0MjY8x0tSOxso4YXwlLITCUTMzqiRrzSy2WI4GRitQqT8fpagWsCLAWQptQWpqjFHfy2gWngHutvDJxl5nfmundbDPItP9p7wdZ1CcL5ffoJwRSWoTp+4J1k5tHQvGOC4aMEDazuUSaIpIYUyiS4mHe3gbslSl488e46ISyMl9Mvb7E7loSEEISKsnxI/uRnRayELLjvLOBCJF2XWMF+hiq/z85vEkkDJBidRubRqRSIZVCyQAhQxCpjz5kGHUDSUq0OEdZwXe+/g0euut+hFC85JU38+YP/iqR7lIeHqErFbrdhDRChSXWX3AF2ACbNQAUAWmU8tKbX87jdz7EYw8/wgU3vIQLrrySnTt2ceyJZ3jgx3eyePIUBV8PvNQ1zLcj4qQJndhRvqPRgaI4WGPt9p3suuAiznvJVZx98YUoXwSktfHsEdohb9OEZGmOchIxdWqOj/zPP2PqyCxpx/ko5cESk+vGeeVrbyFNLM25BkYW2XLueWgRoE3HkYEBBSUIMCgdMVpOWD9sCVJLu9XChjWsCF0C1nrmB+FQouVOg9LSNKHwZrQ/eh1ApZ8pc9rM9XEG5bUqmaw7P3dFUbwzgXrSbXs1ct78ce+6GRaQsw2oPrfZr0RrXe+rQsFd3Mh8kWVRXDKeHOEeRhrto06OQ8iS9ZzKziwIgfrxI2BiCiODrNu2BZu2XAJNgaDI/3f6H/puOrtVQBMag9GJY08TGWTa4aOscOHJtBtREJaDT+/nq5/5IkqFrDl3N+/9nd9yBR+ADCuUJ1azMDXFQGqQoSS1YK0kVAYVVCiPhlBvsO2csznnovN5/P5H+MHnvkSpVuHU8RPoToROUtI0odttE6ea1AhkoCgUS5TXjzG5fi3rt25l/Y4dbDtzNxu2bUOVe61SdZIilQDldr3AapJmE9NqoRcW+cZ3vs3DP76XeC5i/cQkO3btZLm+xKFDB5k6eIjP/c0/Ua0OUSkPENYG2XbheTSSJIdM+xwsobSsWTXEhkEgrTM5VkSWBth/KqKTxLi+cQHWGgyGwEjKy4tUmste1Sqk760sjBv3DJzpoPs9dluXZ+jJdv6zn9YVC2Cl+PaIcMlP5jeeTNOvuEh/oImeb5CkXov3SHatdaZj/kHjHEspJEFo8kcw1mI0jkYQ4biFEJDG1KenSHTE6vExBkeGiNvLSKtdgUNm7L1I0us/f2TbX4AzbbT3rDyvrJDeuXGL2QrPdZR0HaDMlPnsx/6ZQleQVkq893c+TKFWQycRAQKbGKqr1mOLVbRHN4YyBBQkMcf27WPfow+z/4knOXH4KPFig8FKiannnqPdaoEQBMUiYalMcWKC1RPjTK5fx/otW5jcsJ4169cxumbSmTZBT99Za0h1milDZOjUhtIJpt2gXV9EdzrIxPCJP/lzHr/3YQooiCPO2DrJ+375Z4CUoyePc/edD/DInU/S6SaochHjO0ZK6TtleGSBY48wtBoNlgkYH67QaMUsL3ddmFsIhA09UZePDBmNWJijHEegpM83abQSWBsgcY5+5q9m0tnv177oIgAC133FVeFrEfSVmPWbIAKnXvsr8TNLzBU1G6vcFpSTBhmwHUgrrktiJktWkmJBOny4kIJACJSwBFJQkRqspaMDoiwPYgWJt/M67SatpRlILbXRQQqhJqk3CI0lEtbjkiT99aArxHmFL9PbKYzMdq7eYFlcXgBUvjsKRN74ITcbBfk4aWKwCrPcpKRKfOvr3+bI3v1YWeRVb3kzG3ftJk7bhFaj09iVEmqorVoLwSAQc+TJJ3jkznt54u4HOXLgAO16Ax27mHuxUKY8Nsr4tu1ctHM7q7duYcOOraxas5rq8AjV4aGVkS73dC4vo+N8kQYiIJDO3hZYTNQhWl4ibTUgTtDWUpuc4Adf/BZPPvAkE5MTnH/+TkaUZjCK2fuvn2Fi2xY2XnAeG9/7Dq6/eY7Pf/qzPPbwE5SThH/7kz/hp3/rv6LLo3RSiRLQlW4sTcuQdBuUams5sdRluq5JZBlhnFsrUZ4KBWrdJrWFU4QYrMmCIQKhXVg3Z4vICrD8/GqLxypn8+N2A9f9KPRjAoHN2CCy2fRbSh5J6rP/M43v3pd9ep0+AbG972LRSYyQJWca+I2q9z2Hogyk4wmVMmbjqiJJojkxF0NQQqcak1rHzyag027TrC+Tas3g0ACkXWzX9anFR4/+/7GA+nxvH4jw8PC8yXaWTbXZ6umpE5E9iUVZSdLpYJOExekG3/rS1zDWMLh5Nbf8zJvQSQeVdLFxAmjHrlAdpD2/yMN3fo97v/cjDj7xDM2FZdI0gSCgMjzI6s0b2X7mLs6+4ALW797F5MaNee1A/2Gta/Pk7AJX6SWsp4NUILyjmT+TtbQXp2ktziKMoVgoEQ4PUywUUSOjHD56DJ2kbNuxhZ/9jQ/A8gwL+w+xsO8QJ598juXpeVZffB6rd+7kg7/3QT7395/hzm/cRePgPr73yb/jpl/8EA0NViqkFEQapAjpmiIHTjZpdQUmKGN0gMT2io6MIJSG8uIs5U4DqTyXqZ+tzBLpP3rlu2Q20fMnObN/vA0UnN5IACt6BRL94VCy3/ujQxlXkBP2/hL67DI6SQgKKVYEkC0CYRFWeuGHokgJRUylELFutESaCOr1LiZRBMJlf7HOpk2jiKjdRQgc1jyOHbU4gLZOY8sVrs3/9sgrHnEawgiLEiGyWHJwaW/S5V1zpJugzEbs0YNYsCFpfZ5KocjXv30rjZklbKh447veTKESkMzPI9IEFRaQAxWWT07zw299gfu/dzuLx06hY42VguF1a1i7axvnXXwR51x8Ieu3b0F6dmv8PGqtcxMDAk8KQK+DekZbZn03FUnuMCK0U0RWUBwYplCtOZbsoOjI1+IWmJRVExNYAUuzc8w/9RRja4cYPWM7I9u2sXDwKLNPPMGRu+9hbGmZiXPP4C3veQvN2SUeuvdJDtx3F4df8jKGL7iMVjumiMJKQQeDUSU6LYOxyiFr/VhKH3cTCKppRHXuBEXTzckP8q0311g9AJxjN+nVqufMGKzc7fuPQAhH1JR1drcii2R4LZ3ZVX0cQUbYPlMhWwQChGtxlF3chS9TTBIhC556wzr0qMzyCRaM0QyNFNi5fpCS6EAo2LV5jL0nu7QXHfta1k027cZIT5cRhg7LIoxziqzRbjEEK02dFcL+YgARMvtRIFVIY26Zw/sf5+yLzkGj6TUA69se+6XR84OkcUKgDYszC9x1211IGbD5nN1cecP1xLNTmDilNDRMe26Bb3/2c/z41h9Qn60jLBRKJTaev4uLbryOC66+nNXrN/VdJCXRXXpdLZUX+Kx2uwcFe/5z2UwbkTYbBJUKBGUHZ5YgwzIZB5SxzrnHs2Lv3LWTUrHEiQNHufffvsnll5/NwBlnUFw9ydjZ2xnaMMaJRx5n6oknSOpLrLviEn76ba/jqSefoTG7zJM/vo2Xnn8JTeNAbcZKNJKu0SCk5311MX1X9OIWcYCl1lqiujxDqJyJnneYwfgF4+KKZKx0vnIRhKts6ZtrcdpwZMcLqkqb2TQis7jyNzP136fJe86ywwRlMGoJVhNgXHmgMdistaWRIA1GuHpPKxXNrmVuvkVtvEJiNAv1NlHk+D4dEa8r1+kV3Fg3UTpF6NRlT7XGxBGqWH6hx3rRwwqvGK0L0wZhkb/7y4/z3X/9Ch/4rQ/y6vf8DEln2XWZySuB+kfSmxRKkbQblKsD/OA7d1CfW8QEIS//qdehTYJJE0oDNe769vf54j9+ipljJ5AypFQb4pwrL+VlP/U6zrr0IoTyIUnraQeFQApJqAp+kl3hu7EarELkXdZl737yf130zsYtFu7+EebEEVi3homXvAxsgLTaMXT4Gg2BIEC4voQSHn7oYaIoYsPGSbadew7Lp+Y4deh21l90HkM7NxGUK2y64lJqw/s4cu8jpNaw6aaXccGl5/P9b9zB/OF9xPPTVAZXeWClGyvjs/vWOsF1Hp7D7UtrqBBTnj1GJWl5zd9vXfR7s30avw8ObZAudO0/lqFAT1cPKxaA6PtgzoyS7ezeiRB9PkO2U/QHXPItR7roiMAVyhur3QLAd/cTbldJjSUSAhHBwRNtBsslOknC/pMtEoZdciQrpAACIQmlxCrlCrOtdY6k0KANadx1Uab/ZBAoS5db45ykAorJgRFu+8qtXH/zjdTWDGPTCJGHfCFjSbXWIqQkjmKSuIsyggfvfYhSocD4jh1ceO1LUGFAI035xO/9Pzz4gx8jjELIkLOuupzXvOsdnH3ppW78rEanCUK4HMPzZVoi0jqLJ44xuGYtojDqxz0LLfctSu8TCSHonDyCOfAE4yKhdWiZRhzRaUckKmDi0ssprl6HQbm51NY5ilYyPzdPYhLOuPBMdr/mFbSPHmTu0Sc4fte9tI4dY/VlFyPKIWO7tmKRzM/OQ6w56+xz+NG37yKuz5MuLVAbX0szjj3eR3jJd0xxrojIogm8fFmCdp3i/CnKWM8ParD9z5aPx0r56z9O36vtCyyCAE9PZ4RCZyGNPhgEfaZPf1bNwR9s/n4/d1AW+LSyh/gT3gxyDY79lmYVVghSbYiERcgae6c1qZZ0qaKNJdWxP7NC2AAZFhAqoKgUJoodBt9orAlQVqC7bV/imC00Z8o5E07Sf9g+2xFw3DPWQTOuvOkGHvrBndTnF7j3+7dz0zt+GuM5QLO4dgbPMEqgpCVuLFIKKxx65iCzB45hreXSG6+mMLKap+78Ef/0kb9g5vBxhA2Z2LaRN/7Cz3HFTTeBDEh1BFagpEQFGd2IJcN2WAvGRHTmniNcniaZOkIStChOngGq5nYAEeaC3xMBV+Fhow4l4czIAW2I9++jEELHCJaeqDC5ZqPbTWyKtcZFUYohq9aMoQLBg/c/ylXXXsX6XevZcFXI3ESNE/c8TGtqmk03XEVhfIjx7ZsY37oJTMKqsREqpRKJ0Zh2y5Vb+rFF+LJR00tcpt4Rs9ZQQjMwO0W1s5QHWEyfD+AUu4/a9S+GfFe2XiX0REB42XTv9WeOs68JmeOqM//XaX+fwOrbhlY2J+6tJ/edvr/5VjZCWJfVtJ5KNwunWumbKQuS1NKOYbYumG9KYu1qAExmF/prybCILBSQErr1pvMBwHHHGIuNY0wcrRCEzGF/0Qyxv2GBIRCQdBqce+UVrN66BWkFD91xN82jJ0k7iYMe59EK4yMtBhtH0GhRkEX23PcwSSeiPDbCy1/3Wn74hS/w0d/6X7RmlhGlMje+5Q38P5/5J664+ZUYG6N1F6UkQaAwQvomMr1dL5NjIaC7cJxkfj9jVUPryF5mDuzzgBPJSuHPvuiOYGyCKChhrSIFwrBASSiKQqGy0kPjdsJsC7XtBldfcyVDoyMszS/zqY/+A4tPPYewlomdW9j18qtJrOG5799FNL0MQqKFgRDCYoj0bZSSxDUV74mn9aRAoi/cDMoYkJZK1KYye4qSNaRCZIHP3mMJZ+ULkXUy7ZdBv5WL3tOvRMAL8vZKeParTNdkr9zGz4exd6P2BU7sYK79N9GbjOw7CAtpQoBLJGVmhLGW1BiS1JAYSZRY4sSSpA4Kra3CZZoFxhpUISQslhBSUV+qY2NXIG2NjwlrQxpFLpIhLEba3sJ8Mf830wbGa4kkJawMcN1rX4WQATPHTnHwib2YRotobh6ZaoSybtaEi8TobgeimGSpzrN7ngahuOTqq7j9a9/i83/wF4SRQQ7V+MAf/A/e8dsfpjxYdZz5QiKlRi8fJTr1JFL7qFPuwFmyMJWUBYbG16CEJLGW8uAoo+s2IAjAZNp/5eF8LktxbBLWrCPVgkAJtEloRilLpUEGztqNwQCJ8wmsJpCa7uICG3fu4OobryUxhsWTpzj4vTuYfvgpbJRQXruGM25+KYWBIfbe+QDtpQayGIJwTZoMuAUtXf208eS4zu5XnjPU4LhBFcJICtZSnj1Jrb2EEgEW1w8iU4DO9/Qvemwlp8urGwtfVGN79cCnj5HM4A3OjhX+8yLvyGIze184U0kIkSFVV+wU7iZkvgKtcPw9joLOeF8gRmQo0Rx+3FtA2goS46j4s55QRuDQoFa4JhhBEVkogVS06g1aLd9+xxrnTHl0onPq6Otm3y/sK1/OCc5YHiSBEFjd4SWvvJna6km63YR7b7uTkgqJZ+eITk4RL85h4453zjVxt0GgBCcOH+Pk8ROUKlX2P/403/zHz6BEwMDW9fy3T/wVl9zwUlLddQXZQegm2GiWDu9hYe89JEvTviQ1uzvtNnNvvS03DfHwJjqVdbSLo4S1cYTNCsJfeIVbA8gSQ+ddzEyxyrwOWKgO0jnzXFb9xOsoTm5whSkmxpoYoSOi5Tl01II0Yn5xgW7UZdOO7YyvXcOp+/Zw5EcPkrYj1OgQ2192DZW1E7Q7bd94W9FoNjGJRgRFwkqVNLU94KCzr0E4JgqrLakALWGg26Iyd4Ka7eJ0jGMqcY0GhS9wF3kcQmSGkThNCftiLPJ5FVnqfsXYrECDCo/szEsi85isozjMIEcuftwT3mz9OZchy8L6FejNBGsd1pskAuFadNrcJpeOYQL6HHzrWInx58S3ygwCVLEEQtBYXKa13KAyVkXrNN9m01YbO5q4rdxmGcD+BfD8n52R5JxaKQVp1GVgdIKLb7yRH3z28+x55DH2P/EEW7esJWnVibtNulJRKFdQoUQv1ykXqxw9eJhuN6I6UGL+5DStRofNF57Hf/nLP6Y2PIxOuygV5PMgpAJbpDi6DhlUUOVRx2ydbc8Ysg4p1lpG1+9AhrvRSUQSxUCI9SHYF9vgbOD0Z2H1RqrXvQzb6TK0eh3B6Ijb/VPt7kdZbBrRWZ4jbiy6/r5pRJrGxFFKYXCATde/hFq1wvS+vRy+4362vPx65ECZnVdfCgJ0q4MarnDq+EnXQ2GsRnlohFRbxzznJQjhpMv6xWuFpoJmYO44A50FH+UCIVzIW/a1YsmaNmaOv/SRGovbcVx/OpO7BP1IHdH3M2TQGXoa3Xjv3HdZy4Uc0adNbZ+PQGZf+z8J7yIKn5SQmZPiokFWp2jPPrcyVu9Y17JXRpIq+1e1BREGjnnYQtTucuLYcWRYyJMeSoCJY5J2xwmQXwDSPB8L/jxB8aaayMK71nDTa19LqVqj2Wzyne99B1lUSAWFAIoCaLXQi0so7SAF+55+BmkkoQyZW15m/bln8uGP/Rm14SHiJELJ0KsM6ZGNFigwsOFCRndfi6oMuao6QrJNP6uoFUJBUMaaIiIYoFAb7c3Qf/hsbnfUVjC8ZTcjZ16AHF2FNsojWgxGaUwaEc9MQ2OZciAQOG6j8849j3K5wqOPPMZjjz7G2BUXsfGqi0kbbY78+H6IYrdbG4vQFropB57Zh9aGwaERasPDpMbktrmwTmhVJkRCUpCGWnuR6uxhKjp2nFJKoJXxgDqRv3qPenqIzD9tli9YYfr0m0O9Q8rMxMSlkjNhtv7GHN9K1o4oX3Pk/QTyEr6sjar7z5kw7vNGKLf6hcVaDWkXaU0WRHTmkJEII9zLD4y1ohcys1khTpmgNEC2CqeOnQIZuGVoDMIYCjYlaS6Dsb4I24+6zYol/IuMCNiZUI4e3pl/ShpMtMjElo1ceM3VGBPw5EPPsP+5owTVQReVUgoVKoJQIZUkSg3HpmYohlWWlxus3rWND//1n1KsFkjSDoESWJu6l4nBW94WizUSQ4EseyvyqAcIUlLdQadtpNBkeiUbH2t9GNipwMyRI/OepVc0Dj7sbHxM4mxvKRHKYFpLdKaOY9tNp/mBQCridpMrrr2cTTs20ezE/Ovnv8aJ/UepbVjPpgsvYGlqlqN7nkSKFJIYKQSduSX2PfUcqSpQWbcFWa4RR4nH8kiMCLwwKqfgrKVoLJW549Tay44WRvT4fJzJk716v2emthFe6DPQXb439HwDK1z6SQvQoierUhjybK/pCyll0R6ROR39dqm3951HvdL56HeojcgcHkFGZS2EQZkYYRwRVa69+iathxbqvZyfApaAYm0IawUqUBzafwjixJtlbpcJTYppNzFp6hZvtheKTFu4V+8/fGmnN+0EQIqwEWC45W1vojw0hm4LvvvN2xDFAacgrEXjYLul2jD7DxxjZnoBE4bIwUE+/Md/QHVkEJ1EhMLtZW4L1vnWLf2CF3lZn1uQLogbAAEShY7bzB16huaRZ0mWTmDjBorU9V/Is8EiX8DWugaCxspcaeGZEgzGbczSYuI23dlZ4vkZlI4RyvtyhECA1gnFAvzir/8ClfERTs7W+eQ/fJqZY3MUgwJbz9jBQK2KSSN03IFCkYcfeIKFuRaUKqw950JaWqBQDiPgqwStcNFAZSwFaajWF6jOn6QkesrXbReZnPVPXX9Aoz/qKHoOco9GvM/UxkeHeor+tMA4L3j0BFHmwoj/PbP9exGhXlTp+VapfyArSdMu1kbeLBG8GHqT7PzZuQSUBoZIjSEMQ44cPsbS/KLr2ui1uEVAlBA3ll2Uhkzzv+glnncYb1Jp3WHtrp1c8YobIVA89fAe9j36FIWq8zukcUXhaSz5xhe/gULRMDHv//3fZtX27aRRG6G8VjeajJXMOd0epCatcz4zczGbbQvg4APF0gCj46uJm00axw6wfOgp2sf20p09StpYgCQGEyFJ80Yhwpuh0vdpE8K4HImJSbpN2gsnaJ06jFlaQEaRIyzw8woBVgpUIImiNuu3ruM3f/+/MbZmAydOzfNvX/k6cbNDGUMtAKIUFUjSVsQdP7wLIQrUVq1j/c6zaLS6SKEcitZ4/FKfHFXTNgOn9lGL285ScNVPK+a/9+m+ORLPlzOXFX/xgMDpx/OgEJk84sNVOjtVJn9Woa1GCkOvI3zmnPQ7x44/0zH4QuaU5LUDNkXoGBEUXZSnl9H2D9J7AONrkAWOQaI0OOxAszJgeWmJI4eOcd7FZ5JGHb/LCEJrSepLFEeGnCbN8xn/Z0dWr2x1ilSGW372LTx0x52YxXn+/d9u5YNn/opbIGlMuTbGPXc8xOFnj6Gt4safejUXXPdSoniZYlhw+Brhm1AoSffEMZYff4riyCiDZ+5g4elnaB8/ycCuMxg++wJc93ProxzWh/oCwpFVDFcGaM8cI24sYZp1bLNBIhU2CBFhARkUkGGI9NEYhHsOYYwz83SCTiJ0EnnWTQeKK5WrUCyCMcRtt/Nl2tooRapT4iRlYHAYU6/z5N4D7HlmL5eetZXmKdcjeWDzZm6//U6OHz5B05S4/JqXweA4aStGKYfbRzkzWFJAWweErMwdZ2hpjhKueL9XZ+JKYF4obJEFRnsYKDdmxmNCRRbM8aJrbC9Y038E/aftEQ55p5fcdHYrS7hGFBiBIxbzPaLyVbPyFnN4aq7V8E6mv12Tgo6RqoA5zTk5/bDCObGpNRQHhkG6tL01gj17nuK8S892NcbCwWaVgKTVQLdaBLUhf2f/O2fR36JffFJIjNUY02XVhg1c97rX8q1/+Ef2PXOA27/3Y172sitoLc/RbUd859bvk2pLdfUYP/mun8WkjhzWGFfWZ63LjNtOh9kf38nQqSlMqGjsf4JSs8lgYpiZnaU4MkZ5wxb/vYDMM8u2c1kcoLZ+J2lrmc7CNLpdJ7QJKkmwaRepJGmqSS25MnAtijK7XvSaaQtLkmrKwxMc3XeQJx5+jNVr13HRFZe6UK1RpMZQGVnN3d/5ER/947+gaAsMhAUISzz2zLNccuZOVGIppgHPPnKAW//9droUGN5xNruvfyVLHcfSoT3EIQO1GWMpIBjoLFKdPUbV6J6y9fKTZe9dFM+smDuPRV6BxLV439ELuuxzmEVuRfQtAnv6DpDZ7JymLPMd2df/ehvLmQk91J205FuX8BdYeXI36C6XLT2QrusEwxZWhGj7I0R55b91NavFSg0ZhKRJSrFQ5pln9tFarlMshJg0W7EGpQ3J/DxBuYZW8gXBUC925NjKVDvkamh45ZvfyJ23fovOzCzf+NKtnH/ODkZXVXn0/ic4duQYaSL4idf/BLXJNSSNBVS5gPH1FZIAIQJ0s07YjhgcKGLSBFNvIdAooSkmMabZdhOY+139isEV6FshCWojDFRqpJ0W6fIicasOaROZpiiZ+RHGm8IulOgic4HPnkKqLeWRSe78zo/457/+e6JWhLCWG199Mz/zi+8gSWKKtWFOHjjBpz7+z9SCEpddcB66Y3nkiUdYrkdE3ZTy8ATH5lp85t++RSuW1MMqr3/bz9MOhzGRpiAtWgkSACtQxm33g7rN0PQRhtsLzlQVjqYx56Wlp1uzUPbzcWfPV7y5SW17f8nqkkGsyEHJHAhPhpNwUZNs8zjd/rKZ4yt6v2dOgl2Rbcs+sNKWyxw1t1iti4ikEcrzd+YOdIb4tMbnTNx5tIGwXEMEBYSQlItlZqbmeW7vAYJCEasT8OCAUChsvYHutJ0QYFwGvv+BThP47BB+RIRNIeliTUR1eJCfeufbaUVdOvUWX/nCN1C1NTx432Ok3YSx9at56S03YprzKGuQSYLUXnNpsEaihoYRE2N0Wl2EthiTINKEOLXEA0OU1ky6uxHgyEL6JtVnIK01LjpGSFAdprR6M7WNOyhPboPB1cSqQmQl3UTTiVPSjCLE4Bn7LHGiKY+t5oEf3c8//OnfIIxgcs0EY+Mj3P7dH3D04DFkqYqxAZ/5208SN9tsXr+Gn/vFd7Fz+1pCAYVSBVsd5r6nD/K3X/wK882UxbTE9W9+D2Pbz6UdaZRyfmMWmscIUqMJREJlaYrq3EkKmeHSN8+n2/Y9eRR9QZm+qGVecCXyz/ejFlw0MhPH7HMWaTwAiTzE6aI1Lmnhv5HJuKcuMdabN0L4EKn0YVK3pvIwpsgo73wzg2wBoNACjDAYa1E2ReoOhtQLvb+GdTFwxyjhwl/GQFCsEpSraAzSQmBCHrl/D2hXgyqFRhrnCkmj6c7OorTuLeheaOm0THb/IvDDKTXYNsJ00Drimte+igte8hJio3nkwae4/et3MjNVBwOXvew6BiZGSdp1sF1sGkGSIjXOBk9jRCFg+PLLWBgeo9NNKcQJaTfllFEMXXk5amjAQcdNVrBivWXre69ZiSBw4c9sMqVCFCsEw5NU121jYMsuqpu2U9q0jXByPSYoYo30O5GDjFdHxtn34JP841/8LUpIdp65jd/8g99mZM0IaZIyc3KWcGQVt9/6PfY+/iTlcsjr3/harG5xavoQYSmgHsX83ee/xue/ezeLXcmyqnHd29/H7pe+iqVWl6JPfFnhWlwpBBiDEpZKY5rKqcPUdIQRzgLArtCX+SLoRSS9g5uFQbMF4KNCTt6ysLd0ETHpwp/ZPBsvg5m8Ps/wzoRe9N9AtipFhvyktxqtfR7OxmZhuf43vR/QH77K8gnaWrRJsTrBtdVYEbjq7ULCVUEFxYpjXDMaTUKpUuHxx55m9uQshULR9Q8AV0UUSHSrRdJo+F5jvctb7+e8ePwJH65zBFnWRlghePeHPkR5chKhQr7++S9SX1qmODzAhVdehom6ICE1Gm01xiaOqU04NjSiNsXxNax6+U/QWLuBma7lVFBl5IaXUt25E62t1/ISqR1Y0HoSsRxMaDTSJPlDWNx2b6UjnbWqgCoPOdMP6yvmDEYY4iSlVBtlz10P8ZHf/wNarWW2blvDL/3GLzExPELSca7j+KpxTj21j69/9ougU666+lLOvOwCFg4fxSQGoQosdzQHTy7QEoMUtlzE6z/0u+y46Wbmk5QwKPm8kcXgomXGB0wGussMnzzMcLfj2kz5AEUqXbmmEb1mjDaTSdGfiBX9/zxv984oOVdYIvkXRM4MBy+4AFxSQfstxfRpx/4VmV1YS3+zHvlp+s5hRbY1yT5cT+/m8xyCcINkTYzwrXboQ3ZkuyeAMRpVLKMqA8Q6ISgqCqUijVbE/Q/sQRRrjpY9S5BYizKa7vxc3j29/8iMthc/nOFpTQy6izExo5vW8L7f/R3axlJWZXSUsnrjejZs20LcarlgsUkdWa1x7X506jLg1mpst0s4OsbkT7yO4MabGP2JVzFw3kUYE/idDt8ELs3DuFiBkAWQkpMP3svUQ/d4S0B4cLZyeHoUUicky3O0jhzAzE2jjKs/1mlKeWiCu2+7lz/9X39GfX6RdWsn+MB/eR/loSIP33c/hw8cZ+PGLRTDkI//rz+ms7jM1m0beP3bfpJ0YZr60ZMQuwYhdVFCrN3B5W9+D6/9zf/F4M6LWOpKpCw7OVAyMzRIPb6sprsMzxxirDlPUccYobzAG3qcz+47ma9ic+F1MpTnNVaY6Cv5oEzuUGYYtew83nfIkn39xnBeFpmJuvDMwnn9b68CX2Zno2ciAR7jnd22w9WAdVrMJ3tchVfP1nOONQibYDUIKREi6PPqhY9I+Wy0KhDWRpnvxmwfG6FcrrK4tMSDDz7ODTdfSxiWXOjPumsGKqDTbhEvLVMcnnAaU3i2O/8IK3aw05kjhEAJgdEJMkzROuX8q67irb/yS3zuI3/FeK1K3O7SWlpmYvUYUX0JWQzcXVtcllaFGKFcjYS0pDZBhAVGL77U4aBSkEJh1Mp7ENb119VpQmvqFGGjjjr4FKkwdCaGkGMbCIdH3T2aCN1pEC/NQbdBYA2ioFyRTZxSGRrnh9+8jU/+9Schga2b1vGhD/8yw7UC8cIS3/rqraAtWzdu5F/++m84fuAQY2ODvPsX30l5sMTMvU8i2wlxlNLqpqy78CJe8+4P0CrUmI0EdCCUZVJjyLj/nTvuFkDVxozNnmBk6SRFUlLvH0iEw31lnKgrrAQnJa5wRqx4O6tX6Zcka3tRs5Xh00xOvevsyQ5eQPmdJg0rTKA+fFCuwftYWAQO/+Nfll5HR5FVg8lseWSrONuZHKrS9RnWz3NSew9u0Chqo6uQqkir0+Hsc8+kXCkzO7PIY48+RVAZcAtGKFfKa1NCAZ3pWXTialGN7y1sT3/c0y/p/RrngKbYuI0QKWmqeflb38TN73gzM/Ul4uUmf/rh3+HYgYMUBwZJWy3STtu1IU1jjG9TKlNn3wubIohJ0ggTG6Q1WM/hL6x1BSA68FhCA1GbY3fdztz3v8Vgq8Fou83M93/A0btuh84yydIJuicOEJ86RtBpU/BjbqXEWEV5bA0//t49/MNf/SMiMezYvo7f+u8fZHgwAAXf+8Z3eGbPXoYGqzzx2KM8+9SzDA4O8L7/8ous2bmReOokc88dRASK2WaDVErW7TqTZnmM6bpGaJDCokldo0AsynpFaAQlEzO8fIqh2eNUrUFLgc5rlpzvaVHe0uiR2+ewBzhNoL1JZE/33XqZXyF8uWif08xpZ5IumQV5itpf1Kfj/DbUy6z1F7z0306u8yU9AFxmAq0wxUR+88+TcesweMbEGOuaUa8oo7DeiRaCytAwKijQqDfYtnMrmzavJUkSfnz7PejYIqXyBAguWRIIS5DEtKZP5UGEbBHQNzynv/xDA6CkBJNgkxZSQGw0b/6VD/CyN7+RxXqD5sl5/vDX/xv3/uBHlAeGUUjSboTpdBBRFyLfTZ0U6ZOJgc8Bunpc8lCty5+kQIKwMUG1yO6XXEmlVCVodZHNLiOlkM2bVhFNHSaZPYaKmo4+XAhX3ecbnhQHxnjm0Wf51Cf+mVJY4Myzd/Dh3/sgtYoLRBw7dJKv/du3GRmZBAwLS7OsWj3Gf/mdX2fb7q3YxhInnnyCmgpoojm1vEhQGWR0zWZaqUSpItKmWFK08Ek/h7HBAkoZhrrLVGePUDEdLAG+O5c3XJzdb4TqU7IrtdILy12/6Dxfl/ciPr24RwaDyEx1iQ3woR0HVspDUX4R2EyTqzxM5RCb2Yl9kqcvgeAcRx8lIjt9Vt2U+RPOYctsOkOAFYGDh8kIY1pYEzkglwWLds0VfASpPDyIKJRIY41O2lx19UVIaThy6BSPPbqXQqVMqlNHYSIE1mhKJIjFU0SLs6hA4PLc2j/zC78yhGj2rEJYpOlg0xaBcFign/2t3+C1v/A+ltoJ6VLC3/3BR/nERz7OwmKTysAA6Ii0uYRuLxI3FkgaddJ2h7TVwbTbmKSDiRJMEmGTDibuQhRhog5pt05anyeenUJHbdpxRIOUZZ3QNZYwUKikg3L7q9O61hETYzRBWKK52OYzH/tHAmPZsHk1v/Lff5VSVZKmbYKgzFe/9F3aLUu73WZpeYFLLj+H//o/f5UNG4YwzSXqB06wtP8wk+vXcHh2nnY3pTC8htrqzbQ6HVKhSYX0FCdufiUSIRUFBaNpk4GZIwxGiwiZOnZnr5mNEqTKFS45WZWOFFn2QuqZPGZ2fO7A2pW/OwhRr67D0Ad+80608zcCMgrLnBgrX3QvtsTI7Cjb9+HMru/HMWQ3a3ouQhZ79A/gvP4s1u1wOpkhZX2kSHhzx5jUhfn8eZVQmMQyNLKKQqmKbjc5eXKKy66+iu9+6zZOnZznO7d+h3PO3YESCkjBaDIirwKa9snjBOUislzDaBdmVP8bV/h5Y6Eb2ChFFaoYY3nd+97Dms0b+ec//BP0/Dz3fuc29j78KNe/6kauecUNjIyOQ5LSjbskURspoxx1mQrj0/59/oe1GJNiSJBGEwpBUl/GjlQY2LKLVrPF0tIysRcc11PLj6cwLpRqIRio8t3PfJ7pUyep1cr83AfeS61WJq23XEGOTSkUYWAoYOeubdzwsms4/5IzodvEdJroep1jd97LRG0YU6nx+NP7SG2BDbvOpFAbwHYNKIVxxKwondV/SJSQDCdNSqcOM9heomQ9ZY7QucWRFbVnARb3u4dCeKl2VnTf+96sdlGhzFfyn/Vb6Mpgx4sLdoCvbe2xPfRZSi90ouwiNvukA3NlX7b0FcN4zkbpT5bVdooMqWfBZTb9A+XSlS2o1CV1bdHrN+ubMUqKA2OoYgXbFszNL6EGqrz0hqv51898maOHj3P3HQ9w/cuvpNuc9pBbH/cVmnKU0j5+nNrm7YggdItN8586AptgUhfVIaigreHym29i+1ln8uk/+wse/dGdNGfqfPUfv8i9t9/NZde/hMuueQlrN66lpCQ66mK7XZI08rgqT+mRw8TxYVrjK/8kpaEhNl51CVpYhqxgIEmIJc7ZtZbUJwCNdmWnxbDG7NEp7rrtDqyOeelNr2TD9o3Ey9MUlMJo59e85/3voNVoMzQ2DMSknXl3L13DwR/dSc2mrN+5kzsef4rDpxZJiqvYfslVdK10NR5SoAVIa1FGgHJNMypph9rsEWrN2byhhrAi53XKHLAM5pCLmsh2EeMFsEdxKLzF0VsyTriN/1tWbeY6nWbZ3ww48UILQHoIg/Epf+tDjtbjx/ujI160fSgom6acwTmHE3sUUAbTNX5RCJtxx+Xr3T+C7btC/6Hzc1obemgz6FQiijXCSpXOHDTrHWyzzmWXXcD999zP/gMn+e63f8j55+9moBqidZdsUVphKSgQ9SbNY8cZ2LLRN4fpo9LuRyK+CMEWFue4pi2sSZBhDaNhfMM6Pvjnf8KjP/oxX//nT3PsyWdYODzHtz/1dX78jdvZsnML51x6PjvO2MHk2knKQ1UwrpDfaheqtMY9t9aps4mFILUpQkgia1Ce6U0I5Vi1JRAICkEIysEJuq0Wsljjwfvv5tTJKdZNjnHttVdgmvMEwmWYpVRgLIHUDI0U0dEioJFKggiI5ucZDEJW79xEI0257b6HaNkCI1vPZHjTGSx3Hc4HazP1ROq5Xgd1h4H5o1SXT1Ky2kHupEEZF7Z1Oi+TFy9LfdpXWJwp5KHi9BkqRoLIoo0W+uunbWYyCevNKBdUyGUrU9zWYkzeqcJf3/bfwWm7QSbiYuVacrcuIBNy0Xs3N4o8dijb0owHRglsXoaZl7DRM5lk5gha7X2G0HUoTzWyVKIyOEgHycJi3bEtB5ZX3nITf/WX/8Tc9AL//pVv8fb3vJG00UVKk9+TRhBIS1yfp30yoLJ63QsL+X9wuGJt571YE5F6c8hSA6G44LpruOCal/DE3fdz21f/nf2P7KG1uMwT9z7G0w88RqlWZnzdBGs3rmfNunVs3LCe0bFhBodqlCtVZCAphDiBFtKjB120xFGlOBufJCVqt2l12zSWGkwfOQlYzj73HBrdBrd/+wdgDOdddAFDEyOkzRmCINuBHVoUq7HGwRbIIjAWlIXRVZOI2iB33vc4J+aamMIIu6+5gTisojspVjlF4LoBuRLYWtqiMneEWv0UZRs7/xGvvIQFIZ2z7kdS5iax7etUlTlgeDCm/zeTGeHv05vauRyKzCTq/byyf/DKfSBwHzYIq8kXyov6BLkRn4c3+8noXHx9JTzJLV6RP4HIT9Fn5512sd4tGD8A2kcKXGxZCEFQLFAdHmEeweLSIt1OF5l22L1rOxdecA4PP7CHe+9+kIsuOoezz9lCt72MCgKElY6pQFhKEjpzM3RUQHlyrSeE6hfylUf/cFjhTDH3aA59apIGOjGosIZUGiEV51x9BedcfQUnDhzioR/dwWN33cPUcwdYWqwzMz3PUw8/jVSKYrFIuVqiUqswODzI0NAgpVqZam2IgUoFEQpH+2IEnSii0WrRajbpLNXpNJs0Wm0ajTadRhcJrN2whkRHTJ88Rblc5Lrrr8Z0G97QdJG9fKYk5EX1FoRSxMt1OnPz1Go1TtU7/PCexwhElVUbt7H5vIuZa8eEMkT7lKnGcflXki7VxWPU6tOUbUoWf3e2vMKKrFtoTxgd1WZP9WfBkkyyexuFJ2PDOGfXy1aen+qXu9PmLl8EfX8QQICxKDSFpO1OqnuFI/0nyduLZsaYF9CsukfkAtIzb3qkRd5RzoTfN8IQVtGXi/Jx8N5Nag+FldJZxYFNfXlfghVDFEZXgwpJ6g26rTYDxQDTWeK1P3Edz+7dR6uZ8q+f/wYf2vp+wkKB1Dpn192Xc4rLUhPPnqAjJOXxVd66k74K0+R+kDBeQ0kXTZC2t6NlD6aQCNHG6ghrQ6wsgSggVYF127awbtsWXvP2n+Xg3n3se/gRnnn8CU4cOEBrbpZmq0VjdgGm5xHCeTzSJ/GUUm53dnYBFr+LWjfe7neDFQHlQhlpLEvTyyQ2olAt85M/eRMbN4+Sxm0CpXJNiki8ADoBUUKBFSTLLbpTs1QKIao6xBe//lXXtFzVuOxVb6YTDCCMRgrXX8Aah+EvdutUFo4z2J6mbF2zCy18M0VsRp/qoj/2+UkoiwApe/5oLhze1ySbD19M6+HSRjnF6IbI5iIqV5iy5KFU6Z0+aS2BtJ6QKOl6U6OvcOSFvIb+o99ec09GxujQ+3/PUTn9sKd/3y+Y52H2bf+PFoxr7lAcHsQUQjqtJRoLC4ysn0B3OqxaM8orbnkpX/jcN5g5NcuXv/R13vW+n6VbX3SLyfaWqUVRQBKdmqKlU6qr12GMFzaRFeL4R+3TAS86JNbti5gUrdsIEWNNiJYKVEAQBGw9ezdbz97NK4Co3qA+O82xI8c4dfwEi7NzLMzP01hcwrQ6xFFEFEXunvwYyyCkWCoRlIqUKmVGx8ZZtWaSoYlR1m3ZwgPf+yHf/dcvE2jDLS+/hVe+4dXEc4cJCtJDgX1HG+MnQUmkDEFb0vlFkvl5StYSjk7y1a9/lwMHTxHJMmfd+Ao2XvgSppsxJeHOpa0iMIaBeJnq7DEGO/MEMiUVgry/Fk4A1WljZXFCKa31SuV0uchqAnqWhM0Wks08SKc+MyVsV+wkYsW1svsQ0mWMtTEEwkJgDGHSRZgUK8L/rdyfNuW9izxv5+gLb2YmECsFf8UDA/a0b0MPBOU0rvMV4qRDbXQVHRMSdlMW52bZsmWCtGvoNBe57vrLeeLxp9l/4BgP3vc4O3bez9U3XEW3Po8KJNYYpM3SMIKKMHSmp2mlmvK6tVihkMbRwRhv5mS9bXs1zC8wGjk4xRB4FKdJOj7uHWBUiBUu6ymkojhYZWJwOxPbtj//ZNaSdrvEcdyDRgCFQkgQhhAoXPXYymP7OWfxzJ4nOP74Hp55bA/R/JUEhcCFH4WHRmaOqJJIAbrZJJpbxCw1qZWrUKzw5a99l7vu30PMIBNnXcxlr38Li5ElkAVwBi+BSai0lxiYO04tWaJAhLUCSUCPUbxXiiKwOUbMJTp75kkeyck/32d2esHpjwL1widuJ3AmU0+ono8s7VO0jsbCZYIDawjTLkGa5ELqxt/2Xi883/5a0mfw/Pbs/3VmRPZvBqW25AA5IT2jg2cMy0ss3QT1knDu+8ZaX8BnieKI0tqNnH3Tq5mJFKemGyCKIFxTaGtj3vaON1IbKFEu1fjKl7/Jkf0nKFWG0DozHTQZ/UlqUipCI+ZO0Ty0HxH1KrqM0X7SnPAL7SdKvMjLb9fCaqRNUaQokyDSLiJqQrQM8RIyXkR3F0ijFmncIk3aGN3FaFd/YEVCUA6pDNWoDg9SHR6kMjyAqoBWEdo0SeNFkmiBpLuASdt0kzYEAS99zS3IUHHq5BSHDx9DlapgA4RVeSE+RqKXW3SOHKNz8CCi3qA2PMpsy/A3n/oK9zzwDLGsUdy6m5e9+1doiQGMsS6ZJAUVDEP1WYYXjjKYNigIgZWuaz0Wr7kyMJpwFF9+Ll1gxLGFZPD6HEiJL+R3lftkNSpI98qUUn9izO0m5Ngtm1Xh+Vc2N9KjFJIkcW25MhNWRl1CnSCCF4YHv/iuIHreep/54latzbeuvuI0+pdT1qHS+v5YzvbruRp5v9fcGXI4GYAGAdtfeguFQoHjywdI5ACpbBMWJEkaMz45xFvf9gb+/u8+T6FY4R/+9lN88Dd/kaGBCkncwOI7qXg9k6IpKYjryzQPxpTWrKMwNOJpF/EE5CInHngRdbBydPzNW+HXNh4Xj8GaFJFqsJEjNBL9fQ4F0od9rcWB+8CZFSLLj1iwWbWcQJRCCsUSYDn38ospDw8SLyzy3HMH2HXZuYhuhDAG3Y5I2k1svYNebhAIQ61SJQ2r3PXAk3zz9ntpxYKurTK68zxufO+v0imNkSYWpCA0KRXTobw0y2B9npJu47oXOZoTI2KMdJ3fbT7jIp/5LHWa7/h5FaH/RF80sqfje99HCMcYlydT3eecyeS/Z18oseP/Zgw6dX8PjF9kxF2kTtwkZNttvxPxH9hF4nkfWrF55Z/KsngrFortr+PJLDrv6Wd/cZ5Wb0u1zr4MtGS+Y1lzxQ0UGzs41OmyplJGx46FoNNc5JyLzuHmWxb55te+gzFF/vZjf8+v/Nr7UXh0J4GLgEgfIrWCQAqIIrpHj9AZajKwehJZLGKsJwkQgoxs5YUGI79P43eyfFSsT9/neW2XRBRxNhh9ysHRmmTjq/ou5iAhTlCyObJYTJogiyUMmtF161izfQuH71/g1HNHSA6dJKnPIeIIujE26iCNpVaqYMMizx2f4dt33MozR2dQxQG6KM644RYufs3baFClHaVIJSmkgrJuU1w+zmBzjrLV3mpQGGVQ1uduhMiLyrPa8kyL9StJAfTaUNFTgn6eT/cB3C8mN5f6zkJGypAtrNNUUd/PFp2mSCwBxhBYSyVeotpdZqG2Bmu142I0EmXBSu01k/BTI/Kf3IVF30P58FSfJ2t9pjOT/CAT6ny198kL5DYg9DSt7GOf8KOGkK6/WEtbuuW1PNVcol0O2VRsUzEtQm2IF+Z55atewtzUUR64/0mmjsT8zUc/yS/90s8ibRe0RUiFsDGujVPgHDJpKElDujRPs9OkODnhdgMZOpPMN5DI3ek8huzNOAt5SM+PjMyfNfeM8u07G9eVE6XpBZmzr3oWb5EliDJnHayNwaYYowhUgXVbNnPw7gdYmFkkmV2kmLYgjREEyOoIqZU8e3KaOx74EY8/c4SOKZCoMuXRjVzz+rex4cIrmI8kJJaCVBTQlLsLFJZnqCZ1x79kQFjlu/KAthIpC06JCUHW8yuXgzyaRf5+liB1u34Ges5cXtVrzpMxa9iewhJW5dB80S9PQmCkh+PYjBzMIoUFYoROCYTqFcWX05SguYQcS0m9EBusY/YVLiTX3y3+P3XYrOABXIzE5PLPaVPuBqqXuLAr/t7Tdm6wsrwApLLEImN0OgWW4iLbyiXGVQNlGsStOd76zp9kud7imaePsveZo3z8Y5/hF973ZlQYkyZtlyPIF5gTOmMNSoFIuiQnpkjnlyhMTBAODGKUa0it8P6JyCIZ2c7ljkzon7+D9sbyhZL0LuIpc96kPn8SK4U/r0Pamiz177DTSO8Yr9+wDmMt3SglTi2VShV0gWY75alnDnL/nn08d+QEUaJppSGMrmP3VTdy3ktfBYPjTNcTRBhQCizVtEGhuUhYX6SUdAhFSiod0EwYfJoLHO+r6T3zCqug99MKK0Dg7UP3PUMf9v80KyL/3Z+gdx5vPWSLK3OCbU9qsrFO49hl2yUE1k94SRuK9VmKNqVrKyjSXFQzcloyu+rFDeDekdljfZm53ASyPSHOU3z57WUC05e9s32tl+xKW1LgMpZCaLSStMUQx9ISy40lNlUUGwoBNV3Hthv8/M+9mb/6639m3/7jPPn0Uf7io5/h/R94C6WKJI1TnyHtaRE3lpqCCBw9SqdD5+gRomoFNTxCaWAAwkIeGVKG3FnO5i+rQc3i06cfKxTB6frF9ohC8kiZt39zU0tKR29oIU266CggTSSlQonR2gAyDElNSkLAoZNzPLbnCZ549hDH55aJE0VMiWB0FdsuvJJzr3sV5dVbqMeWJLYEqkjRxJSjRYqNaYrdFqFve5WNv1uGxtPkCF9UlVv3Oc6rJwM9Xy4z4PsjQ9lOmtn6WQuuvJAl3w0yECUrZCN3FnE7Rd4bwl8HASaKXKWegkDg2hQVjKXWmKYUtVgKahjpob+YPOyXbeiWlf7Bix/ZxtYzgVzD7Z45I3OP0jouptzZEfkicJTawkNdDfQlQmzG/mLd9qYEpEGBBcZpRm0W0iLbC2VW2SYF2+YXf/6NfPxvPsu+A6c4sH+KP/+zf+J97387qyZG6baaKJV1sHF3rrAYmwASKSwlazGNOsnyMs1igXB4mHBwGFUqQxC65JnNJieb+GzQegt9paD3xjX/ayboeL8g00FkGBdvIiQxSatN2mmTdNuEgxOgqlADHcUgBIk1fPoLX2Hq5CxLzQ5dUSQJh6lu2Mg5F1zO9kuuorx2G61YsNgyBIGgKFIKUYdye55yZ55S2kVKjRXKk/q6+5TCoITbCfCmb7+5KzK7PxdQS+YWZ2/lSGgyxZd9zu9yOEVkM4f/tCHMF6KwObGWzKCXwhmQGZ2Pq47reuSDIPCBCZSwVOtz1OozFMbG0V5GpV85/T4AfkXlYv4ia6FnvkiMyOhNsq3OFyZY03fW3gOt2An6FHMetcox4tm9ST9M2UMrEjXIcRuy1AzYHISsL4YMFRM+8MFf4B/+9lM888xhlk+1+as/+nve8p6f5sxzzyCuz9Oj7vNOr7Xunj1SUwlBEIBOu+iZadrzC5higcLAIEGlgioUEIUiwjNruH5pAnwyy9qVvs8KZZIBXzzehUw/GI01KUan6KiO7XTRnS427jpgHJaCtYSVCCOLGAyLS8sIC9qE7D08TUSRwuQ61m47k63nX8b49rMoDI7RiVLm2zFKKkIlKJiIsD1PpblINY1ck+qc4S/rD91TbFr2NHV/8iqL9uSP5reEjPUtN3mEyOWs/3NucDKnWTnl1weg63UydR/NVKv7WTri2z6TWxhHuR932pSUREhLIKxBIrFSU0s6FBaOUx7bRtP6+KvH0dushhZcI7l88uyK1Xj60VsEK6NA+d899NSXPvR9r7cIhM/eGuNxhN72w7h4uyRBGuETTNY7Wy72nMiAuhhmb1xhJi2wvthizYDm3b/ybv7ts1/l/jsfRskKf/fxf+Hlr7iem26+BkVM1Gm4yKTNNnPIyrGFhVQ6eVZKIkyE6ESITpMYR1MoC0VEuYQqFpFhiA2LoAoo5TvZ5/Tz2YT2DpNqjPZF9UmMjmNs7H42cQRp5MLiCEJfKyGExRiLTruYYoVCscCBZ/e5emg1wOoLL2X9eZcxsf0siiNraOsinQQabe0FP6WQtCl2WhS7SxR1i4o2SNeVAWkcJYlVGpHX3UJGN74i75pr8JW2vpcY92kfyMic00zoV8RuchxKZiS43V70EHN953KLLzOH8qhTLoEWGSjiVgeTJIjQ7dQBSKQ0pEBJaIYWDrMUn0+rMOboNK3yZFIroxgrbtL0h+96w5ELdHYzubZ2R84kJ4xvoZnZbisdYJOdyzMLCH89JwQSR+T6QjnkLA8hSYtV5kyFRtJmammJ9dWE17/751i9YTO3fuXfCXTAd7/+fZ7du4/X/9Sr2LBhEtNpoOMYoaSvLCNzYFxLH+G0uRS+j4F1rP4iTR3rW7tJkidmHBRCSekWdKb1rc0Bhf5Xz0mqETpxq8wapHB8+oEUoFRvnKwjD0vTFBEWqdSG0KbI9/7py+x7dC82LDK86zx+4v2/yXwS0OgktLsGa1OkDChIg9IRhW6DcneRcrtOaGJUIHOMUOamZcnMzFfr792QCVkOach2bWzPJsejPm2GbfJmig9r+xnLT5cVS/VHushEhmxt9PyGzHTMPpciUB7/5QI5kLSWPKWMQhEgFn73Q1ZjSbXBaMOMrHHwgldxYGIXWgqCjLflRdhzMu3DaQsAxIqtfYUW6MOIZKwTYHOIbD+eKL+K/1zG5CCs8T5K9onedpgtR3da5xsIRN50A5ug0iYjssvO8SoLh/bz7X/9EjPHjxCQoJTmsqsv48aXX8fIYJG020SnETKQuCynwmYIhMwmy1/epHEG8gpTEZslevpHcKU5lD2N03o2/xXb05KSAAcTTx0yRAWExRrtVPL4M/v5/r//gKnnphBhhWUl+Ilf/n2qW89lqZX41qsahSBMEoKojYyalJIWRdNFmgglPGDM9u7R6cCe9nWP5zPj2Xxlv/v56M256Y2QzYBrbgHkn7d4/26FoU2vQMVBYLL9Rthes/ZsF8nuK/MwjHUlosqAVQalO7SPHiTUbcLQgQzFwu9+yLVeNgatLe00ZP+mC9h/9g20ZAmBdhm907AVfVOVmyX5hGY30jeIKxdA74bzXUVY10Yz1wH9A9jzDnoOU68vrsAie9kWZ65nJZl+AfQ6rEukVOg0JrAxMu0yVg4YJeauW7/Gk3feQUF3SNMuw2ODXH3thVzzkksYGqlg4y7dKAahfE2xvzer6E94ZQvghdgMnj9+Fk7b0oH+ZCg9h9A9U6Adk4MqFSEosTjb4KEH93Dv3Q9z5PARQlkktWVYtZmXvPntjJ95BcuRRkiB1IZQx4TdFqWoRZh2UTZBmdgrIJ+ky2LofQtU5O4mjha+L0mVz7nN4vH+2XIrxq5YFNbqXKlJmykufImt+z1jFer5TGbFAugttt57vcN9XnlGvKAA6cJJklPHKBekh0VIxNLv/aY11pJa49qSppKjlVUcvPTVTFXXeooL9QJauXedzJFGWPqYU1bMX7Yb9CfJ+gXZPUxvZxB9CyHXrP4Bszqz/oHHePqtvtCa+3pPy8i+dWrzaxh0ElGQhrFKkeNPP8bD3/0GjcP7KZkILbqMjw1xzVUXc+FFZ7Nm3SqsMCRJRJImCCFdbwKTPaPf+fqytNn1stF7fgTN9MBuInt6JxFaax+9MCipKJZKoAroSHP06BQPPfQEDz6wh4W5OkqHtJRCja9lxyXXcdY1r8KMrKbdjSjZhDCNEElMMe5QSlqEppupXofWtM5JdA6tv+PT8z+5uWFdOyTh5k30JUNziirbm1/IciTZaXTf51cyP/fmuf88NpcJh7btey+Xg/5Rdn9TnmgplDHNo89S6NQJQ4VUyt3z8u992BprSI0LhwpjWdAhB3dfxbFtl9GghKub8Rro9MNm8Xo/GFns/zQBWGkv5k/VJ+QZf1wmpCuv1Vv5vYWDN2vwWlTmC61nDq34mz93jzWs14jPItA2plaUlOIGRx++jyd+fDudU8eQ2mnI4aEyO3Zv47yLzmPXrk2MjAyBhDTqonXq6B2txTWl6EVAhBUrs8a5/d+bOGsttt+XEiACiVIhKigAkk67y8kTp3j6mQM8vecZpo7OEMWW1AYYERJMbGDz5Vez5YprKY6sJYksJtGESZNy3KEQd1FWo9AIGeEYMSROwfmW1db1PRamb25EbyztabtBvk7857I5EPSZOrng9u8QTp5y4fUm0IqFQM/v7PmHmRz0m08rTaB+WZVGEiqwzVmaR/dTC104XSnldoDl3/uwNVi08S+bkiSao4PrOXbRq5mqrkaT8bW80AKAntdvMxWGwOSsB06A/6MFABk5Sr/O7Nc8z7MrhSGjy5De1MmcxX5/wJ3KE06RhU0NWQ8uZVykyxFpGTAJympqpTK63eDUnvt59uH7WTp6gDBuUhAGoQRjY4Ns2rqRM8/cxabN6xkbH6RYDh1Qx2jQBpOmoJ2Tavq1fP//hKu/VYFyvENKeXIkS6cdsTi/xKGDxzhw4BiHDhxldnaeKEpdJE6USIsDjGw5gx0XX8nas6+iODxEq9OETotCGhPoFGm6lIzOihI9/t5gyZoRWj/2vQBnZttngu3GsZcfcSZuTyFZa3Ohl9luILKcSG9H71kSGZmhW/j9i2ilH2Hzn/MFYP39rjBI+oM0Tv6cg+2acLSOPIdqLRIWBEHgghFSSkT9f/ymtdY1LNbGkJoEdMqCLXN4+9Uc23UlC5RclN178NIKT35kcTz/fUKbC7WPmvRpPdG7u9NWev8iyAYjf1r/4D3hEX2Lo2dm2Tz64BaEXrEN575FFs728yqzy/hJk15QtXEN5GqhpGC6TB94iiOP3c/Ms3uxjQZKdxHCoCRUyiGj48OsW7ua8XXjTE6MMzQ4SKVaplQsUi4UUAWPX7EiDwAZY0gNtGNNq92h02ixML/E7PQsp6ZOsTA9x/zcIt2OJkkBAgyKNChSHJtg3VnnsfGcS5ncciapLBI36hB3CYgp6hhpEyQ+Q5tncizSZHa17JmTK8zSPrNihV+WCZ8fU9GX4TaZ4PZMWoTb9XK/IZs/b9P3FkWmsDLnuNcPAmFyZ7dn1vbMHWlxZcG+PluCr5oHI11Nhliep3vsOSrKQiAIVIiUAiUlfa5chlCUaEJqNmXgyOMMTm6hMbwdbVKHOfAyqXxCY2U1pujbLnsOXT52udZ/AW/aD5H13n4u+5m1IPo0evamyLZS91YWgjO9T/hz9ShaxP9b2bk9x3UUcfjrmbOrlS3JcS7GJCGVqlBJgFBQFBQhFFXwzp/LO/BEpeCJALk4hCR2HEBSZEuKtN7dM81Dd8/MWSlAtkr27p5zZufS8+t7T38Nj1SUFm1pUziapVGV8ydAmrP/2o/4yetvsDo65J8f3uP43t84enify8df8ORiydnHx9z/8HN0ENIsM+TEMMvMZwOLxZz5fEFKznbFji1ar9dsxjWr1ZKLiyXr1chmXdAilLFYKmSeURb75BsH7N1+ljsvvszzr3yfO996CVns8GRTWJ4cImNhkdaNWEKGaUvmYkby2CGPTC0xn82FFHNrj0tH9P3cdQr75PtOUnBgaT4CmTzaxD2pGybQqdn2PY6sJyXB0b2FyltrFkMcJ8NoGRnY8PjQKlNIN84A0iEK4taGPflgJiPfvDjky3t/5PIHdzia3TS0B6/v4p1LvWzmUxhqwNZ0BWVflxq3fWd4Eq7e0XeWyV2A+06Mvcci25gz14pwfavR71BmgZlA0cRyObKSzPzgBV7+6cu8+tNfsDx7xKPP7nP86UccP/iE8+Mj1ucnrJYXLJ8UyvkKyhLBTkmfegAjpKGYrD/M0TRnWMyZ7yxYHNxi9+lnefbuC9y+8wIHd55n7/Zz6DBjtcayxB6dISg7GXQASozZRNGmhfj8CajnFVhx2D6YrJ+/tmn6bZG669v3x/vg3tP7rgJe9RoTaO5EK0rE8FRvTu3U1FGmntdtuoKrxwIlmw6zyJnlvz+Dy8fkbAlYWcJxaFxiSNJ+XhzZkxbGMnIzjTz34B2WT73IxStvcs4OgjLKipKyadhSasWOEF/qZHSD12o/tlkKZ3JUA+ilN/GJ6Gc4yDz6up18M9ke9UNLZ6wbsLO2TLZYL/zSYo0KaycEz/Ma4Wz1hDGPDLsH3Hr9B9z57g9hs+bJ5SVPHh1xfvIFj4+PuXj8mPXFJavLSzarL1FdE4CTUrLUxvku88UeN/cP2Lt1wMGt2+wf7LNzcIDu7tkmH5X1kzWXyzVa1rZwIshgULJJJtNn7T3qHdF3NlURmYynsyp0axcAEBjdhyjH2grJvJdo8u3hIlCr++Nc11O3SgrlOnZK0IZ6V2tQdCXmSKmpSnhdycY9rBsRmg9l3LDIGfnylIvDh+wlNQU7DbaJtC34MHFEIMx0tCUXGEvhGb3k/O9/ZPn0N1g99RJr5iYKUUjaaix2NNeJQG1WJ7LvFmpMkSKEKo85qQQZopE4mytXNkH7VRNjjKN1bJT2cu48ebbvQ924fbFWVYqMyACSEpsCZ8uRswJCJg23yHcOuP3Ct3nanUZJMBPtuCaNmxYJm5IpYp5KWlXRUhi1cL4plDOr2pcYTUZP/kdidGJPqgyqSPGIrTqYVEXBkPMV0BTx9VZxrgJQJcI2esV8Pz0fqfoZeKQAiFoIiggUyebPUVCaxxfwPjL5BaOH5HWFHN464lDENtI2+tN9FqOvQkJ0ZKbKYr3i5LOPGdYr8swsc4JLH9LmxeoCeb5kBDYpZj4i2ZGoz158zvIvv0V//Gse7t6Fkty7uvFQ1evEkEAS667tiSn/vLppegKc3LH1fTx0DUuu65+J+vwFY59mdUjX3IxHqbbvAiXD5VtLdYhLm+5VFswjihZkLGxGWK2McEOQEBQpZiCKok5WHtMOhUgdGkarGUv2iXnovduJ0sqyEKIgNFm2zZ2JFX2E5XSe+2oM2zPdz34vDl231tuvyfe63aJz+I6o+xAIIVdjhPrzKnbCTO+M6zdBPTusjNxIM87v/wNOT9iZWc7xIEoWbbnBElGjsbgxTI/9SILZs3Nmf1DuHn3AjXd/zzPjqXkBS2ZMI0U2IMooLrVrY1cRNxNALgEGFX6nENzP41VUFiK5GlqcvTqrnN7vLJRMPbhPkiFStK39vd3TUv+hAGPyc6Yy7dQbMfxQl1WLWLqmerRizpkhD8xSZpYyA5mcMjL4X06QhDRkkh+anZIdwiEoyZF+lJFRxpoDbQsWVR0aIUXlYyTGug1ISk0s70Zck9BjKaRbF3XdUL3NID2x0usF/Cw335rSJbVLqmtjHQn7z/TlkpFv0rYA9p3NUT0028WUCqruRyhqUboI6FiYi3Bx9JCLw/vszOy5nAbaWQHqtG0bYBBnhyksOqFMJEFKIqsyqvLUoNz95M8wu0n5/q841D3QoSGYmnKRVClptAPsSsWoTu7yNaKNoypd8cbHrIRc2ChWkTofFR8r3OgW54n3Ic4YUuPsuqV29qw17u4RORYm+ILjlStsjTP0qCmOcNTTSCbmWLHP4iJaiBZJpDOiNGnexu0FAYojd/Qw5lByJ56UCVc1hpkMVSc6lb1vzNl1wtLNurQDq/0WE0qL53kItQiVul6Ag0XT8VwstYWoa9Xm1Z5psr71t/dDhO6hJSM6omInkCVPY90ZMuXkkNMH99gbNpBNzDTPvFUYqU46H7eLQJ4wQLAFqURUGb3OuMvIeO9t2FnAt3/OUblJGSyUWpwVF4GNmFxYU+M6wgC6pHsn8I5dfiVLnWyFRpJf99UZ9660+9Wvtt22f7sLW/frDUyvihOmy/SbrNAqpvXWOJkEA01Zfs3B1nY57ugiiK/07Wu9kkyeu25dUgqD43+fwf9HTOqGzsSUWrl/U8hVzFdoVyxObTYk9OyY00/e54ZuSMnoOHvMjw0pAjS1LkrzA4hYoSiJn7FNoC4vqW4oWblb1pR3foeUDN/5Gce6AwXG1IcyzLzo1KotYaUhaz+AogZVAlG/RWV76SFYcDDIirBu0w607asIXJlwn0+btJ7jRIbV9QsWAkhPiMbewyEX82b9KLFU1ULRd8iIRjtq7zPtuuF2puTmyDILi9UpqvF/HXrHJqiZcpjeU9PvJygbrFTroCdGodhArk23kiNOP3WXtaL422FOpfu9OJctDBMm0jBB/RJrH0UQOv9PbAN177logrJhnqGcHvP43l/ZXS/JQyFJ8lB5ows7PLytQD0kzxZJEZVanSJiZVIcV5lAdUQ1kUm8mFfw3u/YlBXDq29xNDuwEwpH9RNAYsDdolZA60QSbaFSAm5As80YRGRGoC4ZpxdIvL1Q8JQmDum1sGeDiZxdrR4zrTbpfoHxPm3bs/vfNtGkLr/1o1KOZY+Z9NMF+oXC5khUf0tMUY6HLTy4R//oUZtKEzOsjUigb4Nw9GwUXNelvo9N5oTWQKLfCK0fAVBbkA1eO0mkBfLVG3zzpDbhHvcjrX3vsi8iEfotDlRmBHMKSWrHyW5W7M9njI/+xaMP/8ruuGSeE5IFyThNS1N8k8doJfs+ibSqELW7YmxjAx7UZRM55jlpUzyGBF4sG/J7f+B4dQHfe4vDnadR2cOqNGy2m528rjhPqGtxRVxqzwgyQc2GnT23uO7ZSTshRtAQrUf/q/e3/Nvp97UrRnzbfdB2Lfpvgy2M4MWx7PNkDD39VqJvYoY4ZzZwbFftt/pgwq8WPf7Xq26CQN6agywd5/p67V3HXa9zqlkYS3/BxhqKtd1YGFizN8+sjh5w+vG77JY185nNZWbGoHZGXBKpekCz27X+DPEhQTXaWPaR12r001yGYiZS1Fz1pMxzLMmfvI1cHrP7xi/54uAVTr1Oi1CsunPJXlF5dIQKJ9MUaa0P/XJ3F66ZyKlIYp+FzsdQxSid/IZ9k5wPXNUmGjiG+EAz9XZhF9ARiI+pXgqljVTzUaGJDNPN1BFx932/cdKE5mK18LLibV7q/9JzwhiQt6phyXL+dY2JMu6NueznqN3po6hiq6N1BybbrRZJiFtsisu5FrvTONBoAE9WMUXc5z75GXWFkUFGbsiGs4cfc/HgI/bFD/VASckkl+znN6RK/Ez+4lX9ABHvYfEUbjMN2S51JFKysSBdIwWekcLOw/c5OT1j8fpbzL/1BsfcYJQBXK8oGkQRZiy3EAmMGkFzYZU1dhvsFGGKOhMhU6pMGego3awbMpdGVkor0a0dAtf3LnELbl7TiKuyx7tn+8jDCpnRrsfhiD8UTiL8/xC3worT9y9Et14cKrGAClZYsdT2JiJaJVidIHgcFWQ6XR9T1ZTYK6CkzYCBRvrjlLgJtNa2LgErvf4RIFT7gBJHXtmcSAUGO+XdzhBovg/x1FNYSCFdnnH86Qdw8i/2BzuLzESawWR/ETSNLvcbTSQ/lC9L8rBvG8fQnBUxDqkLV82NsVvFWbmDhqoZoQ6ScuP0cw7/9Bvk5HN2XnuT4/ltlmmwchmE0iiIFkqK40krNnbE9DX4trblq4tSH3dC6kWYBo8dukn73peqFLXiUhIOrWtese7aASxtI041RbvQBxf03K/iv0xmYgLcXdennYj7unvUnX7NIdm1I1tiVv8+5q8Y96qVSiNcRtuYv/plDRb6nOHGrRv/2GpHQqkPU7Z6LroBRaYwl5HN4UNOP/2AxWbJzmC6ocn0ICHjizgniPeN+KsVyPWC/wAiiVHj3tVwHwAAAABJRU5ErkJggg==";
+function useAppIcon() {
+  useEffect(()=>{
+    if (typeof document === "undefined") return;
+    document.title = "WordBabe";
+
+    const setLink = (rel, href, sizes) => {
+      let link = document.querySelector(`link[rel="${rel}"]${sizes?`[sizes="${sizes}"]`:""}`);
+      if (!link) {
+        link = document.createElement("link");
+        link.rel = rel;
+        if (sizes) link.sizes = sizes;
+        document.head.appendChild(link);
+      }
+      link.href = href;
+    };
+
+    setLink("icon", `data:image/png;base64,${APP_ICON_FAVICON_B64}`);
+    setLink("shortcut icon", `data:image/png;base64,${APP_ICON_FAVICON_B64}`);
+    setLink("apple-touch-icon", `data:image/png;base64,${APP_ICON_TOUCH_B64}`, "180x180");
+  }, []);
+}
+
 /* ============================================================
    ROOT APP
    ============================================================ */
 function AppInner() {
+  useAppIcon();
   const [phase, setPhase] = useState("boot"); // boot | onboarding | auth | setup | main
   const [children, setChildren] = useState([]);
   const [activeChildId, setActiveChildId] = useState(null);
