@@ -1791,8 +1791,10 @@ async function reverseGeocodeTR(lat, lon) {
 
 const OVERPASS_MIRRORS = [
   "https://overpass-api.de/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
   "https://overpass.kumi.systems/api/interpreter",
-  "https://overpass.openstreetmap.ru/api/interpreter"
+  "https://overpass.openstreetmap.ru/api/interpreter",
+  "https://overpass.nchc.org.tw/api/interpreter"
 ];
 
 function fetchWithTimeout(url, options, timeoutMs) {
@@ -1801,11 +1803,35 @@ function fetchWithTimeout(url, options, timeoutMs) {
   return fetch(url, {...options, signal: controller.signal}).finally(()=>clearTimeout(timer));
 }
 
-async function overpassNearby(lat, lon, radiusM, tagPairs) {
+function parseOverpassElements(data) {
+  return (data.elements||[]).map(el => {
+    const lt = el.lat ?? el.center?.lat;
+    const ln = el.lon ?? el.center?.lon;
+    if (lt==null || ln==null) return null;
+    const tags = el.tags || {};
+    const addrParts = [];
+    const street = [tags["addr:street"], tags["addr:housenumber"]].filter(Boolean).join(" ");
+    if (street) addrParts.push(street);
+    const area = tags["addr:neighbourhood"] || tags["addr:suburb"] || tags["addr:district"] || "";
+    if (area) addrParts.push(area);
+    if (!addrParts.length && tags["addr:full"]) addrParts.push(tags["addr:full"]);
+    return {
+      id: `${el.type}/${el.id}`,
+      name: tags.name || tags["name:tr"] || "İsimsiz",
+      lat: lt, lon: ln,
+      address: addrParts.join(", "),
+      phone: tags.phone || tags["contact:phone"] || ""
+    };
+  }).filter(Boolean);
+}
+
+// Bir yarıçap için tüm aynaları (mirror) dener; biri başarısız olursa
+// sıradakine geçer. Hepsi başarısız olursa hata fırlatır (ağ/servis sorunu).
+async function overpassNearbyOnce(lat, lon, radiusM, tagPairs) {
   const filters = tagPairs.map(([k,v]) =>
-    `node["${k}"="${v}"](around:${radiusM},${lat},${lon});way["${k}"="${v}"](around:${radiusM},${lat},${lon});`
+    `node["${k}"="${v}"](around:${radiusM},${lat},${lon});way["${k}"="${v}"](around:${radiusM},${lat},${lon});relation["${k}"="${v}"](around:${radiusM},${lat},${lon});`
   ).join("\n");
-  const query = `[out:json][timeout:20];(${filters});out center 20;`;
+  const query = `[out:json][timeout:25];(${filters});out center 40;`;
 
   let lastErr = null;
   for (const endpoint of OVERPASS_MIRRORS) {
@@ -1814,33 +1840,35 @@ async function overpassNearby(lat, lon, radiusM, tagPairs) {
         method: "POST",
         headers: {"Content-Type":"application/x-www-form-urlencoded"},
         body: "data=" + encodeURIComponent(query)
-      }, 10000);
+      }, 16000);
       if (!res.ok) throw new Error("overpass_error");
       const data = await res.json();
-      return (data.elements||[]).map(el => {
-        const lt = el.lat ?? el.center?.lat;
-        const ln = el.lon ?? el.center?.lon;
-        if (lt==null || ln==null) return null;
-        const tags = el.tags || {};
-        const addrParts = [];
-        const street = [tags["addr:street"], tags["addr:housenumber"]].filter(Boolean).join(" ");
-        if (street) addrParts.push(street);
-        const area = tags["addr:neighbourhood"] || tags["addr:suburb"] || tags["addr:district"] || "";
-        if (area) addrParts.push(area);
-        if (!addrParts.length && tags["addr:full"]) addrParts.push(tags["addr:full"]);
-        return {
-          id: `${el.type}/${el.id}`,
-          name: tags.name || tags["name:tr"] || "İsimsiz",
-          lat: lt, lon: ln,
-          address: addrParts.join(", "),
-          phone: tags.phone || tags["contact:phone"] || ""
-        };
-      }).filter(Boolean);
+      return parseOverpassElements(data);
     } catch (e) {
-      lastErr = e; // bu aynada başarısız oldu, sıradaki aynayı dene
+      lastErr = e; // bu ayna başarısız oldu, sıradaki aynayı dene
     }
   }
   throw lastErr || new Error("overpass_error");
+}
+
+// Verilen yarıçapta sonuç bulunamazsa (kırsal/küçük yerleşim gibi düşük
+// yoğunluklu OSM verisi olan bölgelerde), otomatik olarak daha geniş
+// yarıçaplarla yeniden dener. Sonuç bulur bulmaz durur; tüm denemeler
+// ağ hatasıyla başarısız olursa hatayı yukarı fırlatır.
+async function overpassNearby(lat, lon, radiusM, tagPairs) {
+  const radiiToTry = [radiusM, ...[30000, 50000, 80000].filter(r => r > radiusM)];
+  let lastErr = null;
+  for (const r of radiiToTry) {
+    try {
+      const results = await overpassNearbyOnce(lat, lon, r, tagPairs);
+      if (results.length > 0) return results;
+      lastErr = null; // istek başarılı ama bölgede sonuç yok; daha geniş dene
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  if (lastErr) throw lastErr;
+  return [];
 }
 
 /* ============================================================
@@ -4713,8 +4741,10 @@ function NearbyTab() {
       .then(r => { setProvince(r.province); setDistrict(r.district); })
       .catch(()=>{});
 
-    // Eczaneler — tek istek, 15km yarıçap
-    overpassNearby(lat, lon, 15000, [["amenity","pharmacy"]])
+    // Eczaneler — 15km yarıçap, sonuç yoksa otomatik genişler.
+    // OSM'de eczaneler hem amenity=pharmacy hem healthcare=pharmacy ile
+    // etiketlenebildiği için ikisi birden sorgulanır.
+    overpassNearby(lat, lon, 15000, [["amenity","pharmacy"],["healthcare","pharmacy"]])
       .then(results => {
         const withDist = results
           .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
