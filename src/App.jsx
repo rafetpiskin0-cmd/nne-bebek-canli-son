@@ -38,6 +38,8 @@ const UI_TEXT = {
     profile_pregnancy_tracking: "Hamilelik takibi",
     profile_postnatal_tracking: "Doğum sonrası takip",
     profile_premium_title: "Premium",
+    profile_premium_active_title: "Premium Aktif ✓",
+    profile_premium_active_desc: "Sınırsız AI asistan, reklamsız kullanım ve tüm premium içerikler açık.",
     profile_premium_upgrade: "Premium'a Geç",
     profile_premium_desc: "Reklamsız kullanım · Sınırsız AI · Detaylı raporlar · Premium sesler ve aktiviteler",
     profile_premium_btn: "Ödeme Yöntemi Ekle",
@@ -317,6 +319,8 @@ const UI_TEXT = {
     toast_message_send_failed: "Mesaj gönderilemedi, tekrar deneyin",
     assistant_title: "Yapay Zeka Anne Asistanı",
     assistant_disclaimer: "Sadece bilgilendirme amaçlıdır, tanı koymaz.",
+    assistant_unlimited_badge: "Sınırsız (Premium)",
+    assistant_usage_badge: (left,total)=>`Bugün ${left}/${total} mesaj hakkın kaldı`,
     assistant_input_placeholder: "Bir şey sorun...",
     assistant_history_title: "Geçmiş Sohbetler",
     assistant_no_chats: "Henüz sohbet yok.",
@@ -1216,6 +1220,59 @@ async function storageSet(key, value, shared=false) {
   } catch (e) {
     return false;
   }
+}
+
+/* ============================================================
+   PREMIUM / ÜCRETSİZ KATMAN SINIRLAMASI
+   ============================================================
+   ÖNEMLİ — GÜVENLİK NOTU: Bu bayrak (profile:premium) window.storage'da
+   istemci tarafında tutulur. MVP / test aşaması için yeterlidir ama
+   teknik bir kullanıcı tarayıcı konsolundan bu değeri değiştirip
+   "sahte" premium elde edebilir. Gerçek/canlı yayında bunu güvenli
+   hale getirmek için: mobil uygulamada RevenueCat + App Store/Play
+   Store IAP makbuz doğrulaması, web'de ise bir ödeme sağlayıcısının
+   (iyzico/Stripe/PayTR) webhook'uyla SUNUCU tarafında set edilen bir
+   "premium" alanı kullanılmalı — istemcinin kendi kendine yazdığı bir
+   değere asla güvenilmemeli. Şu anki PaymentMethodModal, bu mimariyi
+   test edebilmeniz için premium'u yerel olarak aktifleştiren bir
+   DEMO'dur; gerçek tahsilat yapmaz.
+   ============================================================ */
+const FREE_AI_DAILY_LIMIT = 5; // ücretsiz kullanıcıların günlük asistan mesaj hakkı
+
+async function getPremiumStatus() {
+  const saved = await storageGet("profile:premium", false);
+  return (saved && saved.active) ? saved : {active:false, since:null, source:null};
+}
+async function setPremiumStatus(active, source="demo_card") {
+  const val = {active, since: active ? todayISO() : null, source: active ? source : null};
+  await storageSet("profile:premium", val, false);
+  return val;
+}
+// Component'ler içinde reaktif olarak premium durumunu okumak için.
+function usePremium() {
+  const [isPremium, setIsPremium] = useState(false);
+  const [loadingPremium, setLoadingPremium] = useState(true);
+  const refreshPremium = async () => {
+    const status = await getPremiumStatus();
+    setIsPremium(!!status.active);
+    return !!status.active;
+  };
+  useEffect(()=>{ (async ()=>{ await refreshPremium(); setLoadingPremium(false); })(); }, []);
+  return { isPremium, loadingPremium, refreshPremium };
+}
+
+// Ücretsiz kullanıcılar için günlük AI (Asistan) mesaj sayacı — her gün sıfırlanır.
+async function getAIUsageToday() {
+  const today = todayISO();
+  const saved = await storageGet("usage:assistant", false);
+  if (!saved || saved.date !== today) return {date: today, count: 0};
+  return saved;
+}
+async function incrementAIUsage() {
+  const usage = await getAIUsageToday();
+  const updated = {date: usage.date, count: usage.count + 1};
+  await storageSet("usage:assistant", updated, false);
+  return updated;
 }
 
 /* ============================================================
@@ -5612,6 +5669,9 @@ function CommunityChat() {
 
 function AssistantTab() {
   const { t, lang } = useLang();
+  const { isPremium, refreshPremium } = usePremium();
+  const [usage, setUsage] = useState({date: todayISO(), count: 0});
+  const [showUpsell, setShowUpsell] = useState(false);
   const [loading, setLoading] = useState(true);
   const [conversations, setConversations] = useState([]);
   const [activeId, setActiveId] = useState(null);
@@ -5632,6 +5692,8 @@ function AssistantTab() {
         setConversations([c]);
         setActiveId(c.id);
       }
+      const u = await getAIUsageToday();
+      setUsage(u);
       setLoading(false);
     })();
   }, []);
@@ -5643,6 +5705,10 @@ function AssistantTab() {
 
   const send = async () => {
     if (!input.trim() || sending || !active) return;
+    if (!isPremium && usage.count >= FREE_AI_DAILY_LIMIT) {
+      setShowUpsell(true);
+      return;
+    }
     const text = input.trim();
     setInput("");
     setError(null);
@@ -5652,6 +5718,7 @@ function AssistantTab() {
     let list = conversations.map(c => c.id===activeId ? {...c, messages:updatedMsgs, title, updatedAt:Date.now()} : c);
     persist(list);
     setSending(true);
+    if (!isPremium) { const u = await incrementAIUsage(); setUsage(u); }
     try {
       const res = await callGemini(
         getAssistantSystemPrompt(lang),
@@ -5698,6 +5765,9 @@ function AssistantTab() {
         <div>
           <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>{t("assistant_title")}</h2>
           <div style={{fontSize:12.5,color:"var(--ink-soft)",marginTop:4}}>{t("assistant_disclaimer")}</div>
+          <div style={{fontSize:11,fontWeight:700,marginTop:6,color: isPremium ? "var(--purple-deep)" : "var(--ink-faint)",display:"flex",alignItems:"center",gap:4}}>
+            {isPremium ? (<><Crown size={11}/> {t("assistant_unlimited_badge")}</>) : t("assistant_usage_badge", Math.max(0, FREE_AI_DAILY_LIMIT-usage.count), FREE_AI_DAILY_LIMIT)}
+          </div>
         </div>
         <div style={{display:"flex",gap:8}}>
           <div onClick={()=>setShowHistory(true)} className="abp-tap" style={{width:36,height:36,borderRadius:18,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"var(--shadow-sm)"}}><Clock size={16}/></div>
@@ -5751,7 +5821,36 @@ function AssistantTab() {
           ))}
         </Modal>
       )}
+
+      {showUpsell && (
+        <AIUpsellModal
+          onClose={()=>setShowUpsell(false)}
+          onUpgraded={async ()=>{ await refreshPremium(); setShowUpsell(false); }}
+        />
+      )}
     </div>
+  );
+}
+
+/* ============================================================
+   AI KULLANIM PAYWALL'İ — ücretsiz günlük hak dolduğunda gösterilir.
+   ============================================================ */
+function AIUpsellModal({onClose, onUpgraded}) {
+  const [showCard, setShowCard] = useState(false);
+  if (showCard) return <PaymentMethodModal onClose={onClose} onUpgraded={onUpgraded}/>;
+  return (
+    <Modal title="Günlük AI Hakkın Doldu" onClose={onClose}>
+      <div style={{textAlign:"center",padding:"6px 0 16px"}}>
+        <div style={{width:56,height:56,borderRadius:28,background:"linear-gradient(135deg, var(--purple), var(--pink))",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}>
+          <Crown size={26} color="#fff"/>
+        </div>
+      </div>
+      <div style={{fontSize:13.5,lineHeight:1.7,color:"var(--ink-soft)",marginBottom:18,textAlign:"center"}}>
+        Ücretsiz hesaplar günde {FREE_AI_DAILY_LIMIT} asistan mesajıyla sınırlıdır. Premium'a geçerek sınırsız AI asistan, reklamsız kullanım ve detaylı raporların kilidini açabilirsin.
+      </div>
+      <PrimaryButton onClick={()=>setShowCard(true)}>Premium'a Geç</PrimaryButton>
+      <div onClick={onClose} className="abp-tap" style={{textAlign:"center",marginTop:14,fontSize:12.5,color:"var(--ink-faint)",fontWeight:600}}>Yarın tekrar dene</div>
+    </Modal>
   );
 }
 
@@ -5763,7 +5862,7 @@ function AssistantTab() {
    modülün bir ödeme sağlayıcısının resmi SDK/API'siyle backend
    üzerinden entegre edilmesi gerekir.
    ============================================================ */
-function PaymentMethodModal({onClose}) {
+function PaymentMethodModal({onClose, onUpgraded}) {
   const [loading, setLoading] = useState(true);
   const [methods, setMethods] = useState([]);
   const [holder, setHolder] = useState("");
@@ -5800,7 +5899,11 @@ function PaymentMethodModal({onClose}) {
     const ok = await storageSet("payment:methods", list, false);
     if (ok) {
       setMethods(list); setHolder(""); setNumber(""); setExpiry(""); setCvc("");
-      showToast("Ödeme yöntemi eklendi ✓ (demo — gerçek tahsilat yapılmaz)");
+      // DEMO aktivasyon: gerçek ortamda bu satır yerine ödeme sağlayıcısının
+      // başarı webhook'u/sunucu onayı premium'u aktifleştirmeli.
+      await setPremiumStatus(true, "demo_card");
+      if (onUpgraded) onUpgraded();
+      showToast("Ödeme yöntemi eklendi, Premium aktifleşti ✓ (demo — gerçek tahsilat yapılmaz)");
     } else showToast("Kaydedilemedi, tekrar deneyin", "error");
     setSaving(false);
   };
@@ -5959,6 +6062,7 @@ function AccountDetail({authUser, onBack}) {
 
 function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onOpenAccount, authUser, onLogout}) {
   const { t } = useLang();
+  const { isPremium, refreshPremium } = usePremium();
   const [reminders, setReminders] = useState([]);
   const [editingReminder, setEditingReminder] = useState(null); // {id:null} => yeni, {id,...} => düzenleme
   const [reminderDraft, setReminderDraft] = useState({label:"", date:"", time:"", repeat:"none"});
@@ -6115,15 +6219,26 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
       )}
 
       <SectionTitle>{t("profile_premium_title")}</SectionTitle>
-      <Card style={{background:"linear-gradient(135deg, var(--purple), var(--pink))"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-          <Crown size={20}/><div style={{fontWeight:800,fontSize:15}}>{t("profile_premium_upgrade")}</div>
-        </div>
-        <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.7}}>
-          {t("profile_premium_desc")}
-        </div>
-        <PrimaryButton style={{marginTop:12,padding:12,fontSize:13.5}} onClick={()=>setShowPayment(true)}>{t("profile_premium_btn")}</PrimaryButton>
-      </Card>
+      {isPremium ? (
+        <Card style={{background:"linear-gradient(135deg, var(--purple), var(--pink))"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <Crown size={20}/><div style={{fontWeight:800,fontSize:15}}>{t("profile_premium_active_title")}</div>
+          </div>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.7,marginTop:8}}>
+            {t("profile_premium_active_desc")}
+          </div>
+        </Card>
+      ) : (
+        <Card style={{background:"linear-gradient(135deg, var(--purple), var(--pink))"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <Crown size={20}/><div style={{fontWeight:800,fontSize:15}}>{t("profile_premium_upgrade")}</div>
+          </div>
+          <div style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.7}}>
+            {t("profile_premium_desc")}
+          </div>
+          <PrimaryButton style={{marginTop:12,padding:12,fontSize:13.5}} onClick={()=>setShowPayment(true)}>{t("profile_premium_btn")}</PrimaryButton>
+        </Card>
+      )}
 
       <SectionTitle>{t("profile_calendar_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={onOpenCalendar}>
@@ -6135,7 +6250,7 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
 
-      {showPayment && <PaymentMethodModal onClose={()=>setShowPayment(false)}/>}
+      {showPayment && <PaymentMethodModal onClose={()=>setShowPayment(false)} onUpgraded={refreshPremium}/>}
 
       <SectionTitle>{t("profile_market_title")}</SectionTitle>
       <Card
