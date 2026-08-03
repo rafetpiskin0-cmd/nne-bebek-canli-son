@@ -3010,7 +3010,8 @@ function TrackTab({child}) {
     {key:"tekme", label:t("track_sub_kick")},
     {key:"kasilma", label:t("track_sub_contraction")},
     {key:"randevu", label:t("track_sub_appointments")},
-    {key:"uyku", label:t("track_sub_sleep")}
+    {key:"uyku", label:t("track_sub_sleep")},
+    {key:"regl", label:t("track_sub_regl")}
   ] : [
     {key:"emzirme", label:t("track_sub_breastfeeding")},
     {key:"mama", label:t("track_sub_formula")},
@@ -3047,6 +3048,7 @@ function TrackTab({child}) {
         <ContractionTimer logs={logs.kasilma} onLog={(entry)=>addLog("kasilma",entry)}/>
       )}
       {isPregnant && sub === "randevu" && <AppointmentList/>}
+      {isPregnant && sub === "regl" && <PeriodCalendar/>}
 
       {sub === "emzirme" && (
         <TrackerBoard
@@ -5494,7 +5496,21 @@ function CommunityChat() {
     return ()=>clearInterval(id);
   }, [nickname]);
 
-  useEffect(()=>{ if(scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages]);
+  const prevLenRef = useRef(0);
+  useEffect(()=>{
+    const el = scrollRef.current;
+    if (!el) return;
+    const wasNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    const grew = messages.length > prevLenRef.current;
+    // Sadece yeni mesaj geldiyse VE kullanıcı zaten en altta okuyorsa (ya da
+    // ilk yükleme ise) otomatik en alta kaydır. Aksi halde, biri eski
+    // mesajları okumak için yukarı kaydırmışken 4 saniyede bir gelen
+    // arka plan güncellemesi görünümü aşağı zorlamasın.
+    if (grew && (wasNearBottom || prevLenRef.current === 0)) {
+      el.scrollTop = el.scrollHeight;
+    }
+    prevLenRef.current = messages.length;
+  }, [messages]);
 
   const saveNickname = async () => {
     if (!nickInput.trim()) return;
@@ -5562,7 +5578,7 @@ function CommunityChat() {
           </div>
         )}
       </div>
-      <div ref={scrollRef} style={{flex:"1 1 0%",minHeight:0,overflowY:"auto",padding:"6px 16px 90px"}} className="abp-scrollbar">
+      <div ref={scrollRef} style={{flex:"1 1 0%",minHeight:0,overflowY:"auto",padding:"6px 16px 150px"}} className="abp-scrollbar">
         {loading ? (
           <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
         ) : messages.length === 0 ? (
