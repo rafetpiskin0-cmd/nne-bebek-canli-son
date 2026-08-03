@@ -47,6 +47,18 @@ const UI_TEXT = {
     profile_market_title: "WordBabe Satış",
     profile_market_desc: "2. el bebek ve çocuk eşyaları alışveriş pazarı",
     profile_reminders_title: "Hatırlatıcılar",
+    reminder_add_btn: "Ekle",
+    reminder_modal_title: "Hatırlatıcı",
+    reminder_label_label: "Hatırlatıcı adı",
+    reminder_label_placeholder: "Örn. Doktor Randevusu",
+    reminder_date_label: "Tarih",
+    reminder_time_label: "Saat",
+    reminder_repeat_label: "Tekrar",
+    reminder_repeat_none: "Tek seferlik",
+    reminder_repeat_daily: "Her gün",
+    reminder_save: "Kaydet",
+    reminder_delete: "Hatırlatıcıyı Sil",
+    reminder_notif_hint: "Saat belirlersen, o an uygulama açıkken bildirim ve uyarı alırsın.",
     profile_admin_title: "Yönetim",
     profile_admin_card_title: "Yönetici Paneli (Demo)",
     profile_admin_card_desc: "Makale, aktivite, ses ve ninni ekle",
@@ -69,6 +81,9 @@ const UI_TEXT = {
     toast_logout_failed: "Çıkış yapılamadı, tekrar deneyin",
     toast_reminder_on: "Hatırlatıcı açıldı ✓",
     toast_reminder_off: "Hatırlatıcı kapatıldı",
+    toast_reminder_saved: "Hatırlatıcı kaydedildi ✓",
+    toast_reminder_deleted: "Hatırlatıcı silindi",
+    toast_notif_denied: "Bildirim izni verilmedi; hatırlatıcı yalnızca uygulama açıkken uygulama içi uyarı olarak çalışacak",
     new_profile_default_name: "Yeni Profil",
     // Bugün ekranı
     today_greeting: "Merhaba,",
@@ -296,6 +311,8 @@ const UI_TEXT = {
     toast_nickname_saved: "Takma adınız kaydedildi ✓",
     community_writing_as: (name)=>`${name} olarak yazıyorsunuz · herkese açık paylaşımlı alan`,
     community_no_messages: "Henüz mesaj yok. İlk mesajı sen yaz!",
+    community_clear_confirm: "Tüm topluluk mesajlarını kalıcı olarak silmek istediğine emin misin? Bu işlem geri alınamaz.",
+    toast_community_cleared: "Tüm mesajlar silindi ✓",
     community_message_placeholder: "Bir mesaj yaz...",
     toast_message_send_failed: "Mesaj gönderilemedi, tekrar deneyin",
     assistant_title: "Yapay Zeka Anne Asistanı",
@@ -1782,6 +1799,36 @@ function showToast(text, type="success") {
   const id = Math.random().toString(36).slice(2);
   toastListeners.forEach(fn => fn({id, text, type}));
 }
+
+/* ============================================================
+   HATIRLATICI BİLDİRİMLERİ — tarayıcının Notification API'si.
+   Not: bu, sekme açıkken çalışan bir bildirimdir; sekme tamamen
+   kapalıyken tetiklenebilmesi için bir service worker + push sunucusu
+   gerekir (bu proje kapsamında yok). Uygulama açık/arka planda
+   sekme olarak açıkken hatırlatıcılar zamanı geldiğinde bildirim
+   ve uygulama içi toast olarak kullanıcıyı uyarır.
+   ============================================================ */
+function requestNotificationPermission() {
+  if (typeof window === "undefined" || !("Notification" in window)) return Promise.resolve("unsupported");
+  if (Notification.permission === "granted" || Notification.permission === "denied") return Promise.resolve(Notification.permission);
+  return Notification.requestPermission();
+}
+function fireReminderNotification(title, body) {
+  try {
+    if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
+      new Notification(title, { body, tag: "abp-reminder-"+title });
+    }
+  } catch (e) { /* bildirim desteklenmiyorsa sessizce geç */ }
+}
+// Hatırlatıcı kartında gösterilecek tarih/saat metni
+function reminderTimeLabel(r) {
+  if (r.repeat === "daily") return r.time ? `Her gün · ${r.time}` : "Her gün";
+  if (r.date && r.time) return `${formatDateTR(new Date(r.date+"T00:00:00"))} · ${r.time}`;
+  if (r.date) return formatDateTR(new Date(r.date+"T00:00:00"));
+  if (r.time) return r.time;
+  return "Tarih belirtilmedi";
+}
+
 function ToastHost() {
   const [toasts, setToasts] = useState([]);
   useEffect(()=>{
@@ -5469,6 +5516,15 @@ function CommunityChat() {
     setSending(false);
   };
 
+  // Tüm paylaşılan mesajları kalıcı olarak siler (herkes için — bu veri
+  // shared=true ile saklanıyor). Geri alınamaz olduğu için önce onay istenir.
+  const clearAllMessages = async () => {
+    if (!window.confirm(t("community_clear_confirm"))) return;
+    const ok = await storageSet("community:messages", [], true);
+    if (ok) { setMessages([]); showToast(t("toast_community_cleared")); }
+    else showToast(t("toast_message_send_failed"), "error");
+  };
+
   if (loadingNick) {
     return (
       <div style={{height:"100%",background:"var(--bg)",padding:"20px"}}>
@@ -5495,11 +5551,18 @@ function CommunityChat() {
 
   return (
     <div style={{height:"100%",display:"flex",flexDirection:"column",background:"var(--bg)"}}>
-      <div style={{padding:"20px 20px 10px"}}>
-        <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>{t("community_title")}</h2>
-        <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:4}}>{t("community_writing_as", nickname)}</div>
+      <div style={{padding:"20px 20px 10px",display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
+        <div>
+          <h2 className="abp-display" style={{fontSize:21,fontWeight:800,margin:0}}>{t("community_title")}</h2>
+          <div style={{fontSize:12,color:"var(--ink-soft)",marginTop:4}}>{t("community_writing_as", nickname)}</div>
+        </div>
+        {messages.length > 0 && (
+          <div onClick={clearAllMessages} className="abp-tap" style={{width:34,height:34,borderRadius:17,background:"var(--card)",display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"var(--shadow-sm)",flexShrink:0,marginTop:2}}>
+            <X size={15} color="var(--ink-faint)"/>
+          </div>
+        )}
       </div>
-      <div ref={scrollRef} style={{flex:1,overflowY:"auto",padding:"6px 16px"}} className="abp-scrollbar">
+      <div ref={scrollRef} style={{flex:"1 1 0%",minHeight:0,overflowY:"auto",padding:"6px 16px 90px"}} className="abp-scrollbar">
         {loading ? (
           <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
         ) : messages.length === 0 ? (
@@ -5880,12 +5943,9 @@ function AccountDetail({authUser, onBack}) {
 
 function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onOpenAccount, authUser, onLogout}) {
   const { t } = useLang();
-  const [reminders, setReminders] = useState([
-    {label:"Doktor Randevusu", time:"Yarın 10:00", on:true},
-    {label:"Vitamin Hatırlatması", time:"Her gün 09:00", on:true},
-    {label:"Su İçme", time:"Her 2 saatte", on:false},
-    {label:"Aşı Takibi", time:"Otomatik", on:true},
-  ]);
+  const [reminders, setReminders] = useState([]);
+  const [editingReminder, setEditingReminder] = useState(null); // {id:null} => yeni, {id,...} => düzenleme
+  const [reminderDraft, setReminderDraft] = useState({label:"", date:"", time:"", repeat:"none"});
   const [showPayment, setShowPayment] = useState(false);
   const [momName, setMomName] = useState("Anne Adı");
   const [editMom, setEditMom] = useState(false);
@@ -5897,6 +5957,70 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
     const saved = await storageGet("profile:mom", false);
     if (saved && saved.name) setMomName(saved.name);
   })(); }, []);
+
+  useEffect(()=>{ (async ()=>{
+    const saved = await storageGet("profile:reminders", false);
+    if (saved) { setReminders(saved); return; }
+    // İlk açılışta örnek hatırlatıcılarla başla
+    const defaults = [
+      {id:1, label:"Doktor Randevusu", date: addDaysISO(todayISO(),1), time:"10:00", repeat:"none", on:true, lastFiredKey:null},
+      {id:2, label:"Vitamin Hatırlatması", date:null, time:"09:00", repeat:"daily", on:true, lastFiredKey:null},
+      {id:3, label:"Su İçme", date:null, time:null, repeat:"daily", on:false, lastFiredKey:null},
+      {id:4, label:"Aşı Takibi", date:null, time:null, repeat:"none", on:true, lastFiredKey:null},
+    ];
+    setReminders(defaults);
+    await storageSet("profile:reminders", defaults, false);
+  })(); }, []);
+
+  const saveReminders = async (list) => {
+    setReminders(list);
+    await storageSet("profile:reminders", list, false);
+  };
+
+  const toggleReminder = async (id) => {
+    const target = reminders.find(r=>r.id===id);
+    const turningOn = !target.on;
+    if (turningOn && target.time) {
+      const perm = await requestNotificationPermission();
+      if (perm === "denied") showToast(t("toast_notif_denied"));
+    }
+    await saveReminders(reminders.map(r=>r.id===id?{...r,on:turningOn}:r));
+    showToast(turningOn ? t("toast_reminder_on") : t("toast_reminder_off"));
+  };
+
+  const openEditReminder = (r) => {
+    setEditingReminder(r);
+    setReminderDraft({label:r.label, date:r.date||"", time:r.time||"", repeat:r.repeat||"none"});
+  };
+  const openNewReminder = () => {
+    setEditingReminder({id:null});
+    setReminderDraft({label:"", date:todayISO(), time:"", repeat:"none"});
+  };
+  const saveReminderDraft = async () => {
+    if (!reminderDraft.label.trim()) return;
+    const time = reminderDraft.time || null;
+    let list;
+    if (editingReminder.id) {
+      list = reminders.map(r => r.id===editingReminder.id
+        ? {...r, label:reminderDraft.label.trim(), date:reminderDraft.date||null, time, repeat:reminderDraft.repeat}
+        : r);
+    } else {
+      const newR = {id:Date.now(), label:reminderDraft.label.trim(), date:reminderDraft.date||null, time, repeat:reminderDraft.repeat, on:true, lastFiredKey:null};
+      list = [...reminders, newR];
+    }
+    if (time) {
+      const perm = await requestNotificationPermission();
+      if (perm === "denied") showToast(t("toast_notif_denied"));
+    }
+    await saveReminders(list);
+    setEditingReminder(null);
+    showToast(t("toast_reminder_saved"));
+  };
+  const deleteReminderDraft = async () => {
+    await saveReminders(reminders.filter(r=>r.id!==editingReminder.id));
+    setEditingReminder(null);
+    showToast(t("toast_reminder_deleted"));
+  };
 
   const saveMomName = async (val) => {
     setMomName(val);
@@ -6010,16 +6134,40 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
         <ChevronRight size={16} color="var(--ink-faint)"/>
       </Card>
 
-      <SectionTitle>{t("profile_reminders_title")}</SectionTitle>
-      {reminders.map((r,i)=>(
-        <Card key={i} style={{marginBottom:8,display:"flex",alignItems:"center",gap:12}}>
+      <SectionTitle action={
+        <div onClick={openNewReminder} className="abp-tap" style={{fontSize:12,fontWeight:700,color:"var(--ink)",display:"flex",alignItems:"center",gap:3}}>
+          <Plus size={13}/>{t("reminder_add_btn")}
+        </div>
+      }>{t("profile_reminders_title")}</SectionTitle>
+      {reminders.map((r)=>(
+        <Card key={r.id} style={{marginBottom:8,display:"flex",alignItems:"center",gap:12}} onClick={()=>openEditReminder(r)}>
           <IconBadge icon={Bell} color="green" size={34}/>
-          <div style={{flex:1}}><div style={{fontWeight:700,fontSize:13.5}}>{r.label}</div><div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{r.time}</div></div>
-          <div onClick={()=>{setReminders(rs=>rs.map((x,idx)=>idx===i?{...x,on:!x.on}:x)); showToast(reminders[i].on?t("toast_reminder_off"):t("toast_reminder_on"));}} className="abp-tap" style={{width:42,height:24,borderRadius:12,background: r.on?"var(--ink)":"var(--ink-faint)",padding:2,display:"flex",justifyContent:r.on?"flex-end":"flex-start"}}>
+          <div style={{flex:1}}><div style={{fontWeight:700,fontSize:13.5}}>{r.label}</div><div style={{fontSize:11.5,color:"var(--ink-soft)"}}>{reminderTimeLabel(r)}</div></div>
+          <div onClick={(e)=>{e.stopPropagation(); toggleReminder(r.id);}} className="abp-tap" style={{width:42,height:24,borderRadius:12,background: r.on?"var(--ink)":"var(--ink-faint)",padding:2,display:"flex",justifyContent:r.on?"flex-end":"flex-start",flexShrink:0}}>
             <div style={{width:20,height:20,borderRadius:10,background:"#fff"}}/>
           </div>
         </Card>
       ))}
+      {editingReminder && (
+        <Modal title={t("reminder_modal_title")} onClose={()=>setEditingReminder(null)}>
+          <Input label={t("reminder_label_label")} value={reminderDraft.label} placeholder={t("reminder_label_placeholder")}
+            onChange={(v)=>setReminderDraft(d=>({...d,label:v}))}/>
+          <Input label={t("reminder_date_label")} type="date" value={reminderDraft.date}
+            onChange={(v)=>setReminderDraft(d=>({...d,date:v}))}/>
+          <Input label={t("reminder_time_label")} type="time" value={reminderDraft.time}
+            onChange={(v)=>setReminderDraft(d=>({...d,time:v}))}/>
+          <div style={{fontSize:12.5,fontWeight:700,color:"var(--ink-soft)",margin:"2px 0 8px"}}>{t("reminder_repeat_label")}</div>
+          <div style={{display:"flex",gap:8,marginBottom:10}}>
+            <Pill_ active={reminderDraft.repeat==="none"} onClick={()=>setReminderDraft(d=>({...d,repeat:"none"}))}>{t("reminder_repeat_none")}</Pill_>
+            <Pill_ active={reminderDraft.repeat==="daily"} onClick={()=>setReminderDraft(d=>({...d,repeat:"daily"}))}>{t("reminder_repeat_daily")}</Pill_>
+          </div>
+          <div style={{fontSize:11.5,color:"var(--ink-faint)",lineHeight:1.5,marginBottom:14}}>{t("reminder_notif_hint")}</div>
+          <PrimaryButton onClick={saveReminderDraft} disabled={!reminderDraft.label.trim()}>{t("reminder_save")}</PrimaryButton>
+          {editingReminder.id && (
+            <div onClick={deleteReminderDraft} className="abp-tap" style={{textAlign:"center",marginTop:14,fontSize:13,fontWeight:700,color:"#D9526B"}}>{t("reminder_delete")}</div>
+          )}
+        </Modal>
+      )}
 
       <SectionTitle>{t("profile_admin_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={onOpenAdmin}>
@@ -6469,6 +6617,36 @@ function AppInner() {
   useEffect(()=>{
     if (children.length) storageSet("profile:children", children, false);
   }, [children]);
+
+  // Hatırlatıcılar — Profil > Hatırlatıcılar bölümünde ayarlanan tarih/saatler
+  // burada, uygulama açıkken periyodik olarak kontrol edilir. Zamanı gelen
+  // ve açık (on) olan bir hatırlatıcı için tarayıcı bildirimi + uygulama
+  // içi toast gösterilir. "Tekrar yok" olanlar bir kez tetiklendikten sonra
+  // otomatik kapanır; "Her gün" olanlar her gün yeniden tetiklenir
+  // (lastFiredKey ile aynı gün içinde tekrar tetiklenmesi önlenir).
+  useEffect(()=>{
+    const checkReminders = async () => {
+      const list = await storageGet("profile:reminders", false);
+      if (!list || !list.length) return;
+      const now = new Date();
+      const todayStr = todayISO();
+      const hhmm = now.toTimeString().slice(0,5);
+      let changed = false;
+      const updated = list.map(r=>{
+        if (!r.on || !r.time) return r;
+        const isDue = r.repeat === "daily" ? true : r.date === todayStr;
+        if (!isDue || r.time !== hhmm || r.lastFiredKey === todayStr) return r;
+        fireReminderNotification(r.label, reminderTimeLabel(r));
+        showToast(`🔔 ${r.label}`);
+        changed = true;
+        return r.repeat === "daily" ? {...r, lastFiredKey: todayStr} : {...r, on:false, lastFiredKey: todayStr};
+      });
+      if (changed) await storageSet("profile:reminders", updated, false);
+    };
+    checkReminders();
+    const id = setInterval(checkReminders, 30000);
+    return () => clearInterval(id);
+  }, []);
 
   if (phase === "boot") {
     return (
