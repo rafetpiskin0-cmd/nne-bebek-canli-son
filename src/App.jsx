@@ -9,7 +9,7 @@ import {
   Moon as MoonIcon, Droplets, Wind, CloudRain, Waves, TreePine, Flame,
   Train, Car, User, Users, Settings, Crown, Lock, ArrowRight, Home,
   Activity, CalendarDays, MessageCircle, Menu, Edit3, LogOut, Mail,
-  Apple as AppleIcon, MapPin, Clock, TrendingUp, AlertCircle, Info, Globe
+  Apple as AppleIcon, MapPin, Clock, TrendingUp, AlertCircle, Info
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -17,14 +17,11 @@ import {
 } from "recharts";
 
 /* ============================================================
-   ÇOKLU DİL (i18n) — Arayüz metinleri için çeviri sistemi.
-   `t("anahtar")` çağrısı, seçili dile göre UI_TEXT sözlüğünden
-   karşılık gelen metni döndürür; karşılık yoksa Türkçe'ye, o da
-   yoksa anahtarın kendisine düşer.
+   ARAYÜZ METİNLERİ (Türkçe) — `t("anahtar")` çağrısı UI_TEXT
+   sözlüğünden karşılık gelen metni döndürür; karşılık yoksa
+   anahtarın kendisine düşer.
    ============================================================ */
-const LANG_LABELS = { tr: "Türkçe", en: "English", de: "Deutsch" };
-const LOCALE_CODES = { tr: "tr-TR", en: "en-US", de: "de-DE" };
-function localeOf(lang) { return LOCALE_CODES[lang] || "tr-TR"; }
+function localeOf() { return "tr-TR"; }
 
 const UI_TEXT = {
   tr: {
@@ -56,9 +53,6 @@ const UI_TEXT = {
     profile_settings_title: "Ayarlar",
     profile_theme_light: "Açık Tema",
     profile_theme_dark: "Koyu Tema",
-    profile_language_title: "Dil",
-    profile_language_card_title: "Uygulama Dili",
-    profile_language_card_desc: "Arayüz dilini değiştir",
     profile_about: "Hakkımızda",
     profile_privacy: "Gizlilik Politikası (KVKK)",
     profile_logout: "Çıkış Yap",
@@ -75,7 +69,6 @@ const UI_TEXT = {
     toast_logout_failed: "Çıkış yapılamadı, tekrar deneyin",
     toast_reminder_on: "Hatırlatıcı açıldı ✓",
     toast_reminder_off: "Hatırlatıcı kapatıldı",
-    toast_language_changed: "Uygulama dili güncellendi ✓",
     new_profile_default_name: "Yeni Profil",
     // Bugün ekranı
     today_greeting: "Merhaba,",
@@ -95,7 +88,7 @@ const UI_TEXT = {
     track_sub_appointments: "Randevu Takvimi", track_sub_sleep: "Uyku",
     track_sub_breastfeeding: "Emzirme", track_sub_formula: "Mama", track_sub_foodlist: "Yemek Listesi",
     track_sub_diaper: "Bez", track_sub_poop: "Kaka Takibi", track_sub_teething: "Diş Çıkarma",
-    track_sub_vaccine: "Aşı Takvimi", track_sub_weaning: "Ek Gıda",
+    track_sub_vaccine: "Aşı Takvimi", track_sub_weaning: "Ek Gıda", track_sub_regl: "Regl Takvimi",
     tracker_weight_title: "Kilo Takibi", field_weight_kg: "Kilo (kg)",
     tracker_breastfeeding_title: "Emzirme Takibi", field_right_breast: "Sağ Göğüs", field_left_breast: "Sol Göğüs",
     tracker_formula_title: "Mama & Sıvı Takibi", field_formula_ml: "Mama (ml)", field_breastmilk_ml: "Anne Sütü (ml)", field_water_ml: "Su (ml)",
@@ -316,604 +309,52 @@ const UI_TEXT = {
     toast_assistant_failed: "Asistan yanıt veremedi",
     new_chat: "Yeni Sohbet",
     assistant_greeting: "Merhaba! Ben Anne Asistanınız 🤍 Hamilelik, bebek bakımı veya gelişimle ilgili merak ettiklerinizi sorabilirsiniz. Acil durumlarda lütfen doktorunuza başvurun.",
+    // Regl Takvimi
+    regl_title: "Regl Takvimi",
+    regl_subtitle: "Döngünü takip et, bir sonraki regl ve doğurgan günlerini gör.",
+    regl_day_of_cycle: (n)=>`Döngünün ${n}. günü`,
+    regl_active_period: "Regl devam ediyor",
+    regl_next_period_today: "Regl'in bugün başlaması bekleniyor",
+    regl_next_period_tomorrow: "Regl'in yarın başlaması bekleniyor",
+    regl_next_period_in: (n)=>`Regl'e ${n} gün`,
+    regl_next_period_late: (n)=>`Tahmini tarihten ${n} gün geçti`,
+    regl_next_period_unknown: "Tahmin için bir regl başlangıcı ekle",
+    regl_start_btn: "Regl Başladı",
+    regl_end_btn: "Regl Bitti",
+    regl_cycle_length_label: (n)=>`Ort. döngü: ${n} gün`,
+    regl_period_length_label: (n)=>`Ort. süre: ${n} gün`,
+    regl_legend_period: "Regl",
+    regl_legend_predicted: "Tahmini Regl",
+    regl_legend_fertile: "Doğurgan Dönem",
+    regl_legend_ovulation: "Yumurtlama",
+    regl_history_title: "Geçmiş Döngüler",
+    regl_history_empty: "Henüz kayıt yok. İlk regl kaydını ekle!",
+    regl_cycle_render: (start,end,len)=>`${start} – ${end || "devam ediyor"}${len?` · ${len} gün sürdü`:""}`,
+    regl_settings_title: "Döngü Ayarları",
+    regl_settings_btn: "Döngü Ayarları",
+    regl_avg_cycle_label: "Ortalama döngü uzunluğu (gün)",
+    regl_avg_period_label: "Ortalama regl süresi (gün)",
+    regl_settings_save: "Kaydet",
+    regl_settings_desc: "Geçmiş kayıtların arttıkça tahminler otomatik olarak daha isabetli hale gelir; bu değerler henüz yeterli geçmiş yokken ilk tahminler için kullanılır.",
+    regl_delete_confirm: "Bu döngü kaydını silmek istediğine emin misin?",
+    toast_regl_started: "Regl başlangıcı kaydedildi ✓",
+    toast_regl_ended: "Regl bitişi kaydedildi ✓",
+    toast_regl_settings_saved: "Ayarlar kaydedildi ✓",
   },
-  en: {
-    nav_today: "Today", nav_track: "Track", nav_activities: "Activities",
-    nav_nearby: "Nearby", nav_community: "Community", nav_assistant: "Assistant", nav_profile: "Profile",
-    save: "Save", cancel: "Cancel", close: "Close", add: "Add", delete: "Delete", edit: "Edit",
-    back: "Back", loading: "Loading...", search: "Search", done: "Done", confirm: "Confirm",
-    profile_title: "Profile",
-    profile_children_title: "My Children",
-    profile_add: "Add",
-    profile_pregnancy_tracking: "Pregnancy tracking",
-    profile_postnatal_tracking: "Postnatal tracking",
-    profile_premium_title: "Premium",
-    profile_premium_upgrade: "Upgrade to Premium",
-    profile_premium_desc: "Ad-free · Unlimited AI · Detailed reports · Premium sounds and activities",
-    profile_premium_btn: "Add Payment Method",
-    profile_calendar_title: "Calendar",
-    profile_calendar_card_title: "Appointment & Event Calendar",
-    profile_calendar_card_desc: "Doctor appointments, vaccines and important dates",
-    profile_market_title: "Mom Market",
-    profile_market_desc: "Marketplace for second-hand baby and kids' items",
-    profile_reminders_title: "Reminders",
-    profile_admin_title: "Management",
-    profile_admin_card_title: "Admin Panel (Demo)",
-    profile_admin_card_desc: "Add articles, activities, sounds and lullabies",
-    profile_settings_title: "Settings",
-    profile_theme_light: "Light Theme",
-    profile_theme_dark: "Dark Theme",
-    profile_language_title: "Language",
-    profile_language_card_title: "App Language",
-    profile_language_card_desc: "Change the interface language",
-    profile_about: "About Us",
-    profile_privacy: "Privacy Policy (GDPR)",
-    profile_logout: "Log Out",
-    profile_logout_confirm: "Are you sure you want to log out?",
-    profile_mom_name_placeholder: "Your name",
-    profile_mom_name_modal_title: "Change Your Name",
-    profile_child_rename_placeholder: "Your child's name",
-    profile_child_remove_confirm: (name)=>`Are you sure you want to delete the "${name}" profile?`,
-    toast_name_updated: "Your name has been updated ✓",
-    toast_name_updated2: "Name updated ✓",
-    toast_profile_added: "New profile added ✓",
-    toast_profile_removed: "Profile deleted",
-    toast_logged_out: "Logged out",
-    toast_logout_failed: "Couldn't log out, please try again",
-    toast_reminder_on: "Reminder turned on ✓",
-    toast_reminder_off: "Reminder turned off",
-    toast_language_changed: "App language updated ✓",
-    new_profile_default_name: "New Profile",
-    today_greeting: "Hello,",
-    today_week_label: (w)=>`Week ${w}`,
-    today_day_fruit: (d,fruit)=>`Day ${d} · Your baby is the size of a ${fruit} today 🤰`,
-    today_age_years: (y,m)=>`${y}y ${m}m`,
-    today_age_months: (m)=>`${m} months old`,
-    today_child_day: (d)=>`Your baby is on day ${d} today 👶`,
-    today_market_title: "Mom Market",
-    today_market_desc: "Discover or sell second-hand baby clothes, toys and gear",
-    today_cards_title: "Today's Cards",
-    today_cards_refresh_note: "Content refreshes automatically every day.",
-    empty_state_default: "No child profile added yet.",
-    track_title: "Track",
-    track_sub_weight: "Weight Tracking", track_sub_kick: "Kick Counter", track_sub_contraction: "Contraction Tracking",
-    track_sub_appointments: "Appointment Calendar", track_sub_sleep: "Sleep",
-    track_sub_breastfeeding: "Breastfeeding", track_sub_formula: "Formula", track_sub_foodlist: "Food List",
-    track_sub_diaper: "Diaper", track_sub_poop: "Poop Tracking", track_sub_teething: "Teething",
-    track_sub_vaccine: "Vaccine Schedule", track_sub_weaning: "Weaning",
-    tracker_weight_title: "Weight Tracking", field_weight_kg: "Weight (kg)",
-    tracker_breastfeeding_title: "Breastfeeding Tracking", field_right_breast: "Right Breast", field_left_breast: "Left Breast",
-    tracker_formula_title: "Formula & Fluid Tracking", field_formula_ml: "Formula (ml)", field_breastmilk_ml: "Breast Milk (ml)", field_water_ml: "Water (ml)",
-    tracker_sleep_title: "Sleep Tracking", field_duration_min: "Duration (min)", tracker_sleep_weekly_chart: "Weekly Sleep Chart",
-    tracker_diaper_title: "Diaper Tracking", diaper_pee: "Wet", diaper_poop: "Dirty", diaper_both: "Both",
-    field_note_placeholder: "Add a note (optional)",
-    history_title: "Past Entries",
-    history_empty: "No entries yet. Add your first one!",
-    history_empty_generic: "No entries yet.",
-    toast_saved: "Saved ✓",
-    toast_item_saved: (item)=>`${item} saved ✓`,
-    weight_log_render: (time,kg)=>`${time} · ${kg} kg`,
-    breastfeeding_log_render: (time,r,l)=>`${time} · ${r} min right / ${l} min left`,
-    formula_log_render: (time,f,b,w)=>`${time} · Formula ${f}ml, Breast Milk ${b}ml, Water ${w}ml`,
-    sleep_log_render: (time,min)=>`${time} · slept ${min} minutes`,
-    diaper_log_render: (time,type)=>`${time} · ${type}`,
-    kick_counter_title: "Baby Kick Counter",
-    kick_counter_desc: "Usually 10 movements are expected within 2 hours",
-    kick_counter_movement_count: (min)=>`Movements counted in ${min} min`,
-    reset: "Reset",
-    toast_kick_saved: "Kick count saved ✓",
-    history_empty_kick: "No entries yet. Save your first count!",
-    kick_log_render: (time,count,min)=>`${time} · ${count} movements · within ${min} min`,
-    contraction_title: "Contraction Tracking",
-    contraction_running: "Contraction in progress…",
-    contraction_idle: "Tap the button when a contraction starts",
-    contraction_stop: "Contraction Ended",
-    contraction_start: "Contraction Started",
-    toast_contraction_saved: "Contraction saved ✓",
-    contraction_warning: "Call your birth clinic if contractions are more frequent than every 5 minutes and last longer than 1 minute.",
-    contraction_log_render: (time,sec,intervalMin)=>`${time} · lasted ${sec}s${intervalMin!=null?` · ${intervalMin} min after the previous one`:""}`,
-    cms_required_fields: "Please fill in the required fields",
-    cms_add_default: "Add",
-    cms_empty_default: "No content added yet.",
-    cms_adding: "Adding...",
-    cms_shared_content: (n)=>`Shared Content (${n})`,
-    toast_content_added: "Content added ✓",
-    toast_content_add_failed: "Couldn't add, please try again",
-    toast_content_removed: "Content deleted",
-    admin_tab_articles: "Articles", admin_tab_activities: "Activities", admin_tab_sounds: "Sleep Sounds", admin_tab_lullabies: "Lullabies",
-    calendar_title: "Calendar",
-    calendar_add_btn: "Add Appointment / Event",
-    calendar_empty: "No appointment or event added yet.",
-    calendar_upcoming: "Upcoming",
-    calendar_no_upcoming: "No upcoming entries.",
-    calendar_past: "Past",
-    calendar_new_event_modal_title: "New Appointment / Event",
-    calendar_title_placeholder: "Title (e.g. OB/GYN Checkup)",
-    calendar_note_placeholder: "Note (optional)",
-    calendar_saving: "Saving...",
-    calendar_add_to_calendar: "Add to Calendar",
-    toast_calendar_added: "Added to calendar ✓",
-    toast_add_failed: "Couldn't add, please try again",
-    calendar_type_doctor: "Doctor's Appointment",
-    calendar_type_vaccine: "Vaccine",
-    calendar_type_vitamin: "Vitamin/Medicine",
-    calendar_type_other: "Other",
-    admin_title: "Admin Panel",
-    admin_login_title: "Demo Admin Login",
-    admin_login_desc: "This is protected by a demo passcode (0000), it has no real authentication.",
-    admin_code_placeholder: "Passcode",
-    admin_login_btn: "Log In",
-    toast_admin_login_ok: "Logged in ✓",
-    toast_admin_login_fail: "Incorrect code",
-    admin_add_article: "Add Article", admin_field_title: "Title", admin_field_body: "Body text",
-    admin_add_activity: "Add Activity", admin_field_skill: "Skill developed", admin_field_duration: "Duration (e.g. 15 min)", admin_field_materials: "Materials",
-    admin_add_sound: "Add Sleep Sound", admin_field_sound_name: "Sound name",
-    admin_add_lullaby: "Add Lullaby", admin_field_category: "Category",
-    vaccine_schedule_title: "Türkiye Vaccine Schedule",
-    vaccine_schedule_desc: (name, birthDate)=>`Based on ${name} birth date (${birthDate}), the due date for every vaccine is calculated automatically. Once given, tap the card to save the date — this is a general guide, your pediatrician's recommended schedule takes precedence.`,
-    default_child_possessive: "Your child's",
-    vaccine_status_done: "Done", vaccine_status_overdue: "Overdue", vaccine_status_upcoming: "Upcoming", vaccine_status_planned: "Planned",
-    toast_vaccine_marked_done: "Marked as done ✓",
-    toast_vaccine_unmarked: "Marked as upcoming",
-    vaccine_at_birth: "At birth",
-    vaccine_age_month: (m)=>`Month ${m}`,
-    vaccine_planned_label: (date)=>`Planned: ${date}`,
-    vaccine_done_label: (date)=>`Done: ${date}`,
-    vaccine_undo: "Undo",
-    weaning_reaction_good: "Loved It, No Issues", weaning_reaction_dislike: "Didn't Like It",
-    weaning_reaction_mild: "Mild Reaction", weaning_reaction_avoid: "Avoid / Allergy",
-    weaning_log_title: "What Did They Eat Today?",
-    weaning_food_placeholder: (def)=>`E.g. ${def}`,
-    weaning_default_food_example: "Carrot Puree",
-    weaning_amount_placeholder: "Amount (optional, e.g. 2 teaspoons)",
-    weaning_reaction_label: "How did they react?",
-    weaning_add_to_log: "Add to Log",
-    toast_weaning_added: "Added to the weaning log ✓",
-    toast_save_failed: "Couldn't save, please try again",
-    toast_entry_removed: "Entry deleted",
-    weaning_watchlist_title: "Foods to Watch",
-    weaning_watchlist_text: (foods)=>`There's a mild reaction/avoidance note for ${foods}. Check with your doctor before offering these foods again.`,
-    weaning_history_empty: "No entries yet. Add the first food you gave today!",
-    weaning_amount_label: (amt)=>`Amount: ${amt}`,
-    weaning_calendar_day: (d)=>`Weaning · Day ${d}`,
-    weaning_amount_recommend: (mult, gram)=>`Suggested amount: ${mult}x portion (${gram})`,
-    weaning_prep_title: "How to Prepare",
-    weaning_allergy_title: "Allergy Signs",
-    weaning_allergy_text: "If you notice redness, rash, vomiting or fussiness, stop the food and consult your doctor.",
-    weaning_alt_title: "Alternative Food",
-    weaning_avoid_title: "Foods to Avoid",
-    foodlog_error: "Couldn't load the food log.",
-    toast_meal_saved: "Meal saved ✓",
-    foodlog_title: "What Did They Eat Today?",
-    foodlog_placeholder: "E.g. Salmon and mashed potatoes",
-    foodlog_note_placeholder: "Add a note (optional, e.g. ate little / loved it)",
-    foodlog_add_btn: "Add to Food List",
-    foodlog_history_title: "Past Meals",
-    foodlog_history_empty: "No entries yet. Add your first meal!",
-    foodlog_suggestions_title: "Nutrition Suggestions by Age",
-    age_group_1: "6-8 mo", age_group_2: "9-11 mo", age_group_3: "12+ mo",
-    teething_today_restless_title: "Restless Today?",
-    teething_today_restless_desc: "Let's order the suggestions based on the answer",
-    teething_yes_restless: "Yes, Restless",
-    teething_no_calm: "No, Calm",
-    teething_last_log: (date,time,restless)=>`Last entry: ${date} · ${time} — ${restless?"Restless":"Calm"}`,
-    toast_teething_restless: "Restlessness logged, suggestions updated ✓",
-    toast_teething_calm: "Logged as calm today ✓",
-    teething_priority_title: "Priority Suggestions For Today",
-    teething_calm_title: "Your Baby Is Calm — General Info",
-    teething_priority_text: "If your baby is restless, try cold and natural methods first; if needed, consult your pharmacist about gel support.",
-    teething_calm_text: "There's no notable restlessness right now; still, it's useful to check the gums daily and keep natural methods on hand.",
-    teething_relief_methods_title: "Relief Methods",
-    teething_footer_note: "If symptoms like fever, excessive crying, loss of appetite, or diarrhea accompany this, consult your doctor before attributing it to teething.",
-    poop_reason_sert_warn: (d)=>`Hard/pellet-like stool has been seen for ${d} days — this may indicate constipation. You can try plenty of fluids, fibrous fruit purees (prune, pear) and tummy massage; consult your doctor if it exceeds 3 days.`,
-    poop_reason_sert_info: "A one-time hard stool is usually temporary; increase water/fluid intake and keep monitoring.",
-    poop_reason_sulu_warn: (d)=>`Watery/runny stool for ${d} days may indicate diarrhea. Give plenty of fluids to prevent fluid loss; ${d>=3?"see your doctor without delay.":"consult your doctor if it continues."}`,
-    poop_reason_sulu_info: "A one-time watery stool is usually harmless; keep monitoring if it recurs.",
-    poop_reason_yesil_warn: (d)=>`Greenish stool has been seen for ${d} days; usually diet-related, but consult your doctor if it persists long.`,
-    poop_reason_yesil_info: "A greenish color is mostly harmless and related to diet.",
-    poop_reason_mukuslu: (d)=>`${d>1?`For ${d} days, `:""}Mucousy stool may indicate mild irritation in the digestive system; ${d>=2?"consult your doctor if it continues.":"keep monitoring."}`,
-    poop_reason_kanli: "Blood in the stool can be serious; see your doctor without delay.",
-    poop_reason_default: "Consistency looks within the normal range, keep monitoring.",
-    poop_save_title: "Log Stool Consistency",
-    poop_days_question: "How many days has it been like this? (e.g. soft stool for 2 days)",
-    toast_poop_saved: (label,days)=>`${label} · ${days} days logged ✓`,
-    poop_reasons_title: "Possible Reasons Based on This Entry",
-    constipation_tips_title: "General Tips for Constipation",
-    poop_history_empty: "No entries yet. Add your first one!",
-    poop_days_ago: (days)=>`${days} days`,
-    poop_consult_doctor: "Consult your doctor",
-    shopping_cart_title: "My Cart",
-    shopping_own_list_title: "Create Your Own List",
-    shopping_placeholder: "E.g. Baby formula",
-    toast_list_added: "Added to list ✓",
-    shopping_my_list: (n)=>`My List (${n})`,
-    shopping_checked_count: (n)=>`${n} checked`,
-    shopping_by_age_title: "Suggestions by Age",
-    place_no_address: "No address available",
-    place_directions: "Directions →",
-    nearby_title: "Nearby",
-    nearby_subtitle: "Closest pharmacies and baby stores based on your location.",
-    nearby_refresh_location: "Refresh Location",
-    nearby_location_changed: "Your location changed, lists were updated for the new location ✓",
-    nearby_denied: "Location permission not granted",
-    nearby_unsupported: "Your device doesn't support location",
-    nearby_error: "Couldn't get location",
-    nearby_idle_title: "Find your location to see what's nearby",
-    nearby_denied_desc: "Enable location permission for this site in your browser/phone settings and try again.",
-    nearby_idle_desc: "Sharing your location lets us show the closest pharmacies and baby stores on the map.",
-    nearby_locating: "Getting location...",
-    nearby_find_btn: "Find My Location",
-    toast_location_denied: "Location permission denied",
-    toast_location_failed: "Couldn't get location, please try again",
-    nearby_pharmacies: "Pharmacies",
-    nearby_baby_stores: "Baby Stores",
-    nearby_country: "Türkiye",
-    nearby_local_area: "Nearby Area",
-    nearby_location_found: "Location found",
-    nearby_duty_pharmacy_title: "Today's Duty Pharmacies",
-    nearby_duty_pharmacy_desc: (loc)=>`See the current list for ${loc}`,
-    nearby_duty_pharmacy_desc_default: "See the current list for your province",
-    nearby_closest_pharmacies: "Closest Pharmacies",
-    nearby_searching_pharmacies: "Searching for nearby pharmacies...",
-    nearby_pharmacy_load_error: "There was a connection issue while loading pharmacies.",
-    nearby_retry: "Try Again",
-    nearby_no_pharmacies: "No registered pharmacies found nearby.",
-    nearby_closest_baby_stores: "Closest Baby Stores",
-    nearby_searching_baby_stores: "Searching for nearby baby stores...",
-    nearby_baby_store_load_error: "There was a connection issue while loading baby stores.",
-    nearby_no_baby_stores: "No registered baby stores found nearby.",
-    nearby_search_google_maps: "Search on Google Maps →",
-    activities_title: "Activities",
-    activities_section_daily: "Daily Activity", activities_section_craft: "Crafts", activities_section_story: "Stories",
-    activities_section_lullaby: "Lullabies", activities_section_sound: "Sleep Sounds", activities_section_diet: "Mom's Diet",
-    activities_section_health: "Mom's Health", activities_section_shopping: "Shopping List", activities_section_memory: "Memory Journal", activities_section_badge: "Badges",
-    age_all: "All",
-    activities_skill_label: (skill)=>`Skill developed: ${skill}`,
-    craft_how_to: "How to make it?",
-    craft_materials_title: "Materials Needed",
-    craft_steps_title: "Step-by-Step Instructions",
-    craft_dev_tip_title: "Development Tip",
-    story_listen_note: "You can actually listen using your browser's text-to-speech feature.",
-    story_reading_now: " · Reading...",
-    lullaby_listen_note: "You can listen to the lyrics in a soft voice.",
-    lullaby_playing_now: " · Playing...",
-    sound_now_playing: (name)=>`Playing ${name}`,
-    timer_15: "15 min", timer_30: "30 min", timer_60: "1 hour", timer_inf: "Infinite",
-    age_filter_0_6: "0-6 mo", age_filter_6_12: "6-12 mo", age_filter_12_24: "12-24 mo", age_filter_2_3y: "2-3 yr", age_filter_3plus: "3+ yr",
-    community_title: "Mom Chat",
-    community_intro: "A shared space where you can chat with other moms. Anyone using this app can see what you write here — please don't share personal information (phone, address, etc.).",
-    community_pick_nickname: "First, choose a nickname",
-    community_nickname_placeholder: "E.g. Mom Alex",
-    community_join_btn: "Join the Chat",
-    toast_nickname_saved: "Your nickname has been saved ✓",
-    community_writing_as: (name)=>`You're writing as ${name} · public shared space`,
-    community_no_messages: "No messages yet. Write the first one!",
-    community_message_placeholder: "Write a message...",
-    toast_message_send_failed: "Couldn't send message, please try again",
-    assistant_title: "AI Mom Assistant",
-    assistant_disclaimer: "For informational purposes only, does not diagnose.",
-    assistant_input_placeholder: "Ask something...",
-    assistant_history_title: "Past Chats",
-    assistant_no_chats: "No chats yet.",
-    assistant_message_count: (n)=>`${n} messages`,
-    assistant_fallback_reply: "I couldn't generate a response right now, could you try again?",
-    assistant_error: "Couldn't get a response. Check your connection and try again.",
-    toast_assistant_failed: "The assistant couldn't respond",
-    new_chat: "New Chat",
-    assistant_greeting: "Hello! I'm your Mom Assistant 🤍 You can ask me anything about pregnancy, baby care or development. In emergencies, please contact your doctor.",
-  },
-  de: {
-    nav_today: "Heute", nav_track: "Verfolgen", nav_activities: "Aktivitäten",
-    nav_nearby: "In der Nähe", nav_community: "Community", nav_assistant: "Assistent", nav_profile: "Profil",
-    save: "Speichern", cancel: "Abbrechen", close: "Schließen", add: "Hinzufügen", delete: "Löschen", edit: "Bearbeiten",
-    back: "Zurück", loading: "Wird geladen...", search: "Suchen", done: "Fertig", confirm: "Bestätigen",
-    profile_title: "Profil",
-    profile_children_title: "Meine Kinder",
-    profile_add: "Hinzufügen",
-    profile_pregnancy_tracking: "Schwangerschaftsverfolgung",
-    profile_postnatal_tracking: "Nachgeburtliche Verfolgung",
-    profile_premium_title: "Premium",
-    profile_premium_upgrade: "Auf Premium upgraden",
-    profile_premium_desc: "Werbefrei · Unbegrenzte KI · Detaillierte Berichte · Premium-Klänge und -Aktivitäten",
-    profile_premium_btn: "Zahlungsmethode hinzufügen",
-    profile_calendar_title: "Kalender",
-    profile_calendar_card_title: "Termin- und Ereigniskalender",
-    profile_calendar_card_desc: "Arzttermine, Impfungen und wichtige Termine",
-    profile_market_title: "Mama-Markt",
-    profile_market_desc: "Marktplatz für gebrauchte Baby- und Kinderartikel",
-    profile_reminders_title: "Erinnerungen",
-    profile_admin_title: "Verwaltung",
-    profile_admin_card_title: "Admin-Panel (Demo)",
-    profile_admin_card_desc: "Artikel, Aktivitäten, Klänge und Schlaflieder hinzufügen",
-    profile_settings_title: "Einstellungen",
-    profile_theme_light: "Helles Design",
-    profile_theme_dark: "Dunkles Design",
-    profile_language_title: "Sprache",
-    profile_language_card_title: "App-Sprache",
-    profile_language_card_desc: "Oberflächensprache ändern",
-    profile_about: "Über uns",
-    profile_privacy: "Datenschutzrichtlinie (DSGVO)",
-    profile_logout: "Abmelden",
-    profile_logout_confirm: "Möchten Sie sich wirklich abmelden?",
-    profile_mom_name_placeholder: "Ihr Name",
-    profile_mom_name_modal_title: "Namen ändern",
-    profile_child_rename_placeholder: "Name Ihres Kindes",
-    profile_child_remove_confirm: (name)=>`Möchten Sie das Profil "${name}" wirklich löschen?`,
-    toast_name_updated: "Ihr Name wurde aktualisiert ✓",
-    toast_name_updated2: "Name aktualisiert ✓",
-    toast_profile_added: "Neues Profil hinzugefügt ✓",
-    toast_profile_removed: "Profil gelöscht",
-    toast_logged_out: "Abgemeldet",
-    toast_logout_failed: "Abmelden fehlgeschlagen, bitte erneut versuchen",
-    toast_reminder_on: "Erinnerung aktiviert ✓",
-    toast_reminder_off: "Erinnerung deaktiviert",
-    toast_language_changed: "App-Sprache aktualisiert ✓",
-    new_profile_default_name: "Neues Profil",
-    today_greeting: "Hallo,",
-    today_week_label: (w)=>`Woche ${w}`,
-    today_day_fruit: (d,fruit)=>`Tag ${d} · Ihr Baby ist heute so groß wie eine ${fruit} 🤰`,
-    today_age_years: (y,m)=>`${y} J. ${m} Mon.`,
-    today_age_months: (m)=>`${m} Monate alt`,
-    today_child_day: (d)=>`Ihr Baby ist heute am Tag ${d} 👶`,
-    today_market_title: "Mama-Markt",
-    today_market_desc: "Entdecken oder verkaufen Sie gebrauchte Babykleidung, Spielzeug und Ausstattung",
-    today_cards_title: "Karten für heute",
-    today_cards_refresh_note: "Die Inhalte werden jeden Tag automatisch aktualisiert.",
-    empty_state_default: "Noch kein Kinderprofil hinzugefügt.",
-    track_title: "Verfolgen",
-    track_sub_weight: "Gewichtsverfolgung", track_sub_kick: "Tritt-Zähler", track_sub_contraction: "Wehen-Tracking",
-    track_sub_appointments: "Terminkalender", track_sub_sleep: "Schlaf",
-    track_sub_breastfeeding: "Stillen", track_sub_formula: "Fläschchen", track_sub_foodlist: "Essensliste",
-    track_sub_diaper: "Windel", track_sub_poop: "Stuhlgang-Tracking", track_sub_teething: "Zahnen",
-    track_sub_vaccine: "Impfplan", track_sub_weaning: "Beikost",
-    tracker_weight_title: "Gewichtsverfolgung", field_weight_kg: "Gewicht (kg)",
-    tracker_breastfeeding_title: "Stillverfolgung", field_right_breast: "Rechte Brust", field_left_breast: "Linke Brust",
-    tracker_formula_title: "Fläschchen- & Flüssigkeitsverfolgung", field_formula_ml: "Fläschchen (ml)", field_breastmilk_ml: "Muttermilch (ml)", field_water_ml: "Wasser (ml)",
-    tracker_sleep_title: "Schlafverfolgung", field_duration_min: "Dauer (Min.)", tracker_sleep_weekly_chart: "Wöchentliches Schlafdiagramm",
-    tracker_diaper_title: "Windelverfolgung", diaper_pee: "Nass", diaper_poop: "Voll", diaper_both: "Beides",
-    field_note_placeholder: "Notiz hinzufügen (optional)",
-    history_title: "Frühere Einträge",
-    history_empty: "Noch keine Einträge. Fügen Sie den ersten hinzu!",
-    history_empty_generic: "Noch keine Einträge.",
-    toast_saved: "Gespeichert ✓",
-    toast_item_saved: (item)=>`${item} gespeichert ✓`,
-    weight_log_render: (time,kg)=>`${time} · ${kg} kg`,
-    breastfeeding_log_render: (time,r,l)=>`${time} · ${r} Min. rechts / ${l} Min. links`,
-    formula_log_render: (time,f,b,w)=>`${time} · Fläschchen ${f}ml, Muttermilch ${b}ml, Wasser ${w}ml`,
-    sleep_log_render: (time,min)=>`${time} · ${min} Minuten geschlafen`,
-    diaper_log_render: (time,type)=>`${time} · ${type}`,
-    kick_counter_title: "Kindsbewegungszähler",
-    kick_counter_desc: "In der Regel werden 10 Bewegungen innerhalb von 2 Stunden erwartet",
-    kick_counter_movement_count: (min)=>`Bewegungen gezählt in ${min} Min.`,
-    reset: "Zurücksetzen",
-    toast_kick_saved: "Tritt-Zählung gespeichert ✓",
-    history_empty_kick: "Noch keine Einträge. Speichern Sie Ihre erste Zählung!",
-    kick_log_render: (time,count,min)=>`${time} · ${count} Bewegungen · innerhalb von ${min} Min.`,
-    contraction_title: "Wehen-Tracking",
-    contraction_running: "Wehe läuft…",
-    contraction_idle: "Drücken Sie den Knopf, wenn eine Wehe beginnt",
-    contraction_stop: "Wehe beendet",
-    contraction_start: "Wehe begonnen",
-    toast_contraction_saved: "Wehe gespeichert ✓",
-    contraction_warning: "Rufen Sie Ihre Geburtsklinik an, wenn die Wehen häufiger als alle 5 Minuten auftreten und länger als 1 Minute dauern.",
-    contraction_log_render: (time,sec,intervalMin)=>`${time} · dauerte ${sec}s${intervalMin!=null?` · ${intervalMin} Min. nach der vorherigen`:""}`,
-    cms_required_fields: "Bitte füllen Sie die Pflichtfelder aus",
-    cms_add_default: "Hinzufügen",
-    cms_empty_default: "Noch keine Inhalte hinzugefügt.",
-    cms_adding: "Wird hinzugefügt...",
-    cms_shared_content: (n)=>`Geteilte Inhalte (${n})`,
-    toast_content_added: "Inhalt hinzugefügt ✓",
-    toast_content_add_failed: "Konnte nicht hinzugefügt werden, bitte erneut versuchen",
-    toast_content_removed: "Inhalt gelöscht",
-    admin_tab_articles: "Artikel", admin_tab_activities: "Aktivitäten", admin_tab_sounds: "Schlafgeräusche", admin_tab_lullabies: "Schlaflieder",
-    calendar_title: "Kalender",
-    calendar_add_btn: "Termin / Ereignis hinzufügen",
-    calendar_empty: "Noch kein Termin oder Ereignis hinzugefügt.",
-    calendar_upcoming: "Bevorstehend",
-    calendar_no_upcoming: "Keine bevorstehenden Einträge.",
-    calendar_past: "Vergangen",
-    calendar_new_event_modal_title: "Neuer Termin / Neues Ereignis",
-    calendar_title_placeholder: "Titel (z. B. Gynäkologe-Kontrolle)",
-    calendar_note_placeholder: "Notiz (optional)",
-    calendar_saving: "Wird gespeichert...",
-    calendar_add_to_calendar: "Zum Kalender hinzufügen",
-    toast_calendar_added: "Zum Kalender hinzugefügt ✓",
-    toast_add_failed: "Konnte nicht hinzugefügt werden, bitte erneut versuchen",
-    calendar_type_doctor: "Arzttermin",
-    calendar_type_vaccine: "Impfung",
-    calendar_type_vitamin: "Vitamin/Medikament",
-    calendar_type_other: "Sonstiges",
-    admin_title: "Admin-Panel",
-    admin_login_title: "Demo-Admin-Login",
-    admin_login_desc: "Dies ist durch einen Demo-Zugangscode (0000) geschützt und bietet keine echte Authentifizierung.",
-    admin_code_placeholder: "Zugangscode",
-    admin_login_btn: "Anmelden",
-    toast_admin_login_ok: "Angemeldet ✓",
-    toast_admin_login_fail: "Falscher Code",
-    admin_add_article: "Artikel hinzufügen", admin_field_title: "Titel", admin_field_body: "Inhaltstext",
-    admin_add_activity: "Aktivität hinzufügen", admin_field_skill: "Geförderte Fähigkeit", admin_field_duration: "Dauer (z. B. 15 Min.)", admin_field_materials: "Material",
-    admin_add_sound: "Schlafgeräusch hinzufügen", admin_field_sound_name: "Name des Geräuschs",
-    admin_add_lullaby: "Schlaflied hinzufügen", admin_field_category: "Kategorie",
-    vaccine_schedule_title: "Türkischer Impfplan",
-    vaccine_schedule_desc: (name, birthDate)=>`Basierend auf dem Geburtsdatum von ${name} (${birthDate}) wird der Fälligkeitstermin für jede Impfung automatisch berechnet. Nach der Impfung tippen Sie auf die Karte, um das Datum zu speichern — dies ist ein allgemeiner Leitfaden, der von Ihrem Kinderarzt empfohlene Plan hat Vorrang.`,
-    default_child_possessive: "Ihres Kindes",
-    vaccine_status_done: "Erledigt", vaccine_status_overdue: "Überfällig", vaccine_status_upcoming: "Bevorstehend", vaccine_status_planned: "Geplant",
-    toast_vaccine_marked_done: "Als erledigt markiert ✓",
-    toast_vaccine_unmarked: "Als bevorstehend markiert",
-    vaccine_at_birth: "Bei Geburt",
-    vaccine_age_month: (m)=>`${m}. Monat`,
-    vaccine_planned_label: (date)=>`Geplant: ${date}`,
-    vaccine_done_label: (date)=>`Erledigt: ${date}`,
-    vaccine_undo: "Rückgängig",
-    weaning_reaction_good: "Kein Problem, Hat's Geliebt", weaning_reaction_dislike: "Mochte Es Nicht",
-    weaning_reaction_mild: "Leichte Reaktion", weaning_reaction_avoid: "Vermeiden / Allergie",
-    weaning_log_title: "Was gab es heute zu essen?",
-    weaning_food_placeholder: (def)=>`Z. B. ${def}`,
-    weaning_default_food_example: "Karottenpüree",
-    weaning_amount_placeholder: "Menge (optional, z. B. 2 Teelöffel)",
-    weaning_reaction_label: "Wie war die Reaktion?",
-    weaning_add_to_log: "Zum Tagebuch hinzufügen",
-    toast_weaning_added: "Zum Beikost-Tagebuch hinzugefügt ✓",
-    toast_save_failed: "Konnte nicht gespeichert werden, bitte erneut versuchen",
-    toast_entry_removed: "Eintrag gelöscht",
-    weaning_watchlist_title: "Zu beobachtende Lebensmittel",
-    weaning_watchlist_text: (foods)=>`Es gibt einen Hinweis auf eine leichte Reaktion/Vermeidung bei ${foods}. Sprechen Sie mit Ihrem Arzt, bevor Sie diese Lebensmittel erneut anbieten.`,
-    weaning_history_empty: "Noch keine Einträge. Fügen Sie das erste Lebensmittel von heute hinzu!",
-    weaning_amount_label: (amt)=>`Menge: ${amt}`,
-    weaning_calendar_day: (d)=>`Beikost · Tag ${d}`,
-    weaning_amount_recommend: (mult, gram)=>`Empfohlene Menge: ${mult}x Portion (${gram})`,
-    weaning_prep_title: "Zubereitung",
-    weaning_allergy_title: "Allergiezeichen",
-    weaning_allergy_text: "Bei Rötung, Ausschlag, Erbrechen oder Unruhe das Lebensmittel absetzen und einen Arzt konsultieren.",
-    weaning_alt_title: "Alternatives Lebensmittel",
-    weaning_avoid_title: "Zu vermeidende Lebensmittel",
-    foodlog_error: "Das Essenstagebuch konnte nicht geladen werden.",
-    toast_meal_saved: "Mahlzeit gespeichert ✓",
-    foodlog_title: "Was hat es heute gegessen?",
-    foodlog_placeholder: "Z. B. Lachs und Kartoffelpüree",
-    foodlog_note_placeholder: "Notiz hinzufügen (optional, z. B. wenig gegessen / hat's geliebt)",
-    foodlog_add_btn: "Zur Essensliste hinzufügen",
-    foodlog_history_title: "Frühere Mahlzeiten",
-    foodlog_history_empty: "Noch keine Einträge. Fügen Sie die erste Mahlzeit hinzu!",
-    foodlog_suggestions_title: "Ernährungsvorschläge nach Alter",
-    age_group_1: "6-8 Mon.", age_group_2: "9-11 Mon.", age_group_3: "12+ Mon.",
-    teething_today_restless_title: "Heute unruhig?",
-    teething_today_restless_desc: "Basierend auf der Antwort ordnen wir die Vorschläge",
-    teething_yes_restless: "Ja, Unruhig",
-    teething_no_calm: "Nein, Ruhig",
-    teething_last_log: (date,time,restless)=>`Letzter Eintrag: ${date} · ${time} — ${restless?"Unruhig":"Ruhig"}`,
-    toast_teething_restless: "Unruhe protokolliert, Vorschläge aktualisiert ✓",
-    toast_teething_calm: "Heute als ruhig protokolliert ✓",
-    teething_priority_title: "Priorisierte Vorschläge für heute",
-    teething_calm_title: "Ihr Baby ist ruhig — Allgemeine Info",
-    teething_priority_text: "Wenn Ihr Baby unruhig ist, probieren Sie zuerst kalte und natürliche Methoden; bei Bedarf können Sie mit Ihrem Apotheker über eine Gel-Unterstützung sprechen.",
-    teething_calm_text: "Derzeit gibt es keine nennenswerte Unruhe; dennoch ist es hilfreich, das Zahnfleisch täglich zu kontrollieren und natürliche Methoden bereitzuhalten.",
-    teething_relief_methods_title: "Linderungsmethoden",
-    teething_footer_note: "Wenn Symptome wie Fieber, übermäßiges Weinen, Appetitlosigkeit oder Durchfall auftreten, konsultieren Sie Ihren Arzt, bevor Sie dies dem Zahnen zuschreiben.",
-    poop_reason_sert_warn: (d)=>`Seit ${d} Tagen wird harter/klumpiger Stuhl beobachtet — dies kann ein Zeichen für Verstopfung sein. Versuchen Sie viel Flüssigkeit, ballaststoffreiche Fruchtpürees (Pflaume, Birne) und Bauchmassage; konsultieren Sie Ihren Arzt, wenn es länger als 3 Tage andauert.`,
-    poop_reason_sert_info: "Einmalig harter Stuhl ist meist vorübergehend; erhöhen Sie die Flüssigkeitszufuhr und beobachten Sie weiter.",
-    poop_reason_sulu_warn: (d)=>`Wässriger/breiiger Stuhl seit ${d} Tagen kann auf Durchfall hindeuten. Geben Sie viel Flüssigkeit gegen Flüssigkeitsverlust; ${d>=3?"suchen Sie unverzüglich Ihren Arzt auf.":"konsultieren Sie Ihren Arzt, wenn es anhält."}`,
-    poop_reason_sulu_info: "Einmalig wässriger Stuhl ist meist harmlos, bei Wiederholung weiter beobachten.",
-    poop_reason_yesil_warn: (d)=>`Seit ${d} Tagen wird grünlicher Stuhl beobachtet; meist ernährungsbedingt, konsultieren Sie aber Ihren Arzt, wenn es lange anhält.`,
-    poop_reason_yesil_info: "Eine grünliche Farbe ist meist harmlos und ernährungsbedingt.",
-    poop_reason_mukuslu: (d)=>`${d>1?`Seit ${d} Tagen `:""}Schleimiger Stuhl kann auf eine leichte Reizung des Verdauungssystems hindeuten; ${d>=2?"konsultieren Sie Ihren Arzt, wenn es anhält.":"beobachten Sie weiter."}`,
-    poop_reason_kanli: "Blut im Stuhl kann ernst sein; suchen Sie unverzüglich Ihren Arzt auf.",
-    poop_reason_default: "Die Konsistenz sieht im normalen Bereich aus, beobachten Sie weiter.",
-    poop_save_title: "Stuhlkonsistenz protokollieren",
-    poop_days_question: "Seit wie vielen Tagen ist es so? (z. B. seit 2 Tagen weicher Stuhl)",
-    toast_poop_saved: (label,days)=>`${label} · seit ${days} Tagen protokolliert ✓`,
-    poop_reasons_title: "Mögliche Gründe basierend auf diesem Eintrag",
-    constipation_tips_title: "Allgemeine Tipps bei Verstopfung",
-    poop_history_empty: "Noch keine Einträge. Fügen Sie den ersten hinzu!",
-    poop_days_ago: (days)=>`seit ${days} Tagen`,
-    poop_consult_doctor: "Arzt konsultieren",
-    shopping_cart_title: "Mein Warenkorb",
-    shopping_own_list_title: "Eigene Liste erstellen",
-    shopping_placeholder: "Z. B. Babynahrung",
-    toast_list_added: "Zur Liste hinzugefügt ✓",
-    shopping_my_list: (n)=>`Meine Liste (${n})`,
-    shopping_checked_count: (n)=>`${n} markiert`,
-    shopping_by_age_title: "Vorschläge nach Alter",
-    place_no_address: "Keine Adresse verfügbar",
-    place_directions: "Wegbeschreibung →",
-    nearby_title: "In der Nähe",
-    nearby_subtitle: "Nächstgelegene Apotheken und Babygeschäfte basierend auf Ihrem Standort.",
-    nearby_refresh_location: "Standort aktualisieren",
-    nearby_location_changed: "Ihr Standort hat sich geändert, die Listen wurden aktualisiert ✓",
-    nearby_denied: "Standortberechtigung nicht erteilt",
-    nearby_unsupported: "Ihr Gerät unterstützt keine Standortbestimmung",
-    nearby_error: "Standort konnte nicht ermittelt werden",
-    nearby_idle_title: "Finden Sie Ihren Standort, um zu sehen, was in der Nähe ist",
-    nearby_denied_desc: "Aktivieren Sie die Standortberechtigung für diese Website in Ihren Browser-/Telefoneinstellungen und versuchen Sie es erneut.",
-    nearby_idle_desc: "Wenn Sie Ihren Standort teilen, können wir Ihnen die nächstgelegenen Apotheken und Babygeschäfte auf der Karte anzeigen.",
-    nearby_locating: "Standort wird ermittelt...",
-    nearby_find_btn: "Meinen Standort finden",
-    toast_location_denied: "Standortberechtigung verweigert",
-    toast_location_failed: "Standort konnte nicht ermittelt werden, bitte erneut versuchen",
-    nearby_pharmacies: "Apotheken",
-    nearby_baby_stores: "Babygeschäfte",
-    nearby_country: "Türkei",
-    nearby_local_area: "Nähere Umgebung",
-    nearby_location_found: "Standort gefunden",
-    nearby_duty_pharmacy_title: "Heutige Notdienst-Apotheken",
-    nearby_duty_pharmacy_desc: (loc)=>`Aktuelle Liste für ${loc} ansehen`,
-    nearby_duty_pharmacy_desc_default: "Aktuelle Liste für Ihre Provinz ansehen",
-    nearby_closest_pharmacies: "Nächstgelegene Apotheken",
-    nearby_searching_pharmacies: "Suche nach Apotheken in der Nähe...",
-    nearby_pharmacy_load_error: "Beim Laden der Apotheken ist ein Verbindungsproblem aufgetreten.",
-    nearby_retry: "Erneut versuchen",
-    nearby_no_pharmacies: "Keine registrierten Apotheken in der Nähe gefunden.",
-    nearby_closest_baby_stores: "Nächstgelegene Babygeschäfte",
-    nearby_searching_baby_stores: "Suche nach Babygeschäften in der Nähe...",
-    nearby_baby_store_load_error: "Beim Laden der Babygeschäfte ist ein Verbindungsproblem aufgetreten.",
-    nearby_no_baby_stores: "Keine registrierten Babygeschäfte in der Nähe gefunden.",
-    nearby_search_google_maps: "Auf Google Maps suchen →",
-    activities_title: "Aktivitäten",
-    activities_section_daily: "Tägliche Aktivität", activities_section_craft: "Basteln", activities_section_story: "Geschichten",
-    activities_section_lullaby: "Schlaflieder", activities_section_sound: "Schlafgeräusche", activities_section_diet: "Ernährung der Mutter",
-    activities_section_health: "Gesundheit der Mutter", activities_section_shopping: "Einkaufsliste", activities_section_memory: "Erinnerungstagebuch", activities_section_badge: "Abzeichen",
-    age_all: "Alle",
-    activities_skill_label: (skill)=>`Geförderte Fähigkeit: ${skill}`,
-    craft_how_to: "Wie geht das?",
-    craft_materials_title: "Benötigte Materialien",
-    craft_steps_title: "Schritt-für-Schritt-Anleitung",
-    craft_dev_tip_title: "Entwicklungstipp",
-    story_listen_note: "Sie können es mit der Vorlesefunktion Ihres Browsers wirklich anhören.",
-    story_reading_now: " · Wird vorgelesen...",
-    lullaby_listen_note: "Sie können sich den Text mit sanfter Stimme anhören.",
-    lullaby_playing_now: " · Wird abgespielt...",
-    sound_now_playing: (name)=>`${name} spielt`,
-    timer_15: "15 Min.", timer_30: "30 Min.", timer_60: "1 Std.", timer_inf: "Unendlich",
-    age_filter_0_6: "0-6 Mon.", age_filter_6_12: "6-12 Mon.", age_filter_12_24: "12-24 Mon.", age_filter_2_3y: "2-3 J.", age_filter_3plus: "3+ J.",
-    community_title: "Mama-Chat",
-    community_intro: "Ein gemeinsamer Bereich, in dem Sie sich mit anderen Müttern austauschen können. Alle, die diese App nutzen, können sehen, was Sie hier schreiben — teilen Sie bitte keine persönlichen Informationen (Telefon, Adresse usw.).",
-    community_pick_nickname: "Wählen Sie zuerst einen Spitznamen",
-    community_nickname_placeholder: "Z. B. Mama Lena",
-    community_join_btn: "Am Chat teilnehmen",
-    toast_nickname_saved: "Ihr Spitzname wurde gespeichert ✓",
-    community_writing_as: (name)=>`Sie schreiben als ${name} · öffentlicher gemeinsamer Bereich`,
-    community_no_messages: "Noch keine Nachrichten. Schreiben Sie die erste!",
-    community_message_placeholder: "Eine Nachricht schreiben...",
-    toast_message_send_failed: "Nachricht konnte nicht gesendet werden, bitte erneut versuchen",
-    assistant_title: "KI-Mama-Assistent",
-    assistant_disclaimer: "Nur zu Informationszwecken, stellt keine Diagnose.",
-    assistant_input_placeholder: "Fragen Sie etwas...",
-    assistant_history_title: "Frühere Chats",
-    assistant_no_chats: "Noch keine Chats.",
-    assistant_message_count: (n)=>`${n} Nachrichten`,
-    assistant_fallback_reply: "Ich konnte gerade keine Antwort generieren, könnten Sie es erneut versuchen?",
-    assistant_error: "Keine Antwort erhalten. Überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
-    toast_assistant_failed: "Der Assistent konnte nicht antworten",
-    new_chat: "Neuer Chat",
-    assistant_greeting: "Hallo! Ich bin Ihr Mama-Assistent 🤍 Sie können mich alles zu Schwangerschaft, Babypflege oder Entwicklung fragen. Wenden Sie sich im Notfall bitte an Ihren Arzt.",
-  }
 };
 
-const LanguageContext = createContext({ lang: "tr", setLang: ()=>{}, t: (k)=>k });
+const LanguageContext = createContext({ lang: "tr", t: (k)=>k });
 function useLang() { return useContext(LanguageContext); }
 
 function LanguageProvider({ children }) {
-  const [lang, setLangState] = useState("tr");
-
-  useEffect(()=>{ (async ()=>{
-    const saved = await storageGet("app:lang", false);
-    if (saved && UI_TEXT[saved]) setLangState(saved);
-  })(); }, []);
-
-  const setLang = (l) => {
-    if (!UI_TEXT[l]) return;
-    setLangState(l);
-    storageSet("app:lang", l, false);
-  };
-
   const t = (key, ...args) => {
-    const entry = (UI_TEXT[lang] && UI_TEXT[lang][key] !== undefined) ? UI_TEXT[lang][key] : UI_TEXT.tr[key];
+    const entry = UI_TEXT.tr[key];
     if (entry === undefined) return key;
     return typeof entry === "function" ? entry(...args) : entry;
   };
 
   return (
-    <LanguageContext.Provider value={{lang, setLang, t}}>
+    <LanguageContext.Provider value={{lang:"tr", t}}>
       {children}
     </LanguageContext.Provider>
   );
@@ -1727,6 +1168,18 @@ function addMonthsToDate(dateStr, months) {
 function formatDateTR(d) {
   return d.toLocaleDateString("tr-TR", {day:"2-digit", month:"long", year:"numeric"});
 }
+// "YYYY-MM-DD" formatındaki tarihler için gün farkı ve gün ekleme yardımcıları
+// (regl takvimi gibi salt tarih bazlı hesaplamalarda saat dilimi kaymalarını önler).
+function daysBetweenISO(isoA, isoB) {
+  const a = new Date(isoA + "T00:00:00");
+  const b = new Date(isoB + "T00:00:00");
+  return Math.round((b - a) / (1000*60*60*24));
+}
+function addDaysISO(iso, days) {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0,10);
+}
 
 /* ============================================================
    KALICI DEPOLAMA YARDIMCILARI (window.storage)
@@ -1789,10 +1242,36 @@ async function reverseGeocodeTR(lat, lon) {
   return { province, district };
 }
 
+// Overpass'ın tüm aynaları başarısız olursa (ör. ağ engeli), Nominatim'in
+// isim tabanlı arama uç noktasıyla yedek bir sonuç seti dener. Overpass
+// kadar yapısal değildir (etikete göre değil isme göre arar) ama en azından
+// eczaneler tamamen listesiz kalmaz.
+async function nominatimSearchNearby(lat, lon, radiusM, query) {
+  const dLat = radiusM / 111320;
+  const dLon = radiusM / (111320 * Math.cos(lat * Math.PI/180));
+  const viewbox = `${lon-dLon},${lat+dLat},${lon+dLon},${lat-dLat}`;
+  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&viewbox=${viewbox}&bounded=1&limit=20&accept-language=tr`;
+  const res = await fetchWithTimeout(url, { headers: { "Accept": "application/json" } }, 15000);
+  if (!res.ok) throw new Error("nominatim_error");
+  const data = await res.json();
+  return (data||[]).map(d => ({
+    id: `n/${d.place_id}`,
+    name: (d.display_name||"").split(",")[0] || "İsimsiz",
+    lat: parseFloat(d.lat), lon: parseFloat(d.lon),
+    address: (d.display_name||"").split(",").slice(1,3).join(",").trim(),
+    phone: ""
+  })).filter(p => !isNaN(p.lat) && !isNaN(p.lon));
+}
+
+// Not: overpass-api.de (ana sunucu), tarayıcıdan gelen "bot benzeri" istekleri
+// sıkça 406 ile reddediyor (User-Agent tarayıcıdan JS ile değiştirilemediği için
+// bu sorunu koddan çözmek mümkün değil). Bu yüzden CORS'u sorunsuz destekleyen ve
+// bu tür istekleri engellemeyen ayna (private.coffee / eski adıyla kumi.systems)
+// birincil sunucu olarak kullanılır; ana sunucu ise en son çare olarak dener.
 const OVERPASS_MIRRORS = [
-  "https://overpass-api.de/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
-  "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  "https://overpass-api.de/api/interpreter"
 ];
 
 function fetchWithTimeout(url, options, timeoutMs) {
@@ -1836,22 +1315,26 @@ async function overpassNearbyOnce(lat, lon, radiusM, tagPairs) {
     // Önce POST dener; bir ağ/CORS sorunu nedeniyle POST başarısız olursa
     // aynı aynaya GET isteğiyle bir kez daha şans verir (bazı aynalarda POST
     // engellenmiş olabilir). İkisi de başarısız olursa sıradaki aynaya geçer.
+    // Sorgu 25 saniyelik sunucu zaman aşımı isteyebildiği için istemci
+    // zaman aşımı bundan daha kısa olmamalı (aksi halde başarılı olacak
+    // bir sorgu erkenden iptal edilir).
     try {
       const res = await fetchWithTimeout(endpoint, {
         method: "POST",
-        headers: {"Content-Type":"application/x-www-form-urlencoded"},
+        headers: {"Content-Type":"application/x-www-form-urlencoded", "Accept":"application/json, */*"},
         body: "data=" + encodeURIComponent(query)
-      }, 20000);
-      if (!res.ok) throw new Error("overpass_error");
+      }, 27000);
+      if (!res.ok) throw new Error("overpass_error_"+res.status);
       const data = await res.json();
       return parseOverpassElements(data);
     } catch (e) {
       lastErr = e;
       try {
         const res2 = await fetchWithTimeout(`${endpoint}?data=${encodeURIComponent(query)}`, {
-          method: "GET"
-        }, 20000);
-        if (!res2.ok) throw new Error("overpass_error");
+          method: "GET",
+          headers: {"Accept":"application/json, */*"}
+        }, 27000);
+        if (!res2.ok) throw new Error("overpass_error_"+res2.status);
         const data2 = await res2.json();
         return parseOverpassElements(data2);
       } catch (e2) {
@@ -3474,7 +2957,8 @@ function TrackTab({child}) {
     {key:"kaka", label:t("track_sub_poop")},
     {key:"dis", label:t("track_sub_teething")},
     {key:"asi", label:t("track_sub_vaccine")},
-    {key:"ekgida", label:t("track_sub_weaning")}
+    {key:"ekgida", label:t("track_sub_weaning")},
+    {key:"regl", label:t("track_sub_regl")}
   ];
 
   return (
@@ -3563,6 +3047,225 @@ function TrackTab({child}) {
       {sub === "dis" && <TeethingSection childId={child?.id}/>}
       {sub === "asi" && <VaccineList child={child}/>}
       {sub === "ekgida" && <WeaningCalendar childId={child?.id}/>}
+      {sub === "regl" && <PeriodCalendar/>}
+    </div>
+  );
+}
+
+/* ============================================================
+   REGL TAKVİMİ — anneye özel, çocuktan bağımsız döngü takibi.
+   Regl başlangıç/bitiş tarihleri kalıcı olarak saklanır; geçmiş
+   döngülerden ortalama döngü ve regl süresi otomatik hesaplanır,
+   bir sonraki regl / doğurgan dönem / yumurtlama günü buna göre
+   tahmin edilip aylık takvim üzerinde renklerle gösterilir.
+   ============================================================ */
+const WEEKDAY_LABELS_TR = ["Pt","Sa","Ça","Pe","Cu","Ct","Pz"];
+
+function PeriodCalendar() {
+  const { t } = useLang();
+  const [loading, setLoading] = useState(true);
+  const [cycles, setCycles] = useState([]); // [{id, start:"YYYY-MM-DD", end:"YYYY-MM-DD"|null}]
+  const [avgCycle, setAvgCycle] = useState(28);
+  const [avgPeriod, setAvgPeriod] = useState(5);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settingsDraft, setSettingsDraft] = useState({cycle:"28", period:"5"});
+  const [viewDate, setViewDate] = useState(()=>{ const d=new Date(); return {y:d.getFullYear(), m:d.getMonth()}; });
+
+  useEffect(()=>{ (async ()=>{
+    setLoading(true);
+    const savedCycles = await storageGet("regl:cycles", false);
+    const savedSettings = await storageGet("regl:settings", false);
+    setCycles(savedCycles || []);
+    if (savedSettings) {
+      setAvgCycle(savedSettings.avgCycle || 28);
+      setAvgPeriod(savedSettings.avgPeriod || 5);
+    }
+    setLoading(false);
+  })(); }, []);
+
+  const saveCycles = async (list) => {
+    setCycles(list);
+    await storageSet("regl:cycles", list, false);
+  };
+
+  const sorted = [...cycles].sort((a,b)=> b.start.localeCompare(a.start)); // en yeni önce
+  const current = sorted.find(c=>!c.end); // devam eden regl varsa
+  const last = sorted[0];
+  const todayStr = todayISO();
+
+  // Geçmiş kayıtlardan ortalama döngü uzunluğu (son 6 döngü)
+  const computedAvgCycle = (() => {
+    const startsAsc = sorted.map(c=>c.start).slice().sort();
+    if (startsAsc.length < 2) return avgCycle;
+    const diffs = [];
+    for (let i=1;i<startsAsc.length;i++) diffs.push(daysBetweenISO(startsAsc[i-1], startsAsc[i]));
+    const recent = diffs.slice(-6).filter(d=>d>0 && d<90);
+    if (!recent.length) return avgCycle;
+    return Math.round(recent.reduce((a,b)=>a+b,0)/recent.length);
+  })();
+  // Geçmiş kayıtlardan ortalama regl süresi (son 6 kapanmış döngü)
+  const computedAvgPeriod = (() => {
+    const lens = sorted.filter(c=>c.end).map(c=>daysBetweenISO(c.start,c.end)+1).filter(n=>n>0 && n<20);
+    if (!lens.length) return avgPeriod;
+    const recent = lens.slice(0,6);
+    return Math.round(recent.reduce((a,b)=>a+b,0)/recent.length);
+  })();
+
+  const nextPredictedStart = last ? addDaysISO(last.start, computedAvgCycle) : null;
+  const predictedEnd = nextPredictedStart ? addDaysISO(nextPredictedStart, computedAvgPeriod-1) : null;
+  const ovulationDay = nextPredictedStart ? addDaysISO(nextPredictedStart, -14) : null;
+  const fertileStart = ovulationDay ? addDaysISO(ovulationDay, -5) : null;
+  const fertileEnd = ovulationDay ? addDaysISO(ovulationDay, 1) : null;
+  const daysUntilNext = nextPredictedStart ? daysBetweenISO(todayStr, nextPredictedStart) : null;
+  const cycleDay = last ? daysBetweenISO(last.start, todayStr) + 1 : null;
+
+  const startPeriod = async () => {
+    if (current) return;
+    const entry = {id: Date.now(), start: todayStr, end: null};
+    await saveCycles([entry, ...cycles]);
+    showToast(t("toast_regl_started"));
+  };
+  const endPeriod = async () => {
+    if (!current) return;
+    const list = cycles.map(c => c.id===current.id ? {...c, end: todayStr} : c);
+    await saveCycles(list);
+    showToast(t("toast_regl_ended"));
+  };
+  const removeCycle = async (id) => {
+    if (!window.confirm(t("regl_delete_confirm"))) return;
+    await saveCycles(cycles.filter(c=>c.id!==id));
+    showToast(t("toast_entry_removed"));
+  };
+  const saveSettings = async () => {
+    const cycle = clamp(parseInt(settingsDraft.cycle,10) || 28, 15, 60);
+    const period = clamp(parseInt(settingsDraft.period,10) || 5, 1, 15);
+    setAvgCycle(cycle); setAvgPeriod(period);
+    await storageSet("regl:settings", {avgCycle:cycle, avgPeriod:period}, false);
+    setShowSettings(false);
+    showToast(t("toast_regl_settings_saved"));
+  };
+
+  // Takvim ızgarası (Pazartesi başlangıçlı)
+  const {y,m} = viewDate;
+  const firstWeekday = (new Date(y, m, 1).getDay() + 6) % 7;
+  const daysInMonth = new Date(y, m+1, 0).getDate();
+  const isoOf = (d) => `${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+  const cells = [...Array(firstWeekday).fill(null), ...Array.from({length:daysInMonth}, (_,i)=>i+1)];
+
+  const dayStatus = (d) => {
+    const iso = isoOf(d);
+    for (const c of cycles) {
+      if (c.end) { if (iso >= c.start && iso <= c.end) return "period"; }
+      else if (iso >= c.start && iso <= todayStr) return "period";
+    }
+    if (nextPredictedStart && predictedEnd && iso >= nextPredictedStart && iso <= predictedEnd) return "predicted";
+    if (ovulationDay && iso === ovulationDay) return "ovulation";
+    if (fertileStart && fertileEnd && iso >= fertileStart && iso <= fertileEnd) return "fertile";
+    return null;
+  };
+
+  const STATUS_STYLE = {
+    period:    {background:"linear-gradient(135deg, #E8A9C4, #D9526B)", color:"#fff"},
+    predicted: {background:"var(--pink)", color:"var(--ink)"},
+    fertile:   {background:"var(--purple)", color:"var(--ink)"},
+    ovulation: {background:"var(--purple-deep)", color:"#fff"}
+  };
+
+  return (
+    <div style={{marginTop:16}}>
+      <Card style={{background:"linear-gradient(135deg, #E8A9C4, #B79AEA)", color:"#fff"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div>
+            <div style={{fontWeight:800,fontSize:16}}>
+              {current ? t("regl_active_period") : cycleDay!=null ? t("regl_day_of_cycle", cycleDay) : t("regl_subtitle")}
+            </div>
+            <div style={{fontSize:12.5,marginTop:6,opacity:0.92}}>
+              {!last ? t("regl_next_period_unknown")
+                : daysUntilNext===0 ? t("regl_next_period_today")
+                : daysUntilNext===1 ? t("regl_next_period_tomorrow")
+                : daysUntilNext>1 ? t("regl_next_period_in", daysUntilNext)
+                : t("regl_next_period_late", Math.abs(daysUntilNext))}
+            </div>
+          </div>
+          <Droplet size={30} color="#fff"/>
+        </div>
+        <div style={{display:"flex",gap:16,marginTop:14,fontSize:11.5,opacity:0.92}}>
+          <div>{t("regl_cycle_length_label", computedAvgCycle)}</div>
+          <div>{t("regl_period_length_label", computedAvgPeriod)}</div>
+        </div>
+      </Card>
+
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        {!current ? (
+          <PrimaryButton style={{flex:1}} onClick={startPeriod}>{t("regl_start_btn")}</PrimaryButton>
+        ) : (
+          <PrimaryButton style={{flex:1}} onClick={endPeriod}>{t("regl_end_btn")}</PrimaryButton>
+        )}
+        <GhostButton style={{width:52,padding:0,display:"flex",alignItems:"center",justifyContent:"center"}}
+          onClick={()=>{ setSettingsDraft({cycle:String(avgCycle), period:String(avgPeriod)}); setShowSettings(true); }}>
+          <Settings size={18}/>
+        </GhostButton>
+      </div>
+
+      <Card style={{marginTop:16}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+          <div onClick={()=>setViewDate(v=>{ const d=new Date(v.y,v.m-1,1); return {y:d.getFullYear(),m:d.getMonth()}; })} className="abp-tap" style={{width:30,height:30,borderRadius:15,background:"var(--bg)",display:"flex",alignItems:"center",justifyContent:"center"}}><ChevronLeft size={15}/></div>
+          <div style={{fontWeight:700,fontSize:14,textTransform:"capitalize"}}>{new Date(y,m,1).toLocaleDateString("tr-TR",{month:"long",year:"numeric"})}</div>
+          <div onClick={()=>setViewDate(v=>{ const d=new Date(v.y,v.m+1,1); return {y:d.getFullYear(),m:d.getMonth()}; })} className="abp-tap" style={{width:30,height:30,borderRadius:15,background:"var(--bg)",display:"flex",alignItems:"center",justifyContent:"center"}}><ChevronRight size={15}/></div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4,marginBottom:6}}>
+          {WEEKDAY_LABELS_TR.map(w=>(
+            <div key={w} style={{textAlign:"center",fontSize:10.5,fontWeight:700,color:"var(--ink-faint)"}}>{w}</div>
+          ))}
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:4}}>
+          {cells.map((d,i)=>{
+            if (d==null) return <div key={i}/>;
+            const iso = isoOf(d);
+            const status = dayStatus(d);
+            const isToday = iso === todayStr;
+            const style = status ? STATUS_STYLE[status] : {background:"var(--bg)", color:"var(--ink)"};
+            return (
+              <div key={i} style={{
+                aspectRatio:"1", borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center",
+                fontSize:11.5, fontWeight:700, ...style,
+                boxShadow: isToday ? "0 0 0 2px var(--ink) inset" : "none"
+              }}>{d}</div>
+            );
+          })}
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:"8px 14px",marginTop:14,fontSize:10.5,color:"var(--ink-soft)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:9,height:9,borderRadius:3,background:"#D9526B"}}/>{t("regl_legend_period")}</div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:9,height:9,borderRadius:3,background:"var(--pink)"}}/>{t("regl_legend_predicted")}</div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:9,height:9,borderRadius:3,background:"var(--purple)"}}/>{t("regl_legend_fertile")}</div>
+          <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:9,height:9,borderRadius:3,background:"var(--purple-deep)"}}/>{t("regl_legend_ovulation")}</div>
+        </div>
+      </Card>
+
+      <SectionTitle>{t("regl_history_title")}</SectionTitle>
+      {loading ? (
+        <><SkeletonCard lines={1}/><SkeletonCard lines={1}/></>
+      ) : sorted.length === 0 ? (
+        <Card style={{textAlign:"center",color:"var(--ink-faint)",fontSize:13}}>{t("regl_history_empty")}</Card>
+      ) : sorted.map(c=>{
+        const len = c.end ? daysBetweenISO(c.start,c.end)+1 : null;
+        return (
+          <Card key={c.id} style={{marginBottom:8,display:"flex",alignItems:"center",gap:10}} onClick={()=>removeCycle(c.id)}>
+            <IconBadge icon={Droplet} color="pink" size={34}/>
+            <div style={{flex:1,fontSize:13.5,fontWeight:600}}>{t("regl_cycle_render", c.start, c.end, len)}</div>
+            <X size={14} color="var(--ink-faint)"/>
+          </Card>
+        );
+      })}
+
+      {showSettings && (
+        <Modal title={t("regl_settings_title")} onClose={()=>setShowSettings(false)}>
+          <p style={{fontSize:12.5,color:"var(--ink-soft)",lineHeight:1.6,marginTop:0}}>{t("regl_settings_desc")}</p>
+          <Input label={t("regl_avg_cycle_label")} value={settingsDraft.cycle} onChange={(v)=>setSettingsDraft(s=>({...s,cycle:v.replace(/[^0-9]/g,"")}))} type="number"/>
+          <Input label={t("regl_avg_period_label")} value={settingsDraft.period} onChange={(v)=>setSettingsDraft(s=>({...s,period:v.replace(/[^0-9]/g,"")}))} type="number"/>
+          <PrimaryButton onClick={saveSettings}>{t("regl_settings_save")}</PrimaryButton>
+        </Modal>
+      )}
     </div>
   );
 }
@@ -4756,6 +4459,7 @@ function NearbyTab() {
     // OSM'de eczaneler hem amenity=pharmacy hem healthcare=pharmacy ile
     // etiketlenebildiği için ikisi birden sorgulanır.
     overpassNearby(lat, lon, 15000, [["amenity","pharmacy"],["healthcare","pharmacy"]])
+      .catch(()=>nominatimSearchNearby(lat, lon, 15000, "eczane")) // Overpass tamamen başarısız olursa yedek kaynağa geç
       .then(results => {
         const withDist = results
           .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
@@ -4767,6 +4471,7 @@ function NearbyTab() {
 
     // Bebek mağazaları — tek istek, 20km yarıçap; bebek ürünleri + oyuncakçı birlikte sorgulanır
     overpassNearby(lat, lon, 20000, [["shop","baby_goods"],["shop","toys"]])
+      .catch(()=>nominatimSearchNearby(lat, lon, 20000, "bebek mağazası"))
       .then(results => {
         const withDist = results
           .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
@@ -6124,7 +5829,7 @@ function AccountDetail({authUser, onBack}) {
 }
 
 function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenChildProfile, theme, setTheme, onOpenAdmin, onOpenCalendar, onOpenAccount, authUser, onLogout}) {
-  const { t, lang, setLang } = useLang();
+  const { t } = useLang();
   const [reminders, setReminders] = useState([
     {label:"Doktor Randevusu", time:"Yarın 10:00", on:true},
     {label:"Vitamin Hatırlatması", time:"Her gün 09:00", on:true},
@@ -6137,7 +5842,6 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
   const [renameChild, setRenameChild] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
-  const [showLanguage, setShowLanguage] = useState(false);
 
   useEffect(()=>{ (async ()=>{
     const saved = await storageGet("profile:mom", false);
@@ -6285,18 +5989,6 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
       </Card>
       <Card
         style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}
-        onClick={()=>setShowLanguage(true)}
-      >
-        <IconBadge icon={Globe} color="green" size={34}/>
-        <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_language_card_title")}</div>
-          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_language_card_desc")}</div>
-        </div>
-        <div style={{fontSize:12,fontWeight:700,color:"var(--ink-soft)",marginRight:4}}>{LANG_LABELS[lang]}</div>
-        <ChevronRight size={16} color="var(--ink-faint)"/>
-      </Card>
-      <Card
-        style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}
         onClick={()=>setShowAbout(true)}
       >
         <IconBadge icon={Info} color="blue" size={34}/>
@@ -6330,28 +6022,6 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
       {showPrivacy && (
         <Modal title={t("profile_privacy")} onClose={()=>setShowPrivacy(false)}>
           <LegalContent sections={PRIVACY_POLICY_SECTIONS}/>
-        </Modal>
-      )}
-      {showLanguage && (
-        <Modal title={t("profile_language_card_title")} onClose={()=>setShowLanguage(false)}>
-          <div style={{display:"flex",flexDirection:"column",gap:10}}>
-            {Object.keys(LANG_LABELS).map(code=>(
-              <div
-                key={code}
-                className="abp-tap"
-                onClick={()=>{ setLang(code); showToast(UI_TEXT[code].toast_language_changed); setShowLanguage(false); }}
-                style={{
-                  display:"flex",alignItems:"center",justifyContent:"space-between",
-                  padding:"14px 16px",borderRadius:"var(--radius-md)",
-                  background: lang===code ? "var(--pink)" : "var(--card)",
-                  border: "1px solid rgba(150,130,180,0.15)"
-                }}
-              >
-                <span style={{fontWeight:700,fontSize:14}}>{LANG_LABELS[code]}</span>
-                {lang===code && <Check size={18} color="var(--ink)"/>}
-              </div>
-            ))}
-          </div>
         </Modal>
       )}
     </div>
