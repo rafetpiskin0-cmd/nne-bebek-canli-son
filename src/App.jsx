@@ -1349,8 +1349,12 @@ async function overpassNearbyOnce(lat, lon, radiusM, tagPairs) {
 // yoğunluklu OSM verisi olan bölgelerde), otomatik olarak daha geniş
 // yarıçaplarla yeniden dener. Sonuç bulur bulmaz durur; tüm denemeler
 // ağ hatasıyla başarısız olursa hatayı yukarı fırlatır.
-async function overpassNearby(lat, lon, radiusM, tagPairs) {
-  const radiiToTry = [radiusM, ...[30000, 50000, 80000].filter(r => r > radiusM)];
+// Not: azami yarıçap kasıtlı olarak sınırlı tutulur (varsayılan 40km) —
+// aksi halde "yakınımda" araması, yakında hiç sonuç yoksa kullanıcının
+// bulunduğu ilçeden onlarca km uzaktaki farklı bir ilçenin sonuçlarını
+// "en yakın" diye gösterebilir, bu da yanıltıcı olur.
+async function overpassNearby(lat, lon, radiusM, tagPairs, extraRadii=[25000, 40000]) {
+  const radiiToTry = [radiusM, ...extraRadii.filter(r => r > radiusM)];
   let lastErr = null;
   for (const r of radiiToTry) {
     try {
@@ -1363,6 +1367,18 @@ async function overpassNearby(lat, lon, radiusM, tagPairs) {
   }
   if (lastErr) throw lastErr;
   return [];
+}
+
+// Aynı işletme hem Overpass hem Nominatim sonuçlarında (farklı puanlarla)
+// çıkabilir; ~110m'lik bir ızgaraya yuvarlayıp aynı hücreye düşenleri tek
+// kayda indirger (ilk görülen — yapısal etiketli Overpass sonucu — korunur).
+function dedupePlaces(list) {
+  const seen = new Map();
+  for (const p of list) {
+    const key = `${p.lat.toFixed(3)},${p.lon.toFixed(3)}`;
+    if (!seen.has(key)) seen.set(key, p);
+  }
+  return [...seen.values()];
 }
 
 /* ============================================================
@@ -4455,29 +4471,48 @@ function NearbyTab() {
       .then(r => { setProvince(r.province); setDistrict(r.district); })
       .catch(()=>{});
 
-    // Eczaneler — 15km yarıçap, sonuç yoksa otomatik genişler.
-    // OSM'de eczaneler hem amenity=pharmacy hem healthcare=pharmacy ile
-    // etiketlenebildiği için ikisi birden sorgulanır.
-    overpassNearby(lat, lon, 15000, [["amenity","pharmacy"],["healthcare","pharmacy"]])
-      .catch(()=>nominatimSearchNearby(lat, lon, 15000, "eczane")) // Overpass tamamen başarısız olursa yedek kaynağa geç
-      .then(results => {
-        const withDist = results
-          .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
-          .sort((a,b)=>a.distanceKm-b.distanceKm).slice(0,8);
-        setPharmacies(withDist);
-      })
+    // Eczaneler — 15km yarıçap (sonuç yoksa 25/40km'ye genişler). OSM'de
+    // eczaneler hem amenity=pharmacy hem healthcare=pharmacy ile
+    // etiketlenebildiği için ikisi birden sorgulanır. Overpass'ın kaçırdığı
+    // (ör. eksik/farklı etiketlenmiş) eczaneleri de yakalamak için Nominatim
+    // sonuçlarıyla birleştirilip aynı işletme iki kez görünmesin diye
+    // tekilleştirilir — küçük ilçelerde OSM verisi tek başına eksik kalabiliyor.
+    Promise.allSettled([
+      overpassNearby(lat, lon, 15000, [["amenity","pharmacy"],["healthcare","pharmacy"]]),
+      nominatimSearchNearby(lat, lon, 15000, "eczane")
+    ]).then(([ov, nom]) => {
+      if (ov.status==="rejected" && nom.status==="rejected") throw (ov.reason || nom.reason || new Error("pharmacy_error"));
+      const combined = dedupePlaces([
+        ...(ov.status==="fulfilled" ? ov.value : []),
+        ...(nom.status==="fulfilled" ? nom.value : [])
+      ]);
+      const withDist = combined
+        .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
+        .filter(p => p.distanceKm <= 40) // "yakınımda" listesi 40km dışına taşmasın
+        .sort((a,b)=>a.distanceKm-b.distanceKm).slice(0,20);
+      setPharmacies(withDist);
+    })
       .catch(()=>{ setPharmacies([]); setPharmError(true); })
       .finally(()=>setPharmLoading(false));
 
-    // Bebek mağazaları — tek istek, 20km yarıçap; bebek ürünleri + oyuncakçı birlikte sorgulanır
-    overpassNearby(lat, lon, 20000, [["shop","baby_goods"],["shop","toys"]])
-      .catch(()=>nominatimSearchNearby(lat, lon, 20000, "bebek mağazası"))
-      .then(results => {
-        const withDist = results
-          .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
-          .sort((a,b)=>a.distanceKm-b.distanceKm).slice(0,8);
-        setBabyStores(withDist);
-      })
+    // Bebek mağazaları — sadece shop=baby_goods (oyuncakçılar hariç
+    // tutulur). 20km yarıçap, sonuç yoksa 30/45km'ye genişler; Overpass ve
+    // Nominatim sonuçları birleştirilip tekilleştirilir.
+    Promise.allSettled([
+      overpassNearby(lat, lon, 20000, [["shop","baby_goods"]], [30000]),
+      nominatimSearchNearby(lat, lon, 20000, "bebek mağazası")
+    ]).then(([ov, nom]) => {
+      if (ov.status==="rejected" && nom.status==="rejected") throw (ov.reason || nom.reason || new Error("baby_store_error"));
+      const combined = dedupePlaces([
+        ...(ov.status==="fulfilled" ? ov.value : []),
+        ...(nom.status==="fulfilled" ? nom.value : [])
+      ]);
+      const withDist = combined
+        .map(p => ({...p, distanceKm: haversineKm(lat, lon, p.lat, p.lon)}))
+        .filter(p => p.distanceKm <= 30)
+        .sort((a,b)=>a.distanceKm-b.distanceKm).slice(0,8);
+      setBabyStores(withDist);
+    })
       .catch(()=>{ setBabyStores([]); setBabyError(true); })
       .finally(()=>setBabyLoading(false));
   };
@@ -4626,7 +4661,13 @@ function NearbyTab() {
             </Card>
           )}
           {!pharmLoading && !pharmError && pharmacies.length===0 && (
-            <Card style={{textAlign:"center", color:"var(--ink-soft)", fontSize:12.5}}>{t("nearby_no_pharmacies")}</Card>
+            <Card
+              style={{textAlign:"center"}}
+              onClick={()=>window.open(`https://www.google.com/maps/search/eczane/@${coords.lat},${coords.lon},14z`, "_blank")}
+            >
+              <div style={{fontSize:12.5,color:"var(--ink-soft)"}}>{t("nearby_no_pharmacies")}</div>
+              <div style={{fontSize:12,fontWeight:700,color:"var(--ink)",marginTop:6}}>{t("nearby_search_google_maps")}</div>
+            </Card>
           )}
           {pharmacies.map(p => (
             <PlaceCard
@@ -4635,6 +4676,15 @@ function NearbyTab() {
               onSelect={(pl)=>{ setSelectedPlace(pl); setMapView("local"); }}
             />
           ))}
+          {!pharmLoading && !pharmError && pharmacies.length>0 && (
+            <div
+              className="abp-tap"
+              onClick={()=>window.open(`https://www.google.com/maps/search/eczane/@${coords.lat},${coords.lon},14z`, "_blank")}
+              style={{textAlign:"center",fontSize:12,fontWeight:700,color:"var(--ink-soft)",padding:"10px 0 4px"}}
+            >
+              {t("nearby_search_google_maps")}
+            </div>
+          )}
         </>
       )}
 
