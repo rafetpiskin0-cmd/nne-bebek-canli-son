@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef, createContext, useContext } from "react";
 import { callGemini } from "./services/geminiService.js";
 import { signInWithGoogle, signInWithApple, registerWithEmail, signInWithEmail, resetPassword, watchAuthState, signOutUser, handleRedirectResult } from "./services/auth.js";
+import { auth, db } from "./services/firebase.js";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import {
   Heart, Baby, Brain, Sparkles, Sun, Moon, Droplet, Pill, Dumbbell,
   Stethoscope, Smile, ChevronLeft, ChevronRight, ChevronDown, Check, X,
@@ -1200,21 +1202,48 @@ function addDaysISO(iso, days) {
 }
 
 /* ============================================================
-   KALICI DEPOLAMA YARDIMCILARI (window.storage)
+   KALICI DEPOLAMA YARDIMCILARI (Firestore)
+   ------------------------------------------------------------
+   ÖNEMLİ: Bu fonksiyonlar eskiden window.storage (yalnızca Claude
+   artifact önizlemesinde var olan, gerçek tarayıcıda tanımsız olan
+   bir API) kullanıyordu — bu yüzden gerçek sitede hiçbir şey
+   kaydedilmiyordu (try/catch hatayı yutup sessizce null/false
+   döndürüyordu). Şimdi auth.js'teki Firebase Auth mimarisiyle
+   tutarlı olarak Firestore kullanıyor:
+     - shared=false → users/{uid}/data/{key}  (kullanıcıya özel)
+     - shared=true  → shared/{key}            (herkese açık/ortak)
+   auth.currentUser her zaman dolu olmalı çünkü watchAuthState
+   (auth.js) kullanıcı yoksa otomatik anonim oturum açıyor; App.jsx
+   "main" fazına ancak bu callback'ten sonra geçiyor. Yine de ekstra
+   güvenlik olarak currentUser boşsa sessizce null/false dönülür.
+
+   ⚠️ Firestore Security Rules ayarlamadan bu fonksiyonlar "permission
+   denied" hatasıyla başarısız olur (yine sessizce, try/catch içinde).
+   Önerilen kurallar için services/firestore.rules dosyasına bak.
    ============================================================ */
 async function storageGet(key, shared=false) {
   try {
-    const res = await window.storage.get(key, shared);
-    return res ? JSON.parse(res.value) : null;
+    if (!shared && !auth.currentUser) return null;
+    const ref = shared
+      ? doc(db, "shared", key)
+      : doc(db, "users", auth.currentUser.uid, "data", key);
+    const snap = await getDoc(ref);
+    return snap.exists() ? JSON.parse(snap.data().json) : null;
   } catch (e) {
+    console.error("[storageGet]", key, e);
     return null;
   }
 }
 async function storageSet(key, value, shared=false) {
   try {
-    await window.storage.set(key, JSON.stringify(value), shared);
+    if (!shared && !auth.currentUser) return false;
+    const ref = shared
+      ? doc(db, "shared", key)
+      : doc(db, "users", auth.currentUser.uid, "data", key);
+    await setDoc(ref, { json: JSON.stringify(value), updatedAt: Date.now() });
     return true;
   } catch (e) {
+    console.error("[storageSet]", key, e);
     return false;
   }
 }
@@ -1222,7 +1251,7 @@ async function storageSet(key, value, shared=false) {
 /* ============================================================
    PREMIUM / ÜCRETSİZ KATMAN SINIRLAMASI
    ============================================================
-   ÖNEMLİ — GÜVENLİK NOTU: Bu bayrak (profile:premium) window.storage'da
+   ÖNEMLİ — GÜVENLİK NOTU: Bu bayrak (profile:premium) Firestore'da
    istemci tarafında tutulur. MVP / test aşaması için yeterlidir ama
    teknik bir kullanıcı tarayıcı konsolundan bu değeri değiştirip
    "sahte" premium elde edebilir. Gerçek/canlı yayında bunu güvenli
@@ -3056,8 +3085,31 @@ function TrackTab({child}) {
   const isPregnant = child?.status === "pregnant";
   const [sub, setSub] = useState(isPregnant ? "kilo" : "emzirme");
   const [logs, setLogs] = useState({emzirme:[], mama:[], uyku:[], bez:[], kilo:[], tekme:[], kasilma:[]});
+  const childId = child?.id || "default";
+  // Her log tipi çocuğa özel bir key altında kalıcı olarak saklanır:
+  // örn. "kilo:123", "emzirme:123". Önceden bu kayıtlar yalnızca
+  // component state'inde tutuluyordu; sekme değiştirince veya sayfa
+  // yenilenince tüm geçmiş kayboluyordu.
+  const LOG_TYPES = ["emzirme","mama","uyku","bez","kilo","tekme","kasilma"];
 
-  const addLog = (type, entry) => setLogs(prev => ({...prev, [type]: [entry, ...prev[type]]}));
+  useEffect(()=>{
+    let cancelled = false;
+    (async ()=>{
+      const entries = await Promise.all(LOG_TYPES.map(type=>storageGet(`${type}:${childId}`, false)));
+      if (cancelled) return;
+      const next = {};
+      LOG_TYPES.forEach((type,i)=>{ next[type] = entries[i] || []; });
+      setLogs(next);
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [childId]);
+
+  const addLog = (type, entry) => setLogs(prev => {
+    const list = [entry, ...prev[type]];
+    storageSet(`${type}:${childId}`, list, false); // kalıcı kayıt (fire-and-forget)
+    return {...prev, [type]: list};
+  });
 
   const subTabs = isPregnant ? [
     {key:"kilo", label:t("track_sub_weight")},
@@ -3558,7 +3610,7 @@ const PREGNANCY_APPOINTMENTS = [
   {week:"40. Hafta", name:"Doğum Değerlendirmesi"}
 ];
 /* ============================================================
-   ADMIN / CMS PANELİ — paylaşımlı depolama (window.storage, shared=true)
+   ADMIN / CMS PANELİ — paylaşımlı depolama (Firestore, shared/{key})
    Not: Bu, tüm bu artifact'ı kullanan kişiler arasında paylaşılan basit
    bir içerik havuzudur; gerçek kullanıcı rolleri veya güvenlik sağlamaz.
    ============================================================ */
@@ -3624,7 +3676,7 @@ function CMSEditor({storageKey, fields, renderItem, addLabel, emptyText}) {
 
 /* ============================================================
    TAKVİM — doktor randevuları, aşılar ve önemli tarihleri eklemek,
-   düzenlemek ve silmek için kalıcı (window.storage) bir takvim.
+   düzenlemek ve silmek için kalıcı (Firestore) bir takvim.
    ============================================================ */
 function getCalendarTypes(t) { return [
   {key:"doktor", label:t("calendar_type_doctor"), icon:Stethoscope, color:"pink"},
@@ -4389,7 +4441,7 @@ function PoopTrackerSection({childId}) {
 
 /* ============================================================
    ALIŞVERİŞ LİSTESİ — hazır yaş bazlı öneriler + kullanıcının kendi
-   ekleyip işaretleyip silebildiği kalıcı liste (window.storage).
+   ekleyip işaretleyip silebildiği kalıcı liste (Firestore).
    ============================================================ */
 function ShoppingListSection() {
   const { t, lang } = useLang();
@@ -5536,7 +5588,7 @@ function newConversation(t) {
 
 /* ============================================================
    ANNE SOHBETİ — bu artifact'ı kullanan tüm anneler arasında
-   paylaşımlı bir sohbet alanı (window.storage, shared=true).
+   paylaşımlı bir sohbet alanı (Firestore, shared/{key}).
    Not: Gerçek zamanlı değil, birkaç saniyede bir yenilenir (polling).
    Gönderdiğiniz mesajlar bu artifact'ı açan HERKES tarafından görülebilir.
    ============================================================ */
@@ -5876,7 +5928,7 @@ function AIUpsellModal({onClose, onUpgraded}) {
    ÖDEME YÖNTEMİ — bu demo ortamında gerçek bir ödeme altyapısına
    (iyzico, Stripe, PayTR vb.) bağlı DEĞİLDİR. Kart numarası ve CVV asla
    saklanmaz; yalnızca kartın son 4 hanesi ve sahibinin adı, cihazda
-   kalıcı olarak (window.storage) tutulur. Gerçek ödeme almak için bu
+   kalıcı olarak (Firestore) tutulur. Gerçek ödeme almak için bu
    modülün bir ödeme sağlayıcısının resmi SDK/API'siyle backend
    üzerinden entegre edilmesi gerekir.
    ============================================================ */
