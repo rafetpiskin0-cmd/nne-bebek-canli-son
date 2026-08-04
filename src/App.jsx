@@ -985,20 +985,12 @@ const SLEEP_SOUNDS = [
   {name:"Beyaz Gürültü", icon: Wind, noise:"white"},
   {name:"Kahverengi Gürültü", icon: Wind, noise:"brown"},
   {name:"Pembe Gürültü", icon: Wind, noise:"pink"},
-  {name:"Rahim Sesi", icon: Heart, url:""},
-  {name:"Kalp Atışı", icon: Activity, url:"/audio/kalp-atisi.mp3"},
   {name:"Yağmur", icon: CloudRain, url:""},
   {name:"Fırtına", icon: CloudRain, url:"/audio/firtina.mp3"},
   {name:"Okyanus", icon: Waves, url:"/audio/okyanus.mp3"},
-  {name:"Orman", icon: TreePine, url:""},
-  {name:"Şelale", icon: Waves, url:""},
   {name:"Rüzgar", icon: Wind, noise:"white"},
-  {name:"Şömine", icon: Flame, url:""},
-  {name:"Tren", icon: Train, url:""},
-  {name:"Araba", icon: Car, url:""},
   {name:"Elektrik Süpürgesi", icon: Wind, noise:"white"},
-  {name:"Fön Makinesi", icon: Wind, noise:"white"},
-  {name:"Ninni", icon: Music2, url:""}
+  {name:"Fön Makinesi", icon: Wind, noise:"white"}
 ];
 
 const DAILY_ARTICLES_POOL = [
@@ -1129,8 +1121,6 @@ const STORIES_POOL = [
   {title:"Ay Işığında Uyku", cat:"Uyku Hikayesi", dur:"5 dk", url:"", text:"Ay, her gece gökyüzünde yavaşça yükselir ve dünyaya yumuşacık bir ışık saçarmış. Bu ışık, uyumakta zorlanan tüm çocukların pencerelerinden içeri süzülür ve onlara sarılırmış. Ay ışığı bir çocuğun odasına girdiğinde, odadaki her şey sakinleşir, oyuncaklar bile derin bir uykuya dalarmış. Çocuk gözlerini kapattığında ay ona usulca bir ninni mırıldanır, yıldızlar da ona eşlik edermiş. Sabah güneş doğana kadar ay hep oradaymış, sessizce, sevgiyle nöbet tutarmış."}
 ];
 const LULLABIES_POOL = [
-  {title:"Dandini Dandini", cat:"Türkçe", lyrics:"Dandini dandini danalı bebek, elleri kolları kınalı bebek. Uyusun da büyüsün minik bebeğim, tatlı rüyalarla dinlensin bebeğim. Dandini dandini dastana, danalar girmiş bostana.", url:""},
-  {title:"Yağmur Sesli Ninni", cat:"Doğa Sesli", lyrics:"Yağmur damlaları usulca düşer, pencereme hafif hafif vurur. Uyu benim küçük meleğim, gece seni sarıp sarmalar. Damlalar bir ninni gibi fısıldar, sen de onlarla birlikte uykuya dal.", url:""},
   {title:"Piyano Uyku Bahçesi", cat:"Enstrümantal", lyrics:"Yavaşça çalan notalar, bir bahçede süzülür gibi. Her tuş bir yıldız, her melodi bir düş. Gözlerini kapat, notaların seni taşımasına izin ver, uykunun bahçesine doğru.", url:"/audio/piyano-uyku-bahcesi.mp3"},
   {title:"Uzayda Uyku", cat:"Enstrümantal", lyrics:"Yıldızların arasında süzülüyoruz, sessizce, yumuşacık. Ay bize göz kırpıyor, gezegenler usulca dönüyor. Sen de bu sessiz uzayda, güvenle uykuya dalabilirsin.", url:"/audio/uzayda-uyku.mp3"}
 ];
@@ -2943,7 +2933,7 @@ function ChildDetail({child, onBack}) {
 
   const [playingSound, setPlayingSound] = useState(null);
   const [soundTimer, setSoundTimer] = useState(30*60000);
-  const quickSounds = SLEEP_SOUNDS.slice(0,6); // Beyaz, Kahverengi, Pembe Gürültü, Rahim Sesi, Kalp Atışı, Yağmur
+  const quickSounds = SLEEP_SOUNDS.slice(0,6); // Beyaz, Kahverengi, Pembe Gürültü, Yağmur, Fırtına, Okyanus
 
   return (
     <Screen title="Gelişim Takibi" onBack={onBack}>
