@@ -3239,30 +3239,25 @@ function PeriodCalendar() {
   const daysUntilNext = nextPredictedStart ? daysBetweenISO(todayStr, nextPredictedStart) : null;
   const cycleDay = last ? daysBetweenISO(last.start, todayStr) + 1 : null;
 
-  const openStartModal = () => {
+  const startPeriod = async (date=todayStr) => {
     if (current) return;
-    setLogModal({mode:"start", date: todayStr});
-  };
-  const openEndModal = () => {
-    if (!current) return;
-    setLogModal({mode:"end", date: todayStr < current.start ? current.start : todayStr});
-  };
-  const confirmLogModal = async () => {
-    if (!logModal) return;
-    const chosen = logModal.date;
-    if (!chosen) return;
-    if (logModal.mode === "start") {
-      const entry = {id: Date.now(), start: chosen, end: null};
-      await saveCycles([entry, ...cycles]);
-      showToast(t("toast_regl_started"));
-    } else {
-      if (!current) return;
-      const finalEnd = chosen < current.start ? current.start : chosen; // bitiş, başlangıçtan önce olamaz
-      const list = cycles.map(c => c.id===current.id ? {...c, end: finalEnd} : c);
-      await saveCycles(list);
-      showToast(t("toast_regl_ended"));
-    }
+    const entry = {id: Date.now(), start: date, end: null};
+    await saveCycles([entry, ...cycles]);
+    showToast(t("toast_regl_started"));
     setLogModal(null);
+  };
+  const endPeriod = async (date=todayStr) => {
+    if (!current) return;
+    const finalEnd = date < current.start ? current.start : date; // bitiş, başlangıçtan önce olamaz
+    const list = cycles.map(c => c.id===current.id ? {...c, end: finalEnd} : c);
+    await saveCycles(list);
+    showToast(t("toast_regl_ended"));
+    setLogModal(null);
+  };
+  const confirmLogModal = () => {
+    if (!logModal) return;
+    if (logModal.mode === "start") startPeriod(logModal.date);
+    else endPeriod(logModal.date);
   };
   const removeCycle = async (id) => {
     if (!window.confirm(t("regl_delete_confirm"))) return;
@@ -3330,9 +3325,9 @@ function PeriodCalendar() {
 
       <div style={{display:"flex",gap:8,marginTop:12}}>
         {!current ? (
-          <PrimaryButton style={{flex:1}} onClick={openStartModal}>{t("regl_start_btn")}</PrimaryButton>
+          <PrimaryButton style={{flex:1}} onClick={()=>startPeriod()}>{t("regl_start_btn")}</PrimaryButton>
         ) : (
-          <PrimaryButton style={{flex:1}} onClick={openEndModal}>{t("regl_end_btn")}</PrimaryButton>
+          <PrimaryButton style={{flex:1}} onClick={()=>endPeriod()}>{t("regl_end_btn")}</PrimaryButton>
         )}
         <GhostButton style={{width:52,padding:0,display:"flex",alignItems:"center",justifyContent:"center"}}
           onClick={()=>{ setSettingsDraft({cycle:String(avgCycle), period:String(avgPeriod)}); setShowSettings(true); }}>
@@ -3395,9 +3390,11 @@ function PeriodCalendar() {
 
       {logModal && (
         <Modal title={logModal.mode==="start" ? t("regl_start_btn") : t("regl_end_btn")} onClose={()=>setLogModal(null)}>
-          <Input label={t("reminder_date_label")} type="date" value={logModal.date}
-            onChange={(v)=>setLogModal(m=>({...m,date:v}))}/>
-          <PrimaryButton onClick={confirmLogModal} disabled={!logModal.date}>{t("reminder_save")}</PrimaryButton>
+          <div style={{textAlign:"center",padding:"6px 0 20px"}}>
+            <Droplet size={30} color="var(--pink)" style={{marginBottom:10}}/>
+            <div style={{fontSize:16,fontWeight:800,textTransform:"capitalize"}}>{formatDateTR(new Date(logModal.date+"T00:00:00"))}</div>
+          </div>
+          <PrimaryButton onClick={confirmLogModal}>{t("reminder_save")}</PrimaryButton>
         </Modal>
       )}
 
