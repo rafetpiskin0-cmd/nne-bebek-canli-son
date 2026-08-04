@@ -61,9 +61,6 @@ const UI_TEXT = {
     reminder_save: "Kaydet",
     reminder_delete: "Hatırlatıcıyı Sil",
     reminder_notif_hint: "Saat belirlersen, o an uygulama açıkken bildirim ve uyarı alırsın.",
-    profile_admin_title: "Yönetim",
-    profile_admin_card_title: "Yönetici Paneli (Demo)",
-    profile_admin_card_desc: "Makale, aktivite, ses ve ninni ekle",
     profile_settings_title: "Ayarlar",
     profile_theme_light: "Açık Tema",
     profile_theme_dark: "Koyu Tema",
@@ -3192,6 +3189,7 @@ function PeriodCalendar() {
   const [showSettings, setShowSettings] = useState(false);
   const [settingsDraft, setSettingsDraft] = useState({cycle:"28", period:"5"});
   const [viewDate, setViewDate] = useState(()=>{ const d=new Date(); return {y:d.getFullYear(), m:d.getMonth()}; });
+  const [logModal, setLogModal] = useState(null); // {mode:"start"|"end", date:"YYYY-MM-DD"} | null
 
   useEffect(()=>{ (async ()=>{
     setLoading(true);
@@ -3241,17 +3239,30 @@ function PeriodCalendar() {
   const daysUntilNext = nextPredictedStart ? daysBetweenISO(todayStr, nextPredictedStart) : null;
   const cycleDay = last ? daysBetweenISO(last.start, todayStr) + 1 : null;
 
-  const startPeriod = async () => {
+  const openStartModal = () => {
     if (current) return;
-    const entry = {id: Date.now(), start: todayStr, end: null};
-    await saveCycles([entry, ...cycles]);
-    showToast(t("toast_regl_started"));
+    setLogModal({mode:"start", date: todayStr});
   };
-  const endPeriod = async () => {
+  const openEndModal = () => {
     if (!current) return;
-    const list = cycles.map(c => c.id===current.id ? {...c, end: todayStr} : c);
-    await saveCycles(list);
-    showToast(t("toast_regl_ended"));
+    setLogModal({mode:"end", date: todayStr < current.start ? current.start : todayStr});
+  };
+  const confirmLogModal = async () => {
+    if (!logModal) return;
+    const chosen = logModal.date;
+    if (!chosen) return;
+    if (logModal.mode === "start") {
+      const entry = {id: Date.now(), start: chosen, end: null};
+      await saveCycles([entry, ...cycles]);
+      showToast(t("toast_regl_started"));
+    } else {
+      if (!current) return;
+      const finalEnd = chosen < current.start ? current.start : chosen; // bitiş, başlangıçtan önce olamaz
+      const list = cycles.map(c => c.id===current.id ? {...c, end: finalEnd} : c);
+      await saveCycles(list);
+      showToast(t("toast_regl_ended"));
+    }
+    setLogModal(null);
   };
   const removeCycle = async (id) => {
     if (!window.confirm(t("regl_delete_confirm"))) return;
@@ -3319,9 +3330,9 @@ function PeriodCalendar() {
 
       <div style={{display:"flex",gap:8,marginTop:12}}>
         {!current ? (
-          <PrimaryButton style={{flex:1}} onClick={startPeriod}>{t("regl_start_btn")}</PrimaryButton>
+          <PrimaryButton style={{flex:1}} onClick={openStartModal}>{t("regl_start_btn")}</PrimaryButton>
         ) : (
-          <PrimaryButton style={{flex:1}} onClick={endPeriod}>{t("regl_end_btn")}</PrimaryButton>
+          <PrimaryButton style={{flex:1}} onClick={openEndModal}>{t("regl_end_btn")}</PrimaryButton>
         )}
         <GhostButton style={{width:52,padding:0,display:"flex",alignItems:"center",justifyContent:"center"}}
           onClick={()=>{ setSettingsDraft({cycle:String(avgCycle), period:String(avgPeriod)}); setShowSettings(true); }}>
@@ -3348,11 +3359,13 @@ function PeriodCalendar() {
             const isToday = iso === todayStr;
             const style = status ? STATUS_STYLE[status] : {background:"var(--bg)", color:"var(--ink)"};
             return (
-              <div key={i} style={{
-                aspectRatio:"1", borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center",
-                fontSize:11.5, fontWeight:700, ...style,
-                boxShadow: isToday ? "0 0 0 2px var(--ink) inset" : "none"
-              }}>{d}</div>
+              <div key={i} className="abp-tap"
+                onClick={()=>setLogModal({mode: current ? "end" : "start", date: iso})}
+                style={{
+                  aspectRatio:"1", borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center",
+                  fontSize:11.5, fontWeight:700, ...style,
+                  boxShadow: isToday ? "0 0 0 2px var(--ink) inset" : "none"
+                }}>{d}</div>
             );
           })}
         </div>
@@ -3379,6 +3392,14 @@ function PeriodCalendar() {
           </Card>
         );
       })}
+
+      {logModal && (
+        <Modal title={logModal.mode==="start" ? t("regl_start_btn") : t("regl_end_btn")} onClose={()=>setLogModal(null)}>
+          <Input label={t("reminder_date_label")} type="date" value={logModal.date}
+            onChange={(v)=>setLogModal(m=>({...m,date:v}))}/>
+          <PrimaryButton onClick={confirmLogModal} disabled={!logModal.date}>{t("reminder_save")}</PrimaryButton>
+        </Modal>
+      )}
 
       {showSettings && (
         <Modal title={t("regl_settings_title")} onClose={()=>setShowSettings(false)}>
@@ -6299,16 +6320,6 @@ function ProfileTab({children, onAddChild, onRemoveChild, onRenameChild, onOpenC
           )}
         </Modal>
       )}
-
-      <SectionTitle>{t("profile_admin_title")}</SectionTitle>
-      <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={onOpenAdmin}>
-        <IconBadge icon={Settings} color="blue" size={34}/>
-        <div style={{flex:1}}>
-          <div style={{fontWeight:700,fontSize:13.5}}>{t("profile_admin_card_title")}</div>
-          <div style={{fontSize:11,color:"var(--ink-soft)",marginTop:2}}>{t("profile_admin_card_desc")}</div>
-        </div>
-        <ChevronRight size={16} color="var(--ink-faint)"/>
-      </Card>
 
       <SectionTitle>{t("profile_settings_title")}</SectionTitle>
       <Card style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}} onClick={()=>setTheme(theme==="light"?"dark":"light")}>
